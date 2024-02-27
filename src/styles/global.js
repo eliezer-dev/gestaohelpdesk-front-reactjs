@@ -9,13 +9,13 @@ export default createGlobalStyle`
     }
 
     body {
-        background-color: ${({theme}) => theme.COLORS.GREEN_100};
+        background-color: ${({theme}) => theme.COLORS.WHITE};
         color: ${({theme}) => theme.COLORS.BLACK};
         -webkit-font-smoothing: antialiased;
     }
 
     body, input, :no-button, textarea{
-        font-family: 'Roboto Slab', serif;
+        font-family: 'Roboto', serif;
         font-size: 16px;
         outline: none
     }
@@ -35,11 +35,12 @@ export default createGlobalStyle`
 
     body {
         scrollbar-width: thin;          /* "auto" or "thin" */
-        scrollbar-color: ${({theme}) => theme.COLORS.PINK} transparent;   /* scroll thumb and track */
+        scrollbar-color: ${({theme}) => theme.COLORS.ORANGE} transparent;   /* scroll thumb and track */
     }
 
     /* Works on Chrome, Edge, and Safari */
     *::-webkit-scrollbar {
+        background: transparent;
         width: 8px;
     }
 
@@ -48,8 +49,9 @@ export default createGlobalStyle`
     }
 
     *::-webkit-scrollbar-thumb {
-        background-color: ${({theme}) => theme.COLORS.PINK};
+        background-color: ${({theme}) => theme.COLORS.ORANGE};
         border-radius: 8px;
+        
     }
 
 `;

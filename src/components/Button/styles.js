@@ -3,12 +3,27 @@ import styled from "styled-components";
 export const Container = styled.button `
     width: 100%;
     height: 56px;
-    background: ${({theme}) => theme.COLORS.BACKGROUND_900};
+    
+    background: ${({theme}) => theme.COLORS.ORANGE};
     color: ${({theme}) => theme.COLORS.WHITE};
-    border-radius: 4px;
+    font-weight: bold;
     cursor: pointer;
-
+    
+    border:none;
+    border-radius: 24px;
+    padding: 24px;
+       
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    justify-content: center;
+    
     &:hover {
-        background: ${({theme}) => theme.COLORS.BACKGROUND_700};
+        opacity: .5;
+    }
+
+    > svg {
+        height: 32px;
+        width: 32px;
     }
 `;

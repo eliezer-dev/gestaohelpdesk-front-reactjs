@@ -5,7 +5,7 @@ export const Container = styled.div`
     display: flex;
     align-items: center;
     background: ${({theme}) => theme.COLORS.WHITE_100};
-    
+    border-radius: 16px;
     margin-bottom: 8px;
 
     >input {
@@ -14,7 +14,7 @@ export const Container = styled.div`
         padding: 12px;
         color: ${({theme}) => theme.COLORS.GRAY_200};
         background: transparent ;
-        border: 1px solid ${({theme}) => theme.COLORS.GRAY};
+        border: 0;
         border-radius: 10px;
         
         &::placeholder {
