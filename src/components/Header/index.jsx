@@ -2,17 +2,18 @@ import { Container, Profile, Menu, Logo } from "./styles";
 import line1 from "../../assets/Pages/Header/Line 1.svg"
 import {Button} from "../Button"
 import { FaEnvelope  } from "react-icons/fa";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
-
+import { api } from "../../services/api";
+import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 
 export function Header() {
     const navigate = useNavigate();
     const {user, signOut} = useAuth();
     const [itensMenu, setItensMenu] = useState(["Chamados", "Ajuda", "Downloads"])
     const [username, setUsername] = useState("")
-    const [userAvatar, setUserAvatar] = useState("https://github.com/eliezer-dev.png")
+    const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
 
     function handleSignOut() {
         signOut()
@@ -27,8 +28,18 @@ export function Header() {
         navigate("/")
     }
 
+    async function getAvatar(){
+        const response = await api.get(`/users/avatar`)
+        const base64Data = response.data;
+        console.log(base64Data);
+        setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
+
+    }
+
     useEffect(() => {
         setUsername(user.name)
+        getAvatar()
+
     }, [])
 
     return (
@@ -39,10 +50,10 @@ export function Header() {
             <Menu>
                     {   
                         itensMenu.map((item, index) => (
-                            <>
-                            <span key={index}>{item}</span>
-                            <img key={index} src={line1} alt="linha vertical para separar"/>
-                            </>
+                            <Fragment key={index}>
+                            <span>{item}</span>
+                            <img src={line1} alt="linha vertical para separar"/>
+                            </Fragment>
                         ))
                     }
                 <Button title="Novo Chamado" icon={FaEnvelope }/>
@@ -52,12 +63,9 @@ export function Header() {
                     <li onClick={handleProfile}>{user.name}</li>    
                     <li onClick={handleSignOut}>Sair</li>
                 </ul>
-    
-                    <img 
-                        src={userAvatar}
-                        alt="Foto do usuário"
-                        onClick={handleProfile}
-                    />
+                <img src={userAvatar}/>
+
+
             </Profile>            
         </Container>
     )

@@ -11,9 +11,10 @@ import { ButtonText } from "../../components/ButtonText";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
 import { api } from "../../services/api";
+import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 
 export function Profile () {
-    const [userAvatar, setUserAvatar] = useState("https://github.com/eliezer-dev.png")
+    const [userAvatar, setUserAvatar] = useState({avatarPlaceHolder})
     const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
     const [email, setEmail] = useState("");
@@ -26,11 +27,26 @@ export function Profile () {
     const [newPassword, setNewPassword] = useState("");
     const [disableInput, setDisableInput] = useState(false);
     const navigate = useNavigate();
-    const {user} = useAuth();
+    const {user, updateProfile} = useAuth();
+    const [avatarFile, setAvatarFile] = useState(null)
+    const [newPasswordConfirm, setNewPasswordConfirm] = useState("")
 
-    function handleChangeAvatar() {
-        
+    function handleChangeAvatar(event) {
+        const file = event.target.files[0]
+        setAvatarFile(file)
+        const imagePreview = URL.createObjectURL(file)
+        setUserAvatar(imagePreview)
     }
+
+
+    async function getAvatar(){
+        const response = await api.get(`/users/avatar`)
+        const base64Data = response.data;
+        console.log(base64Data);
+        setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
+
+    }
+
 
     async function handleUpdateProfile() {
           setDisableInput(true);
@@ -42,16 +58,28 @@ export function Profile () {
                address,
                addressNumber,
                state,
-               city
+               city,
           }
           let userUpdated = updated
           if (newPassword && !oldPassword) {
                setDisableInput(false);
-               setOldPassword("")
                return alert ("Senha atual não informada.")
           }
 
+          if (newPassword & !newPasswordConfirm) {
+            setDisableInput(false);
+            return alert ("Digita a confirmação da nova senha.")
+          }
+
+
           if (newPassword && oldPassword) {
+
+                if (newPassword != newPasswordConfirm) {
+                    setNewPassword("")
+                    setNewPasswordConfirm("")
+                    setDisableInput(false);
+                    return alert ("A nova senha e a confirmação da nova senha estão diferentes.")
+                }
                updated = {
                     ...updated,
                     oldPassword,
@@ -59,25 +87,12 @@ export function Profile () {
                }
                setNewPassword("")
                setOldPassword("")
+               setNewPassword("")
                userUpdated = Object.assign(user, updated)
           }
-       
-     try {
-          await api.put(`/users/${user.id}`, userUpdated)
-          setDisableInput(false);
-          return alert ("Os seus dados foram atualizados com sucesso.")
-
-          
-     } catch (error) {
-          if (error.response) {
-               setDisableInput(false);
-               return alert(error.response.data)
-          }else {
-               setDisableInput(false);
-               alert("Não foi possível atualizar as suas informações. Tente novamente.")
-               return console.log(error.message)
-          }
-     }
+     
+    updateProfile(userUpdated, avatarFile)   
+    setDisableInput(false);
      
 
     }
@@ -87,6 +102,7 @@ export function Profile () {
     }
 
     useEffect(() => {
+          getAvatar()
           setName(user.name)
           setCpf(user.cpf)
           setEmail(user.email)
@@ -180,7 +196,7 @@ export function Profile () {
                 <Input
                     disabled={disableInput}
                     icon={FiLock}
-                    placeholder="Senha Atual"
+                    placeholder="Senha atual"
                     type="password"
                     value={oldPassword}
                     onChange={e => {setOldPassword(e.target.value)}}
@@ -188,10 +204,18 @@ export function Profile () {
                 <Input
                     disabled={disableInput}
                     icon={FiLock}
-                    placeholder="Nova Senha"
+                    placeholder="Nova senha"
                     type="password"
                     value={newPassword}
                     onChange={e => {setNewPassword(e.target.value)}}
+                />
+                <Input
+                    disabled={disableInput}
+                    icon={FiLock}
+                    placeholder="Confirmar nova senha"
+                    type="password"
+                    value={newPasswordConfirm}
+                    onChange={e => {setNewPasswordConfirm(e.target.value)}}
                 />
                <Button
                     disabled={disableInput}
