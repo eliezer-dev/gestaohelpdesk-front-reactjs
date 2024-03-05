@@ -11,7 +11,7 @@ import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 export function Header() {
     const navigate = useNavigate();
     const {user, signOut} = useAuth();
-    const [itensMenu, setItensMenu] = useState(["Chamados", "Ajuda", "Downloads"])
+    const [itensMenu, setItensMenu] = useState(["Chamados", "Clientes", "Ajuda", "Downloads"])
     const [username, setUsername] = useState("")
     const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
 
@@ -31,7 +31,6 @@ export function Header() {
     async function getAvatar(){
         const response = await api.get(`/users/avatar`)
         const base64Data = response.data;
-        console.log(base64Data);
         setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
 
     }

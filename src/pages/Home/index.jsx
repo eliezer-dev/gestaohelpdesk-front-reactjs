@@ -1,20 +1,69 @@
 import { ButtonText } from "../../components/ButtonText";
-import { Container } from "./styles";
+import { Container, TicketTable } from "./styles";
 import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header";
 
+import { api } from "../../services/api";
+import { useEffect, useState } from "react";
+import { RepeatOneSharp, Rowing } from "@mui/icons-material";
+import { MenuSide } from "../../components/MenuSide";
+import { TicketsTable } from "../../components/TicketsTable";
+
 export function Home(){
-    const {signOut} = useAuth()
     const navigate = useNavigate();
+    const {user} = useAuth();
+    const [ticketsAssignedUser, setTicketsAssignedUser] = useState([]);
+    const [ticketsNotAssigned, setTicketsNotAssigned] = useState([]);
+    const [allTickets, setAllTickets] = useState([]);
+    const [helpdeskAttendants, setHelpdeskAttendants] = useState("");
     
-    function handleSignOut() {
-        signOut()
+    function handleClick(){
+        console.log(helpdeskAttendants)
     }
+
+
+    async function fetchTickets() {
+        const response = await api.get("/tickets")
+        let ticketsFormated = formatDate(response.data)
+        setAllTickets(ticketsFormated)
+    }
+
+    function formatDate(data) {
+        let dataFormated = []
+        data.map((ticket) => {
+            const date = new Date(ticket.createAt);
+            const ticketFormated = {
+                id:ticket.id,
+                description:ticket.description,
+                shortDescription:ticket.shortDescription,
+                client:ticket.client,   
+                users:ticket.users,
+                status:ticket.status,
+                createAt:date.toLocaleString().replace(/,/g,"")
+            }
+            dataFormated.push(ticketFormated)
+        })
+        return dataFormated
+        
+    }
+
+    useEffect(() => {
+        fetchTickets();
+    },[])
+
+    setTimeout(() => {
+        fetchTickets();
+    }, 15000);
+
     return (
         <Container>
             <Header/>
-                   
+            <div className="page">
+                <MenuSide/>
+                <TicketsTable tickets={ticketsAssignedUser}/>   
+            </div> 
+            
         </Container>
     )
 }

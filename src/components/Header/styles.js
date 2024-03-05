@@ -8,7 +8,7 @@ export const Container = styled.div`
 export const Logo = styled.div `
         background-color: ${({theme}) => theme.COLORS.BLUE_100};
         color: ${({theme}) => theme.COLORS.WHITE};
-        width: 150px;
+        width: 195px;
         font-weight: bold;
         display: flex;
         align-items: center;

@@ -5,5 +5,14 @@ export const Container = styled.div `
         color: ${({theme}) => theme.COLORS.PINK}
     }
 
+    .page {
+        display: flex;
+    }
 `;
+
+export const TicketTable = styled.table `
+
+`
+
+
 
