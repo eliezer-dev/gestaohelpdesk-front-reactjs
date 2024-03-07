@@ -1,6 +1,4 @@
 import { Container, Section, MenuSide } from "./styles";
-import { useAuth } from "../../hooks/auth";
-import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header";
 
 import { api } from "../../services/api";
@@ -8,12 +6,15 @@ import { useEffect, useState } from "react";
 import { TicketsTable } from "../../components/TicketsTable";
 
 export function Home(){
-    const navigate = useNavigate();
     const [header, setHeader] = useState("Chamados atribuídos a mim")
     const [ticketsAssignedUser, setTicketsAssignedUser] = useState([]);
+    const [ticketsAssignedUserQty, setTicketsAssignedUserQty] = useState([]);
     const [ticketsNotAssigned, setTicketsNotAssigned] = useState([]);
+    const [ticketsNotAssignedQty, setTicketsNotAssignedQty] = useState([]);
     const [allTickets, setAllTickets] = useState([]);
+    const [allTicketsQty, setAllTicketsQty] = useState([]);
     const [ticketsAssignedOtherUsers, setTicketsAssignedOtherUsers] = useState([]);
+    const [ticketsAssignedOtherUsersQty, setTicketsAssignedOtherUsersQty] = useState([]);
     const [tickets, setTickets] = useState([])
     const [optionCode, setOptionCode] = useState(1);
 
@@ -51,9 +52,13 @@ export function Home(){
         let ticketsAssignedOtherUsersFormated = formatDate(response.data.ticketsAssignedOtherUsers);
 
         setAllTickets(allTicketsFormated);
+        setAllTicketsQty(allTicketsFormated.length)
         setTicketsAssignedUser(ticketsAssignedUserFormated);
+        setTicketsAssignedUserQty(ticketsAssignedUserFormated.length);
         setTicketsNotAssigned(ticketsNotSignedFormated);
+        setTicketsNotAssignedQty(ticketsNotSignedFormated.length);
         setTicketsAssignedOtherUsers(ticketsAssignedOtherUsersFormated);
+        setTicketsAssignedOtherUsersQty(ticketsAssignedOtherUsersFormated.length);
     
         if (tickets.length == 0) {
             setTickets(ticketsAssignedUserFormated) 
@@ -99,7 +104,7 @@ export function Home(){
         }else {
             setTickets(allTickets)
         }
-    }, 60000);
+    }, 10000);
 
 
     return (
@@ -107,10 +112,10 @@ export function Home(){
             <Header/>
             <div className="page">
                 <MenuSide>
-                    <p onClick={handleTicketsAssignedUser}>Atribuídos a mim</p>
-                    <p onClick={handleTicketsAssignedOtherUsers}>Outros usuários</p>
-                    <p onClick={handleTicketsNotAssigned}>Sem atribuição</p>
-                    <p onClick={handleAllTickets}>Todos</p>
+                    <p onClick={handleTicketsAssignedUser}>Atribuídos a mim ({ticketsAssignedUserQty})</p>
+                    <p onClick={handleTicketsAssignedOtherUsers}>Outros usuários ({ticketsAssignedOtherUsersQty})</p>
+                    <p onClick={handleTicketsNotAssigned}>Sem atribuição ({ticketsNotAssignedQty})</p>
+                    <p onClick={handleAllTickets}>Todos ({allTicketsQty})</p>
                 </MenuSide>
 
         
