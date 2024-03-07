@@ -16,26 +16,30 @@ export function Home(){
     const [ticketsAssignedUser, setTicketsAssignedUser] = useState([]);
     const [ticketsNotAssigned, setTicketsNotAssigned] = useState([]);
     const [allTickets, setAllTickets] = useState([]);
+    const [ticketsAssignedOtherUsers, setTicketsAssignedOtherUsers] = useState([]);
     const [helpdeskAttendants, setHelpdeskAttendants] = useState("");
     
     function handleClick(){
-        console.log(helpdeskAttendants)
+        console.log(helpdeskAttendants);
     }
 
 
     async function fetchTickets() {
         const response = await api.get("/tickets")
         
-        let allTicketsFormated = formatDate(response.data.allTickets)
-        let ticketsAssignedUserFormated = formatDate(response.data.ticketsAssignedUser)
-        let ticketsNotSignedFormated = formatDate(response.data.ticketsNotAssigned)
-        setAllTickets(allTicketsFormated)
-        setTicketsAssignedUser(ticketsAssignedUserFormated)
-        setTicketsNotAssigned(ticketsNotSignedFormated)
+        let allTicketsFormated = formatDate(response.data.allTickets);
+        let ticketsAssignedUserFormated = formatDate(response.data.ticketsAssignedUser);
+        let ticketsNotSignedFormated = formatDate(response.data.ticketsNotAssigned);
+        let ticketsAssignedOtherUsersFormated = formatDate(response.data.ticketsAssignedOtherUsers);
+
+        setAllTickets(allTicketsFormated);
+        setTicketsAssignedUser(ticketsAssignedUserFormated);
+        setTicketsNotAssigned(ticketsNotSignedFormated);
+        setTicketsAssignedOtherUsers(ticketsAssignedOtherUsersFormated);
     }
 
     function formatDate(data) {
-        let dataFormated = []
+        let dataFormated = [];
         data && data.map((ticket) => {
             const date = new Date(ticket.createAt);
             const ticketFormated = {
@@ -46,10 +50,10 @@ export function Home(){
                 users:ticket.users,
                 status:ticket.status,
                 createAt:date.toLocaleString().replace(/,/g,"")
-            }
-            dataFormated.push(ticketFormated)
+            };
+            dataFormated.push(ticketFormated);
         })
-        return dataFormated
+        return dataFormated;
         
     }
 
@@ -65,6 +69,7 @@ export function Home(){
         <Container>
             <Header/>
             <div className="page">
+                <MenuSide/>
                 <div className="tickets">
                     <Section className="assignedUser">
                         <h1>Chamados atribuídos a mim</h1>
@@ -75,6 +80,10 @@ export function Home(){
                         <h1>Chamados não atribuídos</h1>
                         <TicketsTable tickets={ticketsNotAssigned}/>
                     </Section>   
+                    <Section className="alltickets">
+                        <h1>Chamados Atribuídos a Outros Usuários</h1>
+                        <TicketsTable tickets={ticketsAssignedOtherUsers}/>
+                    </Section>
                     <Section className="alltickets">
                         <h1>Todos os chamados</h1>
                         <TicketsTable tickets={allTickets}/>
