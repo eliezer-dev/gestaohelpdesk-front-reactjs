@@ -1,5 +1,5 @@
 import { ButtonText } from "../../components/ButtonText";
-import { Container, TicketTable } from "./styles";
+import { Container, Section } from "./styles";
 import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../components/Header";
@@ -25,13 +25,18 @@ export function Home(){
 
     async function fetchTickets() {
         const response = await api.get("/tickets")
-        let ticketsFormated = formatDate(response.data)
-        setAllTickets(ticketsFormated)
+        
+        let allTicketsFormated = formatDate(response.data.allTickets)
+        let ticketsAssignedUserFormated = formatDate(response.data.ticketsAssignedUser)
+        let ticketsNotSignedFormated = formatDate(response.data.ticketsNotAssigned)
+        setAllTickets(allTicketsFormated)
+        setTicketsAssignedUser(ticketsAssignedUserFormated)
+        setTicketsNotAssigned(ticketsNotSignedFormated)
     }
 
     function formatDate(data) {
         let dataFormated = []
-        data.map((ticket) => {
+        data && data.map((ticket) => {
             const date = new Date(ticket.createAt);
             const ticketFormated = {
                 id:ticket.id,
@@ -60,8 +65,24 @@ export function Home(){
         <Container>
             <Header/>
             <div className="page">
-                <MenuSide/>
-                <TicketsTable tickets={ticketsAssignedUser}/>   
+                <div className="tickets">
+                    <Section className="assignedUser">
+                        <h1>Chamados atribuídos a mim</h1>
+                        <TicketsTable tickets={ticketsAssignedUser}/>
+                    </Section>
+                    
+                    <Section className="notAssigned">
+                        <h1>Chamados não atribuídos</h1>
+                        <TicketsTable tickets={ticketsNotAssigned}/>
+                    </Section>   
+                    <Section className="alltickets">
+                        <h1>Todos os chamados</h1>
+                        <TicketsTable tickets={allTickets}/>
+                    </Section>
+
+                </div>
+                
+                
             </div> 
             
         </Container>
