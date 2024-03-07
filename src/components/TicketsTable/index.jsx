@@ -131,7 +131,7 @@ export function TicketsTable({tickets}) {
                             {ticket.client.razaoSocialName}
                           </TableCell>
                           <TableCell  >
-                            {ticket.description}
+                            {ticket.shortDescription}
                           </TableCell>
                           <TableCell  >
                             {

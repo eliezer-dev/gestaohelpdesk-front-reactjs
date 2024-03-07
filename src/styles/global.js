@@ -8,7 +8,8 @@ export default createGlobalStyle`
         box-sizing: border-box;
     }
 
-    body {
+    html, body {
+        height: 100vh;
         background-color: ${({theme}) => theme.COLORS.WHITE};
         color: ${({theme}) => theme.COLORS.BLACK};
         -webkit-font-smoothing: antialiased;

@@ -58,6 +58,8 @@ function AuthProvider({children}) {
        }
     }
 
+
+
     useEffect(() => {
         const user = localStorage.getItem("@gestaohelpdesk:user")
         const token = localStorage.getItem("@gestaohelpdesk:token")
