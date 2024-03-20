@@ -28,6 +28,10 @@ export function Header() {
         navigate("/")
     }
 
+    function handleNewTicket() {
+        navigate("/ticket/new")
+    }
+
     async function getAvatar(){
         const response = await api.get(`/users/avatar`)
         const base64Data = response.data;
@@ -55,7 +59,7 @@ export function Header() {
                             </Fragment>
                         ))
                     }
-                <Button title="Novo Chamado" icon={FaEnvelope }/>
+                <Button title="Novo Chamado" icon={FaEnvelope } onClick={handleNewTicket}/>
             </Menu>
             <Profile>
                 <ul>
