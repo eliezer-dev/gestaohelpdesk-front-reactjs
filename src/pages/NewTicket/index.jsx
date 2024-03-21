@@ -30,7 +30,6 @@ export function NewTicket() {
 
  
     async function handleSave(dataForm) {
-        console.log(dataForm)
         const targetIndex = dataForm.status.target.selectedIndex
         const statusId = dataForm.status.target.childNodes[targetIndex].id
 
@@ -44,26 +43,34 @@ export function NewTicket() {
             return
         }
 
-        if (!dataForm.clientId) {
-            alert ("Prencha o id do cliente")
+        if (!client) {
+            alert ("Pesquise o cliente")
             return
         }
 
+        console.log(client.id)
         await api.post("/tickets", {
             shortDescription:dataForm.shortDescription,
             description:dataForm.description,
-            client:{id:dataForm.clientId},
-            users:[user.id
-
-            ],
+            client:{id:client.id},
+            users:[user.id],
+            typeOfService:dataForm.typeOfService,            
             status:{id:statusId}
         })
+
+        alert("Chamado salvo com sucesso.")
+        handleBack()
 
     }    
 
 
     function handleBack() {
-        navigate("/")
+        const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
+        if (getConfirm) {
+            navigate("/")
+            return
+        }
+        return
     }
 
     useEffect(() => {

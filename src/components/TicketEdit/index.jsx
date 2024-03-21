@@ -1,4 +1,4 @@
-import { Container } from "./styles";
+import { Container, Select } from "./styles";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { TextArea } from "../TextArea";
@@ -16,41 +16,48 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     const [clientSelected, setClientSelected] = useState();
     const [userId, setUserID] = useState();
     const [status, setStatus] = useState();
-    const [statusList, setStatusList] = useState([])
+    const [statusList, setStatusList] = useState([]);
+    const [typeOfService, setTypeOfService] = useState(1);
     
 
     function salvar () {
+
         const dataForm = {
             shortDescription,
             description,
             clientSearch,
-            status
+            status,
+            typeOfService
         }
         getDataForm(dataForm)
         return
     }
 
     function handleClientSelect(event) {
-        setClientsFound([])
+    
         setClientSearch(event.target.value)
-
         const clientSelectedId = event.target.childNodes[event.target.selectedIndex].id
         
         if (clientSelectedId) {
             const clientSelected = clientsFound.find((client) => client.id == clientSelectedId);
+            console.log(clientSelected)
             getClientForm(clientSelected);
+            setClientsFound([])
             return;
         }
+
+        setClientsFound([])
        
        return
     }
 
     async function handleClientSearch (event) {
         setClientSearch(event)
-         if (event.length == 0){
+        //quando apaga a pesquisa o campo é resetado
+        if (event.length == 0){
             setClientsFound([])
             return
-         }
+        }
 
         const res = await api.get(`/clients?search=${event}`)
         setClientsFound(res.data)
@@ -128,28 +135,64 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
 
                 </div>
 
-                <select 
-                    name="status" 
-                    id="status-select" 
-                    defaultChecked
-                    onChange={e => {setStatus(e)}}
-                    required
-                >   
-                    {
-                        statusList && 
-                        statusList.map(status => (
-                            <option 
-                                key={status.id} 
-                                id={status.id} 
-                                value={status.description}
-                            >
-                            {status.description}
-                            </option>
-                           
-                        ))
+                <Select
+                        name="status" 
+                        id="status-select" 
+                        defaultChecked
+                        onChange={e => {setStatus(e)}}
+                        required
+                    >   
+                        <option 
+                            value="" 
+                            disabled
+                            selected
+                        >
+                            Selecione o Status do Chamado
+                        </option>
+                        {
+                            statusList && 
+                            statusList.map(status => (
+                                <option 
+                                    key={status.id} 
+                                    id={status.id} 
+                                    value={status.description}
+                                >
+                                {status.description}
+                                </option>
 
-                    }
-                </select>
+                            ))
+
+                        }
+                </Select>
+                
+                <Select
+                    name="typeOfService" 
+                    id="typeOfService-select" 
+                    defaultChecked
+                    onChange={e => {setTypeOfService(e.target.value)}}
+                    required
+                    >
+                        <option 
+                            value="" 
+                            disabled
+                            selected
+                        >
+                            Selecione o Tipo do Atendimento
+                        </option>
+                        <option  
+                            id={1}
+                            value={1}
+                        >
+                            Chamado Helpdesk
+                        </option>
+                    
+                        <option  
+                            id={2}
+                            value={2}
+                        >
+                            Visita Técnica
+                        </option>
+                </Select>
             <Button title="Salvar" onClick={salvar}/>  
         </Container>
     )

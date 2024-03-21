@@ -10,7 +10,11 @@ export const Container = styled.form `
     width: 600px;
     margin: 0 auto;
 
-    
+    label {
+            color: ${({theme}) => theme.COLORS.BLACK};
+            margin-bottom: 12px;
+            font-weight: bold;
+    }    
 
     .clienteSearch {
         width: 100%;
@@ -62,3 +66,20 @@ export const Container = styled.form `
 
 
 `;
+
+export const Select = styled.select`
+    
+    outline: none;
+    width: 100%;
+    height: 56px;
+    border-radius: 10px;
+    border: none;
+    background: ${({theme}) => theme.COLORS.WHITE_100};
+    margin-bottom: 8px;
+    padding: 12px;
+    color: ${({theme}) => theme.COLORS.GRAY_200};
+    
+    option {
+        padding-block:8px;
+    }
+`    
