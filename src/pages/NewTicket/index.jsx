@@ -59,7 +59,7 @@ export function NewTicket() {
         })
 
         alert("Chamado salvo com sucesso.")
-        handleBack()
+        navigate("/")
 
     }    
 

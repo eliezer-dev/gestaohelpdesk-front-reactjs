@@ -1,4 +1,4 @@
-import { Container, Select } from "./styles";
+import { Container, Select, CheckBoxItem } from "./styles";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { TextArea } from "../TextArea";
@@ -17,20 +17,58 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     const [userId, setUserID] = useState();
     const [status, setStatus] = useState();
     const [statusList, setStatusList] = useState([]);
-    const [typeOfService, setTypeOfService] = useState(1);
-    
+    const [typeOfService, setTypeOfService] = useState();
+    const [scheduledDateTime, setScheduledDateTime]= useState();
+    const [isSheduled, setIsSheduled] = useState(false);
 
     function salvar () {
-
+        const dataFormIsOK = dataFormValidator();
+        if (!dataFormIsOK) {
+            return;
+        }
+        
         const dataForm = {
             shortDescription,
             description,
             clientSearch,
             status,
-            typeOfService
+            typeOfService,
+            scheduledDateTime
         }
         getDataForm(dataForm)
         return
+    }
+
+    function dataFormValidator() {
+        if (!shortDescription) {
+            alert ("Breve descrição não informada")
+            return false;
+        }else if (!description) {
+            alert ("Descrição não informada")
+            return false;
+        }else if (!clientSearch) {
+            alert ("Cliente não informado.")
+            return false;
+        }else if (!status) {
+            alert ("Status do chamado não informado.")
+            return false;
+        }else if (!typeOfService) {
+            alert ("Tipo do atendimento não informado.")
+            return false;
+        }else if (isSheduled == true) {
+            if (!scheduledDateTime) {
+                alert ("Chamado definido como agendamento, mas não informado data de agendamento.")
+                return false
+            }
+        }else {
+            return true
+        }   
+         
+    }
+
+
+    function handleSheduled(event) {
+        setIsSheduled(event.target.checked)
     }
 
     function handleClientSelect(event) {
@@ -183,16 +221,37 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                             id={1}
                             value={1}
                         >
-                            Chamado Helpdesk
+                            Interno
                         </option>
                     
                         <option  
                             id={2}
                             value={2}
                         >
-                            Visita Técnica
+                            Externo
                         </option>
                 </Select>
+                <div className="scheduled">
+                    <CheckBoxItem>
+                        <label> Atendimento agendado? </label>
+                        <input 
+                            type="checkbox"
+                            checked={isSheduled}
+                            onChange={e => {handleSheduled(e)}}
+                        />                         
+                    </CheckBoxItem>
+                    {
+                        isSheduled == true &&
+                        <Input
+                            className="scheduled_datetime"
+                            type="datetime-local"
+                            value={scheduledDateTime}
+                            onChange={e => {setScheduledDateTime(e.target.value)}}
+                        >
+                        </Input>
+                    }
+                    
+                </div>
             <Button title="Salvar" onClick={salvar}/>  
         </Container>
     )

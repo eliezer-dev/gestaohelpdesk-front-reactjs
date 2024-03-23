@@ -1,12 +1,10 @@
 import styled from "styled-components";
 
 export const Container = styled.form `
-    //top: -64px;
     display: flex;
     gap: 24px;
     flex-direction: column;
     align-items: center;
-    //position: relative;
     width: 600px;
     margin: 0 auto;
 
@@ -64,7 +62,17 @@ export const Container = styled.form `
         }
     }
 
+    .scheduled {
+        display: flex;
+        justify-content: space-between;
+        gap: 24px;
+        align-items: center;
+        width: 100%;
+    }
 
+    .scheduled_datetime {
+        width: 200px;
+    }
 `;
 
 export const Select = styled.select`
@@ -83,3 +91,16 @@ export const Select = styled.select`
         padding-block:8px;
     }
 `    
+
+export const CheckBoxItem = styled.div`
+    width: 250px;
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    margin-right: 12px;
+
+    input {
+        width: 20px;
+        height: 20px;
+    }
+`
