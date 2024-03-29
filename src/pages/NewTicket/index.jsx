@@ -85,13 +85,22 @@ export function NewTicket() {
                 <h1>Novo Chamado</h1>
             </Header>
             <Content>
-                <div className="ticketID">
+                <div className="ticketInfo">
                     <label>Número do Chamado: </label>
-                        <Input      
-                            type="text"
-                            disabled={true}
-
-                        />
+                    <Input      
+                        type="text"
+                        disabled={true}
+                    />
+                    <label>Prioridade </label>
+                    <Input      
+                        type="text"
+                        disabled={true}
+                    />
+                    <label>SLA </label>
+                    <Input      
+                        type="text"
+                        disabled={true}
+                    />
                 </div>
                 <TicketEdit
                     newTicketForm

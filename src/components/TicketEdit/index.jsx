@@ -20,6 +20,7 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     const [typeOfService, setTypeOfService] = useState();
     const [scheduledDateTime, setScheduledDateTime]= useState();
     const [isSheduled, setIsSheduled] = useState(false);
+    const [categories, setcategories] = useState([]);
 
     function salvar () {
         const dataFormIsOK = dataFormValidator();
@@ -103,7 +104,6 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
 
     async function fetchStatus () {
         const status = await api.get("/status")
-        console.log(status)
         
         if (newTicketForm) {
             const statusListForNewTicketForm = status.data.filter((status) => status.type == null || status.type == 1)
@@ -112,31 +112,19 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
         
     }
 
+    async function fetchCategory() {
+        const categories = await api.get("/categories")
+        setcategories(categories.data)
+    }
+
     useEffect(() => {
-        fetchStatus()       
+        fetchStatus()
+        fetchCategory()       
         
     },[])
 
     return (
         <Container>
-                
-                <Input
-                    placeholder="Breve descrição do chamado."
-                    type="text"
-                    value={shortDescription}
-                    onChange={e => {setShortDescription(e.target.value)}}
-                    required
-                />
-                <TextArea
-                    placeholder="Descrição do Chamado"
-                    type="textarea"
-                    rows="10"
-                    cols="50"
-                    value={description}
-                    onChange={e => {setDescription(e.target.value)}}
-                    required
-                />
-
                 <div className="clienteSearch">
                     <Input
                     icon={FiSearch}
@@ -170,8 +158,56 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                         </select>
                     }
                     
-
                 </div>
+     
+                <Input
+                    placeholder="Breve descrição do chamado."
+                    type="text"
+                    value={shortDescription}
+                    onChange={e => {setShortDescription(e.target.value)}}
+                    required
+                />
+                <TextArea
+                    placeholder="Descrição do Chamado"
+                    type="textarea"
+                    rows="14"
+                    cols="50"
+                    value={description}
+                    maxlength={1000}
+                    onChange={e => {setDescription(e.target.value)}}
+                    required
+                    characteresUsed = {description.length}
+                />
+
+                <Select
+                        name="category" 
+                        id="category-select" 
+                        defaultChecked
+                        onChange={e => {setStatus(e)}}
+                        required
+                    >   
+                        <option 
+                            value="" 
+                            disabled
+                            selected
+                        >
+                            Selecione a categoria que melhor descreve o chamado.
+                        </option>
+                        {
+                            categories && 
+                            categories.map(category => (
+                                <option 
+                                    key={category.id} 
+                                    id={category.id} 
+                                    value={category.description}
+                                >
+                                {category.description}
+                                </option>
+
+                            ))
+
+                        }
+                </Select>   
 
                 <Select
                         name="status" 
@@ -231,6 +267,9 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                             Externo
                         </option>
                 </Select>
+               
+
+
                 <div className="scheduled">
                     <CheckBoxItem>
                         <label> Atendimento agendado? </label>

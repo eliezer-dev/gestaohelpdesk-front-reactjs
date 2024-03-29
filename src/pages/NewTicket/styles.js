@@ -4,17 +4,22 @@ export const Container = styled.div`
         background: ${({theme}) => theme.COLORS.GRAY_200};
         height: 100vh;
 
-        .ticketID {
+        .ticketInfo {
             font-weight: bold;
             margin-top: 24px;
             width: 300px;
             display: flex;
-            align-content: space-between;
+            flex-direction: column;
             align-items: flex-start;
-            justify-content: space-between;
             
+            label {
+                margin-bottom: 8px;
+            }
+
+
             div {
                 width: 250px;
+                margin-bottom: 24px;
             }
         }
     
