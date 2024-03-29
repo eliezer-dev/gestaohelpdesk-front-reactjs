@@ -170,7 +170,7 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                 <TextArea
                     placeholder="Descrição do Chamado"
                     type="textarea"
-                    rows="14"
+                    rows="10"
                     cols="50"
                     value={description}
                     maxlength={1000}
