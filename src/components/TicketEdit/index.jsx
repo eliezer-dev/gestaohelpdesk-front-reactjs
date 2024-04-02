@@ -21,6 +21,7 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     const [scheduledDateTime, setScheduledDateTime]= useState();
     const [isSheduled, setIsSheduled] = useState(false);
     const [categories, setcategories] = useState([]);
+    const [typeSearchState, setTypeSearchState] = useState(1);
 
     function salvar () {
         const dataFormIsOK = dataFormValidator();
@@ -79,7 +80,6 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
         
         if (clientSelectedId) {
             const clientSelected = clientsFound.find((client) => client.id == clientSelectedId);
-            console.log(clientSelected)
             getClientForm(clientSelected);
             setClientsFound([])
             return;
@@ -90,7 +90,15 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
        return
     }
 
-    async function handleClientSearch (event) {
+    function changeTypeSearch (event) {
+        const search = clientSearch
+        setTypeSearchState(event)
+        handleClientSearch(search, event)
+    }
+
+    async function handleClientSearch (event, typeParams) {
+        const typeSearch = typeParams ? typeParams : typeSearchState
+        
         setClientSearch(event)
         //quando apaga a pesquisa o campo é resetado
         if (event.length == 0){
@@ -98,7 +106,11 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
             return
         }
 
-        const res = await api.get(`/clients?search=${event}`)
+        if (typeSearch == 3 && event.length < 11) {
+            setClientsFound([])
+            return
+        }
+        const res = await api.get(`/clients?search=${event}&type=${typeSearch}`)
         setClientsFound(res.data)
     }
 
@@ -126,14 +138,30 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     return (
         <Container>
                 <div className="clienteSearch">
-                    <Input
-                    icon={FiSearch}
-                    placeholder="Pesquise o Cliente"
-                    type="search"
-                    value={clientSearch}
-                    onChange={e => {handleClientSearch(e.target.value)}}
+                    <div id="search">
+                        <Input
+                            id="inputClientSearch"
+                            icon={FiSearch}
+                            placeholder="Pesquise o Cliente"
+                            type="search"
+                            value={clientSearch}
+                            onChange={e => {handleClientSearch(e.target.value)}}
+                        /> 
+                        <select 
+                            name="typeOfsearch" 
+                            id="typeOfsearch"
+                            onChange={e => {changeTypeSearch(e.target.value)}}
+                        >
+                            <option id={1} value={1}>Razão Social</option>
+                            <option id={2} value={2}>Fantasia</option>
+                            <option id={3} value={3}>CNPJ</option>
+                            <option id={4} value={4}>E-mail</option>
+                            <option id={5} value={5}>Cidade</option>
+                            <option id={6} value={6}>Endereço</option>
+
+                        </select>
+                    </div>
                     
-                    /> 
                     {
                         clientsFound?.length > 0 && 
                         <select 
@@ -143,14 +171,17 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                         size="10"
                         >   
                         {
-                            clientsFound && 
+                            clientsFound.length > 0 && 
                             clientsFound.map(client => (
                                 <option 
-                                    key={client.id} 
-                                    id={client.id} 
-                                    value={client.razaoSocialName}
+                                    key={client?.id} 
+                                    id={client?.id} 
+                                    value={client?.razaoSocialName}
                                 >
-                                {client.razaoSocialName}
+                                { client?.businessName ?
+                                    `${client?.razaoSocialName} - ${client?.businessName}` :
+                                    client?.razaoSocialName
+                                }
                                 </option>
                             ))
 

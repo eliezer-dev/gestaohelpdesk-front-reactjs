@@ -38,8 +38,36 @@ export const Container = styled.form `
         option {
             padding-block:8px;
         }
+
+        }   
+
+        div {
+            display: flex;
+            width: 100%;
+            height: 56px;
+            
+            select {
+                width: 110px;
+                border: none;
+                outline: none;
+                border-top-right-radius: 16px;
+                border-bottom-right-radius: 16px;
+                background-color: ${({theme}) => theme.COLORS.BLUE_100};
+                color: ${({theme}) => theme.COLORS.WHITE};
+                font-weight: bold;
+            }
+        }
+    }
+   
+    #inputClientSearch {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
     }
 
+    #clients-select {
+        margin-top: 2px;
+        border-radius: 8px;
+        width: 100%;
     }
 
     #status-select {
@@ -75,8 +103,7 @@ export const Container = styled.form `
     }
 `;
 
-export const Select = styled.select`
-    
+export const Select = styled.select`   
     outline: none;
     width: 100%;
     height: 56px;
