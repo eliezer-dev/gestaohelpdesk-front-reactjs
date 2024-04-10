@@ -18,8 +18,10 @@ import LastPageIcon from '@mui/icons-material/LastPage';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function TicketsTable({tickets}) {
+    const navigate = useNavigate();
     
     function TablePaginationActions(props) {
         const theme = useTheme();
@@ -90,8 +92,8 @@ export function TicketsTable({tickets}) {
         setPage(0);
       };
 
-    function handleEditTicket () {
-        console.log("editing ticket...")
+    function handleEditTicket (ticketId) {
+        navigate(`/ticket/${ticketId}`)
     }
     
     function handleDeleteTicket(){
@@ -147,7 +149,7 @@ export function TicketsTable({tickets}) {
                             { ticket.createAt}
                           </TableCell>
                           <TableCell  className="ticket_options">
-                            <EditIcon onClick={handleEditTicket}/>
+                            <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
                             <DeleteIcon onClick={handleDeleteTicket}/>
                           </TableCell>
                           

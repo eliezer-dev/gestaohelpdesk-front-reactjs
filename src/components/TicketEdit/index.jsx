@@ -8,19 +8,23 @@ import { FiSearch } from "react-icons/fi";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
-export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
+export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="new"}) {
+    
     const [shortDescription, setShortDescription] = useState("");
     const [description, setDescription] = useState("");
     const [clientSearch, setClientSearch] = useState("");
+    const [inputClientSearchState, setInputClientSearchState] = useState(false)
     const [clientsFound, setClientsFound] = useState([]);
     const [clientSelected, setClientSelected] = useState();
     const [userId, setUserID] = useState();
     const [status, setStatus] = useState();
     const [statusList, setStatusList] = useState([]);
+    const [categoryState, setCategoryState] = useState();
+    const [categoriesListState, setCategoriesListState] = useState([]);
     const [typeOfService, setTypeOfService] = useState();
     const [scheduledDateTime, setScheduledDateTime]= useState();
     const [isSheduled, setIsSheduled] = useState(false);
-    const [categories, setcategories] = useState([]);
+    
     const [typeSearchState, setTypeSearchState] = useState(1);
 
     function salvar () {
@@ -32,14 +36,24 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
         const dataForm = {
             shortDescription,
             description,
-            clientSearch,
+            client:clientSearch,
             status,
             typeOfService,
+            category:categoryState,
             scheduledDateTime
         }
         getDataForm(dataForm)
         return
     }
+
+    function handleSelectStatus (event) {
+        setStatus(event.target.childNodes[event.target.selectedIndex].id)
+    }
+
+    function handleSelectCategory(event) {
+        setCategoryState(event.target.childNodes[event.target.selectedIndex].id)
+    }
+
 
     function dataFormValidator() {
         if (!shortDescription) {
@@ -57,11 +71,17 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
         }else if (!typeOfService) {
             alert ("Tipo do atendimento não informado.")
             return false;
+       
+        }else if (!categoryState) {
+            alert ("Caregoria do atendimento não informada")
+            return false;
+          
         }else if (isSheduled == true) {
             if (!scheduledDateTime) {
                 alert ("Chamado definido como agendamento, mas não informado data de agendamento.")
                 return false
             }
+            return true
         }else {
             return true
         }   
@@ -70,7 +90,12 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
 
 
     function handleSheduled(event) {
+        
+        if (isSheduled) {
+            setScheduledDateTime()
+        }
         setIsSheduled(event.target.checked)
+        
     }
 
     function handleClientSelect(event) {
@@ -117,29 +142,50 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
     async function fetchStatus () {
         const status = await api.get("/status")
         
-        if (newTicketForm) {
+        if (typeForm = "new") {
             const statusListForNewTicketForm = status.data.filter((status) => status.type == null || status.type == 1)
             setStatusList(statusListForNewTicketForm)
         }
         
     }
+    
 
     async function fetchCategory() {
         const categories = await api.get("/categories")
-        setcategories(categories.data)
+        setCategoriesListState(categories.data)
     }
 
     useEffect(() => {
         fetchStatus()
-        fetchCategory()       
+        fetchCategory()
+        if (ticketData) {
+            setClientSearch(ticketData?.client?.razaoSocialName)
+            setInputClientSearchState(true)
+            setShortDescription(ticketData.shortDescription)
+            setDescription(ticketData.description)
+            setStatus(ticketData.status.id)
+            setCategoryState(ticketData.category.id)
+            setTypeOfService(ticketData.typeOfService)
+            if (ticketData.scheduledDateTime) {
+                setIsSheduled(true)
+                setScheduledDateTime(ticketData.scheduledDateTime)
+            }
         
-    },[])
+
+        }        
+        
+    },[ticketData])
 
     return (
         <Container>
+                <div className="main">
+
+                </div>
+
                 <div className="clienteSearch">
                     <div id="search">
                         <Input
+                            disabled={inputClientSearchState}
                             id="inputClientSearch"
                             icon={FiSearch}
                             placeholder="Pesquise o Cliente"
@@ -147,19 +193,23 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                             value={clientSearch}
                             onChange={e => {handleClientSearch(e.target.value)}}
                         /> 
-                        <select 
-                            name="typeOfsearch" 
-                            id="typeOfsearch"
-                            onChange={e => {changeTypeSearch(e.target.value)}}
-                        >
-                            <option id={1} value={1}>Razão Social</option>
-                            <option id={2} value={2}>Fantasia</option>
-                            <option id={3} value={3}>CNPJ</option>
-                            <option id={4} value={4}>E-mail</option>
-                            <option id={5} value={5}>Cidade</option>
-                            <option id={6} value={6}>Endereço</option>
+                        {inputClientSearchState == false &&
+                            <select 
+                                name="typeOfsearch" 
+                                id="typeOfsearch"
+                                onChange={e => {changeTypeSearch(e.target.value)}}
+                            >
+                                <option id={1} value={1}>Razão Social</option>
+                                <option id={2} value={2}>Fantasia</option>
+                                <option id={3} value={3}>CNPJ</option>
+                                <option id={4} value={4}>E-mail</option>
+                                <option id={5} value={5}>Cidade</option>
+                                <option id={6} value={6}>Endereço</option>
 
-                        </select>
+                            </select>
+                        
+                        }
+                        
                     </div>
                     
                     {
@@ -214,23 +264,29 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                         name="category" 
                         id="category-select" 
                         defaultChecked
-                        onChange={e => {setStatus(e)}}
                         required
+                        onChange={e => {handleSelectCategory(e)}}
                     >   
-                        <option 
-                            value="" 
-                            disabled
-                            selected
-                        >
-                            Selecione a categoria que melhor descreve o chamado.
-                        </option>
                         {
-                            categories && 
-                            categories.map(category => (
+                            !ticketData && 
+                            <option 
+                                value="" 
+                                disabled
+                                selected
+                            >
+                                Selecione a categoria que melhor descreve o chamado.
+                            </option>
+                        }
+                        
+                        {
+                            categoriesListState && 
+                            categoriesListState.map(category => (
                                 <option 
                                     key={category.id} 
                                     id={category.id} 
                                     value={category.description}
+
+                                    selected={ticketData?.category?.id == category.id ? true : false}
                                 >
                                 {category.description}
                                 </option>
@@ -244,16 +300,19 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                         name="status" 
                         id="status-select" 
                         defaultChecked
-                        onChange={e => {setStatus(e)}}
+                        onChange={e => {handleSelectStatus(e)}}
                         required
                     >   
-                        <option 
-                            value="" 
-                            disabled
-                            selected
-                        >
+                        {!ticketData && 
+                            <option 
+                                value="" 
+                                disabled
+                                selected
+                            >
                             Selecione o Status do Chamado
-                        </option>
+                            </option>
+                        }
+                       
                         {
                             statusList && 
                             statusList.map(status => (
@@ -261,6 +320,7 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                                     key={status.id} 
                                     id={status.id} 
                                     value={status.description}
+                                    selected = {ticketData?.status?.id == status.id ? true : false}
                                 >
                                 {status.description}
                                 </option>
@@ -277,16 +337,20 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                     onChange={e => {setTypeOfService(e.target.value)}}
                     required
                     >
-                        <option 
-                            value="" 
-                            disabled
-                            selected
-                        >
-                            Selecione o Tipo do Atendimento
-                        </option>
+                        {!ticketData && 
+                            <option 
+                                value="" 
+                                disabled
+                                selected
+                            >
+                                Selecione o Tipo do Atendimento
+                            </option>
+                        }
+                       
                         <option  
                             id={1}
                             value={1}
+                            selected={ticketData?.typeOfService == 1 ? true : false}
                         >
                             Interno
                         </option>
@@ -294,6 +358,7 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                         <option  
                             id={2}
                             value={2}
+                            selected={ticketData?.typeOfService == 2 ? true : false}
                         >
                             Externo
                         </option>
@@ -322,7 +387,8 @@ export function TicketEdit({getDataForm, getClientForm, newTicketForm=false}) {
                     }
                     
                 </div>
-            <Button title="Salvar" onClick={salvar}/>  
+            {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
+            <Button title={typeForm == "new"? "Salvar" : "Atualizar"} onClick={salvar}/> 
         </Container>
     )
 }

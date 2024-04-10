@@ -1,20 +1,22 @@
 import { Container, Header, ClientInfo, Content} from "./styles";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {Input} from '../../components/Input'
 import { TextArea } from "../../components/TextArea";
 import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/auth";
-import { TicketEdit } from "../../components/TicketEdit";
+import { TicketEdit } from "../../components/TicketEdit"; 
 
 
-export function NewTicket() {
+export function Tickets() {
     const navigate = useNavigate();
-    const [client, setClient] = useState ()
     const {user} = useAuth();
-    
+    const params = useParams();
+    const [client, setClient] = useState ()
+    const [headerState, setHeaderState] = useState();
+    const [ticketDataState, setTicketDataState] = useState();
     
     const getDataForm = dataform => {
         handleSave(dataform)
@@ -30,9 +32,6 @@ export function NewTicket() {
 
  
     async function handleSave(dataForm) {
-        const targetIndex = dataForm.status.target.selectedIndex
-        const statusId = dataForm.status.target.childNodes[targetIndex].id
-
         if (dataForm.shortDescription == "") {
             alert ("Preencha o campo Breve Descrição do Chamado")
             return
@@ -43,26 +42,46 @@ export function NewTicket() {
             return
         }
 
-        if (!client) {
+        if (!dataForm.client) {
             alert ("Pesquise o cliente")
             return
         }
 
-        console.log(client.id)
-        await api.post("/tickets", {
-            shortDescription:dataForm.shortDescription,
-            description:dataForm.description,
-            client:{id:client.id},
-            users:[user.id],
-            typeOfService:dataForm.typeOfService,            
-            status:{id:statusId}
-        })
+        if (params.id == "new") {
+            await api.post("/tickets", {
+                shortDescription:dataForm.shortDescription,
+                description:dataForm.description,
+                client:{id:client.id},
+                users:[user.id],
+                typeOfService:dataForm.typeOfService,            
+                status:{id:dataForm.status},
+                category:{id:dataForm.category},
+                scheduledDateTime:dataForm.scheduledDateTime
+            })
+            alert("Chamado salvo com sucesso.")
+        } else {
+            await api.put(`/tickets/${params.id}`, {
+                shortDescription:dataForm.shortDescription,
+                description:dataForm.description,
+                client:{id:client.id},
+                users:[user.id],
+                typeOfService:dataForm.typeOfService,            
+                status:{id:dataForm.status},
+                category:{id:dataForm.category},
+                scheduledDateTime:dataForm.scheduledDateTime
+            })
+            alert("Chamado atualizado com sucesso.")
+        }   
 
-        alert("Chamado salvo com sucesso.")
         navigate("/")
 
     }    
 
+    async function fetchTicket(id) {
+        const ticket = await api.get(`/tickets/${id}`)
+        setTicketDataState(ticket.data);
+        setClient(ticket.data.client)
+    }
 
     function handleBack() {
         const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
@@ -74,6 +93,13 @@ export function NewTicket() {
     }
 
     useEffect(() => {
+        if (params.id == "new") {
+            setHeaderState("Novo Chamado")
+        } else {
+            setHeaderState(`Editar chamado número: ${params.id}`)
+            fetchTicket(params.id)
+       
+        }
     },[])
 
 
@@ -82,10 +108,10 @@ export function NewTicket() {
             
             <Header>
                 <ArrowBackIcon onClick={handleBack}/>
-                <h1>Novo Chamado</h1>
+                <h1>{headerState}</h1>
             </Header>
             <Content>
-                <div className="ticketInfo">
+                {/* <div className="ticketInfo">
                     <label>Número do Chamado: </label>
                     <Input      
                         type="text"
@@ -101,9 +127,10 @@ export function NewTicket() {
                         type="text"
                         disabled={true}
                     />
-                </div>
+                </div> */}
                 <TicketEdit
-                    newTicketForm
+                    typeForm = {params.id == "new" ? "new" : "edit"} 
+                    ticketData = {ticketDataState && ticketDataState }
                     getDataForm = {getDataForm}
                     getClientForm = {getClientForm}
                 />
