@@ -164,7 +164,7 @@ export function Profile () {
                     onChange={e => {setCep(e.target.value)}}
                 /> 
                 <Input
-                    disabled
+                    disabled={disableInput}
                     icon={PiAddressBookLight}
                     placeholder="Endereço"
                     type="text"

@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 import { useAuth } from "../../hooks/auth";
 
-export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="new"}) {
+export function TicketEdit({getDataForm, getClientForm, ticketData}) {
     
     const [shortDescription, setShortDescription] = useState("");
     const [description, setDescription] = useState("");
@@ -147,10 +147,13 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
     async function fetchStatus () {
         const status = await api.get("/status")
         
-        if (typeForm = "new") {
+        if (!ticketData) {
             const statusListForNewTicketForm = status.data.filter((status) => status.type == null || status.type == 1)
             setStatusList(statusListForNewTicketForm)
+            return
         }
+
+        setStatusList(status.data)
         
     }
     
@@ -431,7 +434,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
 
                     </div>
                     {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
-                    <Button title={typeForm == "new"? "Salvar" : "Atualizar"} onClick={salvar}/> 
+                    <Button title={ticketData ? "Atualizar" : "Salvar"} onClick={salvar}/> 
                 </TicketMain>
                 {
                 ticketData &&
@@ -465,7 +468,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
                                     value={annotation.description}
                                     wrap
                                     disabled
-                                    rows={3}
+                                    rows={4}
                                 />
                             </div>
                             </TicketAnnotations>

@@ -86,12 +86,9 @@ export function Tickets() {
     }
 
     function handleBack() {
-        const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
-        if (getConfirm) {
-            navigate("/")
-            return
-        }
+        navigate("/")
         return
+           
     }
 
     useEffect(() => {
