@@ -33,7 +33,6 @@ function AuthProvider({children}) {
     }
 
     async function updateProfile(userUpdated, avatarFile) {
-        
         try {
             await api.put(`/users/${data.user.id}`, userUpdated)
             localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(userUpdated))
@@ -42,11 +41,9 @@ function AuthProvider({children}) {
             if (avatarFile) {
                 const fileUploadForm = new FormData
                 fileUploadForm.append("avatar", avatarFile)
-                await api.put(`/users/avatar`, fileUploadForm)
+                await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)
             }
-
             return alert ("Os seus dados foram atualizados com sucesso.")
-  
             
        } catch (error) {
             if (error.response) {

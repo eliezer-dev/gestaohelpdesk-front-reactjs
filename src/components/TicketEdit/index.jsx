@@ -1,4 +1,4 @@
-import { Container, Select, CheckBoxItem } from "./styles";
+import { Container, TicketMain, Select, CheckBoxItem, Annotations, TicketAnnotations } from "./styles";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { TextArea } from "../TextArea";
@@ -7,6 +7,8 @@ import { api } from "../../services/api";
 import { FiSearch } from "react-icons/fi";
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
+import { useAuth } from "../../hooks/auth";
 
 export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="new"}) {
     
@@ -24,8 +26,10 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
     const [typeOfService, setTypeOfService] = useState();
     const [scheduledDateTime, setScheduledDateTime]= useState();
     const [isSheduled, setIsSheduled] = useState(false);
-    
     const [typeSearchState, setTypeSearchState] = useState(1);
+    const [annotationsListState, setAnnotatiosListState] = useState([]);
+    const [annotationState, setAnnotationState] = useState("")
+    const {user} = useAuth();
 
     function salvar () {
         const dataFormIsOK = dataFormValidator();
@@ -54,6 +58,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
         setCategoryState(event.target.childNodes[event.target.selectedIndex].id)
     }
 
+   
 
     function dataFormValidator() {
         if (!shortDescription) {
@@ -155,6 +160,47 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
         setCategoriesListState(categories.data)
     }
 
+    async function fetchAnnotations(){
+        const annotations = await api.get(`/tickets/annotations?ticket=${ticketData?.id}`)
+        if (annotations.data.length > 0) {
+            setAnnotatiosListState(annotations.data)
+        }
+        return annotations.data;
+    }
+
+    async function fetchUser(userId, attribute) {
+        const user = await api.get(`/users/${userId}`)
+        if (attribute == "name") {
+            console.log(user.data.name)
+            return user.data.name;
+        }
+        
+    }
+
+    async function getAvatar(userId){
+        const response = await api.get(`/users/avatar${userId}`)
+        return response.data
+        //setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
+
+    }
+
+    async function handleSaveAnnotation () {
+        console.log("chegou na função")
+        if (annotationState == "") {
+            console.log("entrou no if que não devia")
+            return;
+        }
+        const annotation = {
+            description:annotationState,
+            ticketId:ticketData.id,
+            userId: user.id
+        }
+        console.log(annotation)
+        await api.post(`/tickets/annotations`,annotation)
+        await fetchAnnotations();
+        setAnnotationState("");
+    }
+
     useEffect(() => {
         fetchStatus()
         fetchCategory()
@@ -166,229 +212,270 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, typeForm="ne
             setStatus(ticketData.status.id)
             setCategoryState(ticketData.category.id)
             setTypeOfService(ticketData.typeOfService)
+            
             if (ticketData.scheduledDateTime) {
                 setIsSheduled(true)
                 setScheduledDateTime(ticketData.scheduledDateTime)
             }
-        
+            fetchAnnotations();
 
-        }        
-        
+        }           
     },[ticketData])
 
     return (
         <Container>
-                <div className="main">
+                <TicketMain>
 
-                </div>
+                    <div className="clienteSearch">
+                        <div id="search">
+                            <Input
+                                disabled={inputClientSearchState}
+                                id="inputClientSearch"
+                                icon={FiSearch}
+                                placeholder="Pesquise o Cliente"
+                                type="search"
+                                value={clientSearch}
+                                onChange={e => {handleClientSearch(e.target.value)}}
+                            /> 
+                                <select
+                                    disabled={inputClientSearchState}
+                                    name="typeOfsearch" 
+                                    id="typeOfsearch"
+                                    onChange={e => {changeTypeSearch(e.target.value)}}
+                                >
+                                    <option id={1} value={1}>Razão Social</option>
+                                    <option id={2} value={2}>Fantasia</option>
+                                    <option id={3} value={3}>CNPJ</option>
+                                    <option id={4} value={4}>E-mail</option>
+                                    <option id={5} value={5}>Cidade</option>
+                                    <option id={6} value={6}>Endereço</option>
 
-                <div className="clienteSearch">
-                    <div id="search">
-                        <Input
-                            disabled={inputClientSearchState}
-                            id="inputClientSearch"
-                            icon={FiSearch}
-                            placeholder="Pesquise o Cliente"
-                            type="search"
-                            value={clientSearch}
-                            onChange={e => {handleClientSearch(e.target.value)}}
-                        /> 
-                        {inputClientSearchState == false &&
+                                </select>
+
+
+                        </div>
+                        
+                        {
+                            clientsFound?.length > 0 && 
                             <select 
-                                name="typeOfsearch" 
-                                id="typeOfsearch"
-                                onChange={e => {changeTypeSearch(e.target.value)}}
-                            >
-                                <option id={1} value={1}>Razão Social</option>
-                                <option id={2} value={2}>Fantasia</option>
-                                <option id={3} value={3}>CNPJ</option>
-                                <option id={4} value={4}>E-mail</option>
-                                <option id={5} value={5}>Cidade</option>
-                                <option id={6} value={6}>Endereço</option>
+                            name="clients" 
+                            id="clients-select" 
+                            onChange={e => {handleClientSelect(e)}}
+                            size="10"
+                            >   
+                            {
+                                clientsFound.length > 0 && 
+                                clientsFound.map(client => (
+                                    <option 
+                                        key={client?.id} 
+                                        id={client?.id} 
+                                        value={client?.razaoSocialName}
+                                    >
+                                    { client?.businessName ?
+                                        `${client?.razaoSocialName} - ${client?.businessName}` :
+                                        client?.razaoSocialName
+                                    }
+                                    </option>
+                                ))
 
+                            }
                             </select>
-                        
                         }
-                        
+
                     </div>
                     
-                    {
-                        clientsFound?.length > 0 && 
-                        <select 
-                        name="clients" 
-                        id="clients-select" 
-                        onChange={e => {handleClientSelect(e)}}
-                        size="10"
+                    <Input
+                        placeholder="Breve descrição do chamado."
+                        type="text"
+                        value={shortDescription}
+                        onChange={e => {setShortDescription(e.target.value)}}
+                        required
+                    />
+                    <TextArea
+                        placeholder="Descrição do Chamado"
+                        type="textarea"
+                        rows="10"
+                        cols="50"
+                        value={description}
+                        maxlength={1000}
+                        onChange={e => {setDescription(e.target.value)}}
+                        required
+                        characteresUsed = {description.length}
+                    />
+
+                    <Select
+                            name="category" 
+                            id="category-select" 
+                            defaultChecked
+                            required
+                            onChange={e => {handleSelectCategory(e)}}
                         >   
-                        {
-                            clientsFound.length > 0 && 
-                            clientsFound.map(client => (
+                            {
+                                !ticketData && 
                                 <option 
-                                    key={client?.id} 
-                                    id={client?.id} 
-                                    value={client?.razaoSocialName}
+                                    value="" 
+                                    disabled
+                                    selected
                                 >
-                                { client?.businessName ?
-                                    `${client?.razaoSocialName} - ${client?.businessName}` :
-                                    client?.razaoSocialName
-                                }
+                                    Selecione a categoria que melhor descreve o chamado.
                                 </option>
-                            ))
+                            }
 
-                        }
-                        </select>
-                    }
-                    
-                </div>
-     
-                <Input
-                    placeholder="Breve descrição do chamado."
-                    type="text"
-                    value={shortDescription}
-                    onChange={e => {setShortDescription(e.target.value)}}
-                    required
-                />
-                <TextArea
-                    placeholder="Descrição do Chamado"
-                    type="textarea"
-                    rows="10"
-                    cols="50"
-                    value={description}
-                    maxlength={1000}
-                    onChange={e => {setDescription(e.target.value)}}
-                    required
-                    characteresUsed = {description.length}
-                />
+                            {
+                                categoriesListState && 
+                                categoriesListState.map(category => (
+                                    <option 
+                                        key={category.id} 
+                                        id={category.id} 
+                                        value={category.description}
 
-                <Select
-                        name="category" 
-                        id="category-select" 
-                        defaultChecked
-                        required
-                        onChange={e => {handleSelectCategory(e)}}
-                    >   
-                        {
-                            !ticketData && 
-                            <option 
-                                value="" 
-                                disabled
-                                selected
-                            >
-                                Selecione a categoria que melhor descreve o chamado.
-                            </option>
-                        }
+                                        selected={ticketData?.category?.id == category.id ? true : false}
+                                    >
+                                    {category.description}
+                                    </option>
+
+                                ))
+
+                            }
+                    </Select>   
+
+                    <Select
+                            name="status" 
+                            id="status-select" 
+                            defaultChecked
+                            onChange={e => {handleSelectStatus(e)}}
+                            required
+                        >   
+                            {!ticketData && 
+                                <option 
+                                    value="" 
+                                    disabled
+                                    selected
+                                >
+                                Selecione o Status do Chamado
+                                </option>
+                            }
+
+                            {
+                                statusList && 
+                                statusList.map(status => (
+                                    <option 
+                                        key={status.id} 
+                                        id={status.id} 
+                                        value={status.description}
+                                        selected = {ticketData?.status?.id == status.id ? true : false}
+                                    >
+                                    {status.description}
+                                    </option>
+
+                                ))
+
+                            }
+                    </Select>
                         
-                        {
-                            categoriesListState && 
-                            categoriesListState.map(category => (
-                                <option 
-                                    key={category.id} 
-                                    id={category.id} 
-                                    value={category.description}
-
-                                    selected={ticketData?.category?.id == category.id ? true : false}
-                                >
-                                {category.description}
-                                </option>
-
-                            ))
-
-                        }
-                </Select>   
-
-                <Select
-                        name="status" 
-                        id="status-select" 
+                    <Select
+                        name="typeOfService" 
+                        id="typeOfService-select" 
                         defaultChecked
-                        onChange={e => {handleSelectStatus(e)}}
+                        onChange={e => {setTypeOfService(e.target.value)}}
                         required
-                    >   
-                        {!ticketData && 
-                            <option 
-                                value="" 
-                                disabled
-                                selected
-                            >
-                            Selecione o Status do Chamado
-                            </option>
-                        }
-                       
-                        {
-                            statusList && 
-                            statusList.map(status => (
+                        >
+                            {!ticketData && 
                                 <option 
-                                    key={status.id} 
-                                    id={status.id} 
-                                    value={status.description}
-                                    selected = {ticketData?.status?.id == status.id ? true : false}
+                                    value="" 
+                                    disabled
+                                    selected
                                 >
-                                {status.description}
+                                    Selecione o Tipo do Atendimento
                                 </option>
+                            }
 
-                            ))
-
-                        }
-                </Select>
-                
-                <Select
-                    name="typeOfService" 
-                    id="typeOfService-select" 
-                    defaultChecked
-                    onChange={e => {setTypeOfService(e.target.value)}}
-                    required
-                    >
-                        {!ticketData && 
-                            <option 
-                                value="" 
-                                disabled
-                                selected
+                            <option  
+                                id={1}
+                                value={1}
+                                selected={ticketData?.typeOfService == 1 ? true : false}
                             >
-                                Selecione o Tipo do Atendimento
+                                Interno
                             </option>
+                        
+                            <option  
+                                id={2}
+                                value={2}
+                                selected={ticketData?.typeOfService == 2 ? true : false}
+                            >
+                                Externo
+                            </option>
+                    </Select>
+                        
+
+
+                    <div className="scheduled">
+                        <CheckBoxItem>
+                            <label> Atendimento agendado? </label>
+                            <input 
+                                type="checkbox"
+                                checked={isSheduled}
+                                onChange={e => {handleSheduled(e)}}
+                            />                         
+                        </CheckBoxItem>
+                        {
+                            isSheduled == true &&
+                            <Input
+                                className="scheduled_datetime"
+                                type="datetime-local"
+                                value={scheduledDateTime}
+                                onChange={e => {setScheduledDateTime(e.target.value)}}
+                            >
+                            </Input>
                         }
-                       
-                        <option  
-                            id={1}
-                            value={1}
-                            selected={ticketData?.typeOfService == 1 ? true : false}
-                        >
-                            Interno
-                        </option>
-                    
-                        <option  
-                            id={2}
-                            value={2}
-                            selected={ticketData?.typeOfService == 2 ? true : false}
-                        >
-                            Externo
-                        </option>
-                </Select>
-               
 
-
-                <div className="scheduled">
-                    <CheckBoxItem>
-                        <label> Atendimento agendado? </label>
-                        <input 
-                            type="checkbox"
-                            checked={isSheduled}
-                            onChange={e => {handleSheduled(e)}}
-                        />                         
-                    </CheckBoxItem>
+                    </div>
+                    {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
+                    <Button title={typeForm == "new"? "Salvar" : "Atualizar"} onClick={salvar}/> 
+                </TicketMain>
+                {
+                ticketData &&
+                <Annotations>
+                    <h1>Anotações dos Atendimentos</h1>
+                    <TextArea 
+                        placeholder="Digite aqui o que foi feito no atendimento."
+                        value={annotationState}
+                        wrap
+                        rows={4}
+                        characteresUsed={annotationState.length}
+                        onChange={e => {setAnnotationState(e.target.value)}}
+                        />
+                    <div className="annotations_buttons">
+                        <Button title="Salvar" onClick={handleSaveAnnotation}/>
+                        <Button title="Cancelar" onClick={() => {setAnnotationState("")}}/> 
+                    </div>    
+                      
+                    <div className="annotationSaved">  
                     {
-                        isSheduled == true &&
-                        <Input
-                            className="scheduled_datetime"
-                            type="datetime-local"
-                            value={scheduledDateTime}
-                            onChange={e => {setScheduledDateTime(e.target.value)}}
-                        >
-                        </Input>
+                        annotationsListState.length > 0 &&
+                        annotationsListState.map((annotation) => (
+                            <TicketAnnotations key={annotation.id}>
+                                <img src={
+                                    annotation.user.avatar ?
+                                    `data:image/jpeg;base64,${annotation.user.avatar}` : avatarPlaceholder}/>
+                            <div className="annotation">
+                                <span>{annotation.user.name}</span>
+                                <span>{new Date(annotation.updateAt).toLocaleString().replace(/,/g,"")}</span>
+                                <TextArea 
+                                    value={annotation.description}
+                                    wrap
+                                    disabled
+                                    rows={3}
+                                />
+                            </div>
+                            </TicketAnnotations>
+                        ))
+                      
                     }
+                    </div>
                     
-                </div>
-            {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
-            <Button title={typeForm == "new"? "Salvar" : "Atualizar"} onClick={salvar}/> 
+                </Annotations>
+                }
         </Container>
     )
 }

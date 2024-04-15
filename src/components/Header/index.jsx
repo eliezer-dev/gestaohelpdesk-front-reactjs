@@ -33,10 +33,12 @@ export function Header() {
     }
 
     async function getAvatar(){
-        const response = await api.get(`/users/avatar`)
-        const base64Data = response.data;
-        setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
-
+        const response = await api.get(`/users/avatar/${user.id}`)
+        const avatar = response.data;
+        if (avatar == ''){
+            return;
+        }
+        setUserAvatar(`data:image/jpeg;base64,${avatar}`)
     }
 
     useEffect(() => {
@@ -66,7 +68,10 @@ export function Header() {
                     <li onClick={handleProfile}>{user.name}</li>    
                     <li onClick={handleSignOut}>Sair</li>
                 </ul>
-                <img src={userAvatar}/>
+                <img 
+                    src={userAvatar || avatarPlaceHolder}
+                    onClick={handleProfile }
+                />
 
 
             </Profile>            

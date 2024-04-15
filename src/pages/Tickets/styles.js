@@ -52,22 +52,43 @@ export const Header = styled.div`
 `
 export const Content = styled.div `
    display: flex;
+   gap: 36px;
    justify-content: space-between;
    padding: 24px;
+   justify-content: center;
 
 `
 export const ClientInfo = styled.div  `
+    width: 600px;
     display: flex;
     flex-direction: column;
 
     h1 {
-        margin-bottom: 24px;
-    }
-    p {
-        font-weight: bold;
-        
-    }
-    span {
         margin-bottom: 12px;
     }
+
+    .cepAndAddress {
+        display: flex;
+        gap: 8px;
+
+        > div:first-of-type {
+            width: 150px;
+        }
+    }
+
+    .cityAndStateInput {
+        display: flex;
+        gap: 8px;
+
+    }
+
+    .numberAndComplement {
+        display: flex;
+        gap: 8px;
+
+        > div:first-of-type {
+            width: 150px;
+        }
+    }
+
 `

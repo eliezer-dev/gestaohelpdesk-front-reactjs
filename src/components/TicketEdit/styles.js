@@ -1,6 +1,45 @@
 import styled from "styled-components";
 
-export const Container = styled.form `
+export const Container = styled.div `
+    display: flex;
+    gap: 36px;
+    .activies {
+        
+    }
+
+`;
+
+export const Annotations = styled.div `
+    width: 600px;
+    > h1 {
+        margin-bottom: 12px;
+    }
+
+    .annotationSaved {
+        margin-top: 12px;
+        border-top: 1px solid black;
+        width: 100%;
+        height: 600px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    .annotations_buttons {
+        display: flex;
+        gap: 12px;
+    
+    }
+   
+    button {
+        border-radius: 0;
+        margin-top: 0;
+        width: 100px;
+        padding: 12px;
+        height: fit-content;
+    }
+`
+
+export const TicketMain = styled.form `
     display: flex;
     gap: 24px;
     flex-direction: column;
@@ -101,7 +140,37 @@ export const Container = styled.form `
     .scheduled_datetime {
         width: 200px;
     }
-`;
+
+    
+`
+
+export const TicketAnnotations = styled.div `
+    padding: 8px 24px 0px 8px;
+    display: flex;
+    align-items: flex-start;
+    width: 600px;
+    display: flex;
+    gap: 12px;
+    overflow-y: auto;
+
+    span:first-of-type {
+        font-weight: bold;
+    }
+
+    span:nth-of-type(2) {
+        margin-left: 8px;
+    }
+    
+    img {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+    }
+
+    .annotation {
+        width: 100%;
+    }
+`
 
 export const Select = styled.select`   
     outline: none;

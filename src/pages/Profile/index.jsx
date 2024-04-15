@@ -40,10 +40,12 @@ export function Profile () {
 
 
     async function getAvatar(){
-        const response = await api.get(`/users/avatar`)
-        const base64Data = response.data;
-        console.log(base64Data);
-        setUserAvatar(`data:image/jpeg;base64,${base64Data}`)
+        const response = await api.get(`/users/avatar/${user.id}`)
+        const avatar = response.data;
+        if (avatar == ''){
+            return;
+        }
+        setUserAvatar(`data:image/jpeg;base64,${avatar}`)
 
     }
 
@@ -88,12 +90,12 @@ export function Profile () {
                setNewPassword("")
                setOldPassword("")
                setNewPassword("")
-               userUpdated = Object.assign(user, updated)
+               
           }
-     
-    updateProfile(userUpdated, avatarFile)   
+    userUpdated = Object.assign(user, updated)
+    await updateProfile(userUpdated, avatarFile)   
     setDisableInput(false);
-     
+    handleBack() 
 
     }
 
@@ -122,7 +124,7 @@ export function Profile () {
                />
             </Header>   
             <Picture>
-                <img src={userAvatar} alt="Foto do usuário"/>
+                <img src={userAvatar || avatarPlaceHolder} alt="Foto do usuário"/>
                 <label>
                     <FiCamera/>
                     <input id="avatar" type="file" onChange={handleChangeAvatar}/>

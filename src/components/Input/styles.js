@@ -3,12 +3,23 @@ import styled from "styled-components";
 export const Container = styled.div`
     width: 100%;
     display: flex;
-    align-items: center;
-    background: ${({theme}) => theme.COLORS.WHITE_100};
-    border-radius: 16px;
-    margin-bottom: 8px;
+    flex-direction: column;
+    margin-bottom: 12px;
 
-    >input {
+    > label {
+        font-weight: bold;
+    }
+
+    > div {
+        padding-left: 12px;
+        width: 100%;
+        align-items: center;
+        display: flex;
+        background: ${({theme}) => theme.COLORS.WHITE_100};
+        border-radius: 16px;
+    }
+
+    input {
         height: 56px;
         width: 100%;
         padding: 12px;

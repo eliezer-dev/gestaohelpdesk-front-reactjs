@@ -48,7 +48,7 @@ export function Tickets() {
         }
 
         if (params.id == "new") {
-            await api.post("/tickets", {
+            const ticketSaved = await api.post("/tickets", {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
                 client:{id:client.id},
@@ -59,6 +59,7 @@ export function Tickets() {
                 scheduledDateTime:dataForm.scheduledDateTime
             })
             alert("Chamado salvo com sucesso.")
+            navigate(`/ticket/${ticketSaved.data.id}`)
         } else {
             await api.put(`/tickets/${params.id}`, {
                 shortDescription:dataForm.shortDescription,
@@ -71,9 +72,10 @@ export function Tickets() {
                 scheduledDateTime:dataForm.scheduledDateTime
             })
             alert("Chamado atualizado com sucesso.")
+            navigate("/")
         }   
 
-        navigate("/")
+        
 
     }    
 
@@ -100,7 +102,7 @@ export function Tickets() {
             fetchTicket(params.id)
        
         }
-    },[])
+    },[params])
 
 
     return (
@@ -134,34 +136,88 @@ export function Tickets() {
                     getDataForm = {getDataForm}
                     getClientForm = {getClientForm}
                 />
-                <ClientInfo>
-                    <h1>Dados do Cliente </h1>
+                
+                    
                     {
                         client &&
-                        <>
-                            <p>Razão Social: </p>
-                            <span>{client?.razaoSocialName}</span>
-                            <p>CPNJ: </p>
-                            <span>{client?.cpfCnpj}</span>
-                            <p>E-mail: </p>
-                            <span>{client?.email}</span>
-                            <p>Cep</p>
-                            <span>{client?.cep}</span>
-                            <p>Endereço</p>
-                            <span>{client?.address}</span>
-                            <p>Numero</p>
-                            <span>{client?.addressNumber}</span>
-                            <p>Cidade</p>
-                            <span>{client?.city}</span>
-                            <p>Estado</p>
-                            <span>{client?.state}</span>
-                            <p>Cliente desde</p>
-                            <span>{client.createAt}</span>
+                        <ClientInfo>
+                            <h1>Dados do Cliente </h1>
+                            <Input 
+                                label="Razão Social"
+                                type="text"
+                                value={client?.razaoSocialName}
+                                disabled
+                            />
+                            <Input 
+                                label="CPNJ"
+                                type="text"
+                                value={client?.cpfCnpj}
+                                disabled
+                            />
+                            <Input 
+                                label="E-mail"
+                                type="text"
+                                value={client?.email}
+                                disabled
+                            />
+                            <div className="cepAndAddress">
+                                <Input 
+                                    label="Cep"
+                                    type="text"
+                                    value={client?.cep}
+                                    disabled
+                                />
+                                <Input 
+                                    label="Endereço"
+                                    type="text"
+                                    value={client?.address}
+                                    disabled
+                                />
+                            </div>
+                            <div className="numberAndComplement">
+                                <Input 
+                                    label="Numero"
+                                    type="text"
+                                    value={client?.addressNumber}
+                                    disabled
+                                />
+                                <Input 
+                                    label="Complemento"
+                                    type="text"
+                                    value={client?.addressComplement}
+                                    disabled
+                                />
 
-                        </>
+
+                            </div>
+                            
+                            
+                            <div className="cityAndStateInput">
+                                <Input 
+                                    label="Cidade"
+                                    type="text"
+                                    value={client?.city}
+                                    disabled
+                                />
+                                <Input 
+                                label="Estado"
+                                type="text"
+                                value={client?.state}
+                                disabled
+                                />
+                            </div>
+                            
+                            <Input 
+                                label="Data de Cadastro"
+                                type="text"
+                                value={client?.createAt}
+                                disabled
+                            />
+
+                        </ClientInfo>
                     }
 
-                </ClientInfo>
+                
                
             </Content>
             
