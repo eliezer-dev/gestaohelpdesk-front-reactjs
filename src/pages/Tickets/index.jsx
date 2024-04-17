@@ -117,7 +117,33 @@ export function Tickets() {
             
             <Header>
                 <ArrowBackIcon onClick={handleBack}/>
-                <h1>{headerState}</h1>
+                <div className="header_title">
+                   
+                    {
+                        ticketDataState ?
+                        <>
+                        <h1>Editar Chamado Nº</h1>
+                        <Input
+                            type="text"
+                            value={`${ticketDataState.id}`}
+                            disabled   
+                        />
+                        <div className="header_tittle_sla">
+                            <label htmlFor="">Tempo para Vencer SLA</label>
+                            <Input
+                            type="text"
+                            value="18:00:00"
+                            disabled
+                        />
+                        </div>
+                       
+                        </> 
+                        :
+                        <h1>Novo Chamado</h1>
+                    }
+
+                </div>
+                    
             </Header>
             <Content>
                 {/* <div className="ticketInfo">

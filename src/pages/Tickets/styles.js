@@ -36,6 +36,42 @@ export const Header = styled.div`
     flex-direction: row;
     align-items: center;
 
+    .header_title {
+        width: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        
+        div {
+            width: 150px;
+        }
+
+        input {
+            text-align: right;
+        }
+
+        .header_tittle_sla {
+            width: 350px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: absolute;
+            right: 24px;
+
+            label {
+                font-weight: bold;
+                color: ${({theme}) => theme.COLORS.WHITE}; 
+                font-size: 32px;
+            }
+
+            input {
+                text-align: center;
+            }
+        }
+        
+    }
+
     h1 {
         color: ${({theme}) => theme.COLORS.WHITE}; 
     }
