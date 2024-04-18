@@ -85,8 +85,8 @@ export function Tickets() {
 
     function adjustSLATime(ticket) {
         if (ticket) {
-            let slaTimeLeftInSeconds = Math.trunc((new Date(ticket.slaDateTimeEnd) - new Date())/1_000)
-            console.log({slaTimeLeftInSeconds})
+            const slaTimeLeftInSeconds = Math.trunc((new Date(ticket.slaDateTimeEnd) - new Date())/1_000)
+
             let slaTimeHours = Math.trunc(slaTimeLeftInSeconds/3600),
                 slaTimeMinutes = Math.trunc((slaTimeLeftInSeconds%3600)/60),
                 slaTimeSeconds = Math.trunc(((slaTimeLeftInSeconds%3600)%60))

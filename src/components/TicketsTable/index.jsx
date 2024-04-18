@@ -17,7 +17,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function TicketsTable({tickets}) {
@@ -100,6 +100,9 @@ export function TicketsTable({tickets}) {
         console.log("remove ticket...")
     }
 
+    useEffect(() => {
+      console.log({tickets})
+  },[tickets])
     return (
         <Container>
         <TableContainer component={Paper}>
@@ -114,6 +117,7 @@ export function TicketsTable({tickets}) {
                     <TableCell> Atendentes </TableCell>
                     <TableCell> Status </TableCell>
                     <TableCell> Data de Criação </TableCell>
+                    <TableCell> Vencimento </TableCell>
                     <TableCell> Opções </TableCell>
                     </TableRow>
                 </TableHead>
@@ -147,6 +151,9 @@ export function TicketsTable({tickets}) {
                           </TableCell>
                           <TableCell  >
                             { ticket.createAt}
+                          </TableCell>
+                          <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} >
+                            {ticket.slaTimeLeft}
                           </TableCell>
                           <TableCell  className="ticket_options">
                             <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>

@@ -46,10 +46,10 @@ export function Home(){
     async function fetchTickets () {
         const response = await api.get("/tickets")
         
-        let allTicketsFormated = formatDate(response.data.allTickets);
-        let ticketsAssignedUserFormated = formatDate(response.data.ticketsAssignedUser);
-        let ticketsNotSignedFormated = formatDate(response.data.ticketsNotAssigned);
-        let ticketsAssignedOtherUsersFormated = formatDate(response.data.ticketsAssignedOtherUsers);
+        let allTicketsFormated = formatData(response.data.allTickets);
+        let ticketsAssignedUserFormated = formatData(response.data.ticketsAssignedUser);
+        let ticketsNotSignedFormated = formatData(response.data.ticketsNotAssigned);
+        let ticketsAssignedOtherUsersFormated = formatData(response.data.ticketsAssignedOtherUsers);
 
         setAllTickets(allTicketsFormated);
         setAllTicketsQty(allTicketsFormated.length)
@@ -68,10 +68,41 @@ export function Home(){
     }
 
 
-    function formatDate(data) {
+    function formatData(data) {
         let dataFormated = [];
         data && data.map((ticket) => {
             const date = new Date(ticket.createAt);
+
+            const calcSlaTimeLeft = function (slaDateTimeEnd) {
+                let slaTimeLeft
+                const slaTimeLeftInSeconds = Math.trunc((new Date(slaDateTimeEnd) - new Date())/1_000)
+
+                let slaTimeHours = Math.trunc(slaTimeLeftInSeconds/3600),
+                slaTimeMinutes = Math.trunc((slaTimeLeftInSeconds%3600)/60),
+                slaTimeSeconds = Math.trunc(((slaTimeLeftInSeconds%3600)%60))
+            
+            if (slaTimeLeftInSeconds < 0){
+                slaTimeHours = slaTimeHours * -1
+                slaTimeMinutes = slaTimeMinutes * -1
+                slaTimeSeconds = slaTimeSeconds * -1
+                slaTimeHours = ("00" + slaTimeHours).slice(-2)
+                slaTimeMinutes = ("00" + slaTimeMinutes).slice(-2)
+                slaTimeSeconds = ("00" + slaTimeSeconds).slice(-2)
+                slaTimeLeft = `-${slaTimeHours}:${slaTimeMinutes}:${slaTimeSeconds}`
+            } else {
+                slaTimeHours = ("00" + slaTimeHours).slice(-2)
+                slaTimeMinutes = ("00" + slaTimeMinutes).slice(-2)
+                slaTimeSeconds = ("00" + Math.trunc(((slaTimeLeftInSeconds%3600)%60))).slice(-2)
+                slaTimeLeft = `${slaTimeHours}:${slaTimeMinutes}:${slaTimeSeconds}`
+            }
+            return slaTimeLeft
+            }
+            
+            const calcSlaTimeLeftInSeconds = function (slaDateTimeEnd) {
+                const slaTimeLeftInSeconds = Math.trunc((new Date(slaDateTimeEnd) - new Date())/1_000)
+                return slaTimeLeftInSeconds
+            }
+            
             const ticketFormated = {
                 id:ticket.id,
                 description:ticket.description,
@@ -79,7 +110,9 @@ export function Home(){
                 client:ticket.client,   
                 users:ticket.users,
                 status:ticket.status,
-                createAt:date.toLocaleString().replace(/,/g,"")
+                createAt:date.toLocaleString().replace(/,/g,""),
+                slaTimeLeft:calcSlaTimeLeft(ticket.slaDateTimeEnd),
+                slaTimeInSeconds:calcSlaTimeLeftInSeconds(ticket.slaDateTimeEnd)
             };
             dataFormated.push(ticketFormated);
         })
