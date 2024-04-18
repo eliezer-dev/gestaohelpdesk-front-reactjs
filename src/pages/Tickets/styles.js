@@ -63,14 +63,32 @@ export const Header = styled.div`
                 font-weight: bold;
                 color: ${({theme}) => theme.COLORS.WHITE}; 
                 font-size: 32px;
+                text-align: center;
             }
+            
+            .color-orange {
+                color: ${({theme}) => theme.COLORS.ORANGE};
+                
+            }  
 
             input {
                 text-align: center;
             }
         }
-        
+       
     }
+
+    .background-color-orange {
+            background-color: ${({theme}) => theme.COLORS.ORANGE}; 
+            color: ${({theme}) => theme.COLORS.WHITE}; 
+            font-weight: bold;
+
+            input {
+                color: ${({theme}) => theme.COLORS.WHITE};  
+            }
+        }
+
+      
 
     h1 {
         color: ${({theme}) => theme.COLORS.WHITE}; 

@@ -17,6 +17,10 @@ export function Tickets() {
     const [client, setClient] = useState ()
     const [headerState, setHeaderState] = useState();
     const [ticketDataState, setTicketDataState] = useState();
+    const [SLATime, setSLATime] = useState("00:00:00");
+    const [slaWon, setslaWon] = useState(false);
+
+
     
     const getDataForm = dataform => {
         handleSave(dataform)
@@ -79,10 +83,40 @@ export function Tickets() {
 
     }    
 
+    function adjustSLATime(ticket) {
+        if (ticket) {
+            let slaTimeLeftInSeconds = Math.trunc((new Date(ticket.slaDateTimeEnd) - new Date())/1_000)
+            console.log({slaTimeLeftInSeconds})
+            let slaTimeHours = Math.trunc(slaTimeLeftInSeconds/3600),
+                slaTimeMinutes = Math.trunc((slaTimeLeftInSeconds%3600)/60),
+                slaTimeSeconds = Math.trunc(((slaTimeLeftInSeconds%3600)%60))
+            
+            if (slaTimeLeftInSeconds < 0){
+                setslaWon(true)
+                slaTimeHours = slaTimeHours * -1
+                slaTimeMinutes = slaTimeMinutes * -1
+                slaTimeSeconds = slaTimeSeconds * -1
+                slaTimeHours = ("00" + slaTimeHours).slice(-2)
+                slaTimeMinutes = ("00" + slaTimeMinutes).slice(-2)
+                slaTimeSeconds = ("00" + slaTimeSeconds).slice(-2)
+                setSLATime(`-- ${slaTimeHours}:${slaTimeMinutes}:${slaTimeSeconds}`)
+            } else {
+                slaTimeHours = ("00" + slaTimeHours).slice(-2)
+                slaTimeMinutes = ("00" + slaTimeMinutes).slice(-2)
+                slaTimeSeconds = ("00" + Math.trunc(((slaTimeLeftInSeconds%3600)%60))).slice(-2)
+                setSLATime(`${slaTimeHours}:${slaTimeMinutes}:${slaTimeSeconds}`)
+            }
+            
+        }      
+        return;
+    }
+
+
     async function fetchTicket(id) {
         const ticket = await api.get(`/tickets/${id}`)
         setTicketDataState(ticket.data);
         setClient(ticket.data.client)
+        adjustSLATime(ticket.data)
     }
 
     function handleBack() {
@@ -101,16 +135,20 @@ export function Tickets() {
         
     }
 
+   
+
     useEffect(() => {
         if (params.id == "new") {
             setHeaderState("Novo Chamado")
         } else {
             setHeaderState(`Editar chamado número: ${params.id}`)
             fetchTicket(params.id)
-       
         }
     },[params])
 
+    setTimeout(() => {
+        adjustSLATime(ticketDataState)
+    }, 1000);
 
     return (
         <Container>
@@ -129,10 +167,16 @@ export function Tickets() {
                             disabled   
                         />
                         <div className="header_tittle_sla">
-                            <label htmlFor="">Tempo para Vencer SLA</label>
-                            <Input
+                            <label 
+                                htmlFor=""
+                                className={slaWon == true && "color-orange"}
+                            >
+                            {slaWon == false ? "Tempo para Vencer SLA" : "Atendimento Atrasado"}
+                            </label>
+                            <Input classInput={slaWon == true && "background-color-orange"}
                             type="text"
-                            value="18:00:00"
+                            value={SLATime}
+                            slaWon={slaWon}
                             disabled
                         />
                         </div>
