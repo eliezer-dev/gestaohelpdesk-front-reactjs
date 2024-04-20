@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
 import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 
-export function Header() {
+export function Header({logo=true}) {
     const navigate = useNavigate();
     const {user, signOut} = useAuth();
     const [itensMenu, setItensMenu] = useState(["Chamados", "Clientes", "Ajuda", "Downloads"])
@@ -49,9 +49,13 @@ export function Header() {
 
     return (
         <Container>
-            <Logo>
-                <p onClick={handleBack}>Gestão Heldesk</p>
-            </Logo>
+            {
+                logo == true && 
+                <Logo>
+                    <p onClick={handleBack}>Gestão Heldesk</p>
+                </Logo>
+            }
+            
             <Menu>
                     {   
                         itensMenu.map((item, index) => (

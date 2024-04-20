@@ -20,13 +20,15 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function TicketsTable({tickets}) {
+export function TicketsTable({tickets, rows}) {
     const navigate = useNavigate();
     
     function TablePaginationActions(props) {
         const theme = useTheme();
         const { count, page, rowsPerPage, onPageChange } = props;
       
+        console.log(rowsPerPage)
+
         const handleFirstPageButtonClick = (event) => {
           onPageChange(event, 0);
         };
@@ -79,7 +81,7 @@ export function TicketsTable({tickets}) {
 
     const [page, setPage] = useState(0);
     
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rowsPerPage, setRowsPerPage] = useState(rows);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -100,79 +102,77 @@ export function TicketsTable({tickets}) {
         console.log("remove ticket...")
     }
 
-    useEffect(() => {
-      console.log({tickets})
-  },[tickets])
     return (
         <Container>
-        <TableContainer component={Paper}>
-                
-                <Table sx={{minWidth: 650}} size="small" aria-label="simple table">
-                
-                <TableHead>
-                    <TableRow>
-                    <TableCell> Numero Ticket </TableCell>
-                    <TableCell> Cliente </TableCell>
-                    <TableCell> Descrição </TableCell>
-                    <TableCell> Atendentes </TableCell>
-                    <TableCell> Status </TableCell>
-                    <TableCell> Data de Criação </TableCell>
-                    <TableCell> Vencimento </TableCell>
-                    <TableCell> Opções </TableCell>
-                    </TableRow>
-                </TableHead>
-               
-                <TableBody>
-                      {
-                      tickets &&
-                      (rowsPerPage > 0
-                        ? tickets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        : tickets
-                      ).map((ticket) => (
-                        <TableRow key={ticket.id}>
-                          <TableCell component="th" scope="row" align="right" style={{width:130}}>
-                            {ticket.id}
-                          </TableCell>
-                          <TableCell>
-                            {ticket.client.razaoSocialName}
-                          </TableCell>
-                          <TableCell  >
-                            {ticket.shortDescription}
-                          </TableCell>
-                          <TableCell  >
-                            {
-                                ticket.users.map((user) => (
-                                    user.name + ", "
-                                ))
-                            }
-                          </TableCell>
-                          <TableCell  >
-                            { ticket.status.description}
-                          </TableCell>
-                          <TableCell  >
-                            { ticket.createAt}
-                          </TableCell>
-                          <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} >
-                            {ticket.slaTimeLeft}
-                          </TableCell>
-                          <TableCell  className="ticket_options">
-                            <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
-                            <DeleteIcon onClick={handleDeleteTicket}/>
-                          </TableCell>
-                          
-                        </TableRow>
-                      ))}
-                      {emptyRows > 0 && (
-                        <TableRow style={{ height: 53 * emptyRows }}>
-                          <TableCell colSpan={6} />
-                        </TableRow>
-                      )}
-                </TableBody>
-                </Table>
+          <TableContainer component={Paper}>  
+                <div className="contentTable">
+                  <Table sx={{minWidth: 650}} size="small" aria-label="simple table">
+
+                  <TableHead>
+                      <TableRow>
+                      <TableCell> Numero Ticket </TableCell>
+                      <TableCell> Cliente </TableCell>
+                      <TableCell> Descrição </TableCell>
+                      <TableCell> Atendentes </TableCell>
+                      <TableCell> Status </TableCell>
+                      <TableCell> Data de Criação </TableCell>
+                      <TableCell> Vencimento </TableCell>
+                      <TableCell> Opções </TableCell>
+                      </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                        {
+                        tickets &&
+                        (rowsPerPage > 0
+                          ? tickets.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          : tickets
+                        ).map((ticket) => (
+                          <TableRow key={ticket.id}>
+                            <TableCell component="th" scope="row" align="right" style={{width:130}}>
+                              {ticket.id}
+                            </TableCell>
+                            <TableCell>
+                              {ticket.client.razaoSocialName}
+                            </TableCell>
+                            <TableCell  >
+                              {ticket.shortDescription}
+                            </TableCell>
+                            <TableCell  >
+                              {
+                                  ticket.users.map((user) => (
+                                      user.name + ", "
+                                  ))
+                              }
+                            </TableCell>
+                            <TableCell  >
+                              { ticket.status.description}
+                            </TableCell>
+                            <TableCell  >
+                              { ticket.createAt}
+                            </TableCell>
+                            <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} >
+                              {ticket.slaTimeLeft}
+                            </TableCell>
+                            <TableCell  className="ticket_options">
+                              <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
+                              <DeleteIcon onClick={handleDeleteTicket}/>
+                            </TableCell>
+                            
+                          </TableRow>
+                        ))}
+                        {emptyRows > 0 && (
+                          <TableRow style={{ height: 53 * emptyRows }}>
+                            <TableCell colSpan={6} />
+                          </TableRow>
+                        )}
+                  </TableBody>
+                  </Table>
+                </div>
                 <TableFooter>
                     <TableRow>
                       <TablePagination
-                        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                        rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
                         colSpan={3}
                         count={tickets ? tickets.length : 0}
                         rowsPerPage={rowsPerPage}
@@ -191,7 +191,7 @@ export function TicketsTable({tickets}) {
                       />
                     </TableRow>
                 </TableFooter>      
-                </TableContainer>
-            </Container>
+          </TableContainer>
+        </Container>
     )
 }

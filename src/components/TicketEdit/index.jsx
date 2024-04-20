@@ -174,7 +174,6 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
     async function fetchUser(userId, attribute) {
         const user = await api.get(`/users/${userId}`)
         if (attribute == "name") {
-            console.log(user.data.name)
             return user.data.name;
         }
         
@@ -188,9 +187,8 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
     }
 
     async function handleSaveAnnotation () {
-        console.log("chegou na função")
+
         if (annotationState == "") {
-            console.log("entrou no if que não devia")
             return;
         }
         const annotation = {
@@ -198,7 +196,6 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
             ticketId:ticketData.id,
             userId: user.id
         }
-        console.log(annotation)
         await api.post(`/tickets/annotations`,annotation)
         await fetchAnnotations();
         setAnnotationState("");

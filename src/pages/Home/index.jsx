@@ -1,9 +1,10 @@
-import { Container, Section, MenuSide } from "./styles";
+import { Container, Tickets, MenuSide, MenuSideHeaderTickets, HeaderTickets } from "./styles";
 import { Header } from "../../components/Header";
 
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import { TicketsTable } from "../../components/TicketsTable";
+import { Footer } from "../../components/Footer";
 
 export function Home(){
     const [header, setHeader] = useState("Chamados atribuídos a mim")
@@ -142,25 +143,30 @@ export function Home(){
 
     return (
         <Container>
-            <Header/>
-            <div className="page">
+            
+            <MenuSideHeaderTickets>
+                
                 <MenuSide>
+                    <div className="logo">
+                        <p>Gestão Heldesk</p>
+                    </div>
                     <p onClick={handleTicketsAssignedUser}>Atribuídos a mim ({ticketsAssignedUserQty})</p>
                     <p onClick={handleTicketsAssignedOtherUsers}>Outros usuários ({ticketsAssignedOtherUsersQty})</p>
                     <p onClick={handleTicketsNotAssigned}>Sem atribuição ({ticketsNotAssignedQty})</p>
                     <p onClick={handleAllTickets}>Todos ({allTicketsQty})</p>
                 </MenuSide>
 
-        
-                <div className="tickets">
-                    <Section className="tickets">
+                <HeaderTickets>
+                    <Header logo={false}/>
+                    <Tickets>
                         <h1>{header}</h1>
-                        <TicketsTable tickets={tickets}/>
-                    </Section>
-                </div>
-                
-                
-            </div> 
+                        <TicketsTable tickets={tickets} rows={10}/>
+                    </Tickets>
+                </HeaderTickets>
+           
+            </MenuSideHeaderTickets>
+            <Footer/> 
+           
             
         </Container>
     )
