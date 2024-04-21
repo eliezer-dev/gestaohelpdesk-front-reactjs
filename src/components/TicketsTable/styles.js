@@ -32,6 +32,10 @@ export const Container = styled.div`
         padding: 6px 8px;
     } */
 
+    .MuiTableCell-root {
+        padding: 6px 8px 6px 2px; 
+    }
+
     .background-color-orange {
             background-color: ${({theme}) => theme.COLORS.ORANGE}; 
             /* color: ${({theme}) => theme.COLORS.WHITE}; 

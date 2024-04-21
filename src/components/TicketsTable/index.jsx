@@ -108,7 +108,7 @@ export function TicketsTable({tickets, rows}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:110}}> Numero Ticket </TableCell>
+                      <TableCell style={{width:105}}> Numero Ticket </TableCell>
                       <TableCell> Cliente </TableCell>
                       <TableCell> Descrição </TableCell>
                       <TableCell> Atendentes </TableCell>
