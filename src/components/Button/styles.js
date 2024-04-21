@@ -2,19 +2,20 @@ import styled from "styled-components";
 
 export const Container = styled.button `
     width: 100%;
-    height: 56px;
+    height: 40px;
     
     background: ${({theme}) => theme.COLORS.ORANGE};
     color: ${({theme}) => theme.COLORS.WHITE};
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
     
     border:none;
     border-radius: 24px;
-    padding: 24px;
+    padding: 12px;
        
     display: flex;
-    gap: 24px;
+    gap: 12px;
     align-items: center;
     justify-content: center;
     
@@ -23,7 +24,7 @@ export const Container = styled.button `
     }
 
     > svg {
-        height: 32px;
-        width: 32px;
+        height: 16px;
+        width: 16px;
     }
 `;

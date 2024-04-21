@@ -1,15 +1,17 @@
 import styled from "styled-components";
 
 export const Container = styled.div `
+    border-top:1px solid rgba(224, 224, 224, 1);
     width: 100%;
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
-    height: 116px;
+    height: 56px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    p {
-        color: ${({theme}) => theme.COLORS.WHITE};
-        font-weight: bold;
-        font-size: 24px;
+
+    img {
+        width: 168px;
+        height: 100%;
+        object-fit: cover;
     }
+
 `

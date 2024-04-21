@@ -1,8 +1,9 @@
 import styled from "styled-components"
 
 export const Container = styled.div`
-    height: 116px;
-    display: flex;   
+    height: 72px;
+    display: flex;
+    border-bottom: .2px solid  rgba(224, 224, 224, 1);   
 
 `
 export const Logo = styled.div `
@@ -38,9 +39,9 @@ export const Menu = styled.div `
         }
        
         > button {
-            width: 180px;
-            height: 40px;
+            width: 150px;
             margin-right: 24px;
+            overflow: hidden;
         }
 
 `
@@ -49,9 +50,8 @@ export const Menu = styled.div `
 export const Profile = styled.div`
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     cursor: pointer;
-    width: 165px;
+    width: 148px;
     display: flex;
-    gap: 12px;
     justify-content: space-between;
     align-items: center;
     padding-right: 12px;
@@ -70,7 +70,7 @@ export const Profile = styled.div`
 
         > li:first-of-type {
             color:${({theme}) => theme.COLORS.WHITE};
-            margin-bottom: 12px;
+            margin-bottom: 4px;
             font-weight: 700;
             
         }

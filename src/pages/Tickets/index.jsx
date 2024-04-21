@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../services/api";
 import { useAuth } from "../../hooks/auth";
 import { TicketEdit } from "../../components/TicketEdit"; 
+import { Footer } from "../../components/Footer";
 
 
 export function Tickets() {
@@ -297,7 +298,7 @@ export function Tickets() {
                 
                
             </Content>
-            
+            <Footer/>
             
 
         </Container>

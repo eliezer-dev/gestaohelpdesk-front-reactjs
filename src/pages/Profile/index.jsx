@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {FiCamera, FiLock, FiMail, FiUser, FiClipboard } from 'react-icons/fi';
 import { PiAddressBookLight } from "react-icons/pi";
 import { GoNumber} from "react-icons/go";
-import { FaArrowLeft  } from "react-icons/fa6";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { LiaCitySolid } from "react-icons/lia";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
 import { api } from "../../services/api";
 import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
+import { Footer } from "../../components/Footer";
+import LogoGestaoHelpdesk  from "../../assets/Pages/Header/Logo_Gestao_Helpdesk2.png"
 
 export function Profile () {
     const [userAvatar, setUserAvatar] = useState({avatarPlaceHolder})
@@ -118,10 +120,14 @@ export function Profile () {
     return (
         <Container>
             <Header>
-               <ButtonText
-                    icon={FaArrowLeft}
-                    onClick={handleBack}            
-               />
+                <ArrowBackIcon 
+                    onClick={handleBack}
+                    className="arrow_back"
+                />
+                <div className="logo">
+                        <img src={LogoGestaoHelpdesk}/>
+                </div>
+
             </Header>   
             <Picture>
                 <img src={userAvatar || avatarPlaceHolder} alt="Foto do usuário"/>
@@ -225,7 +231,8 @@ export function Profile () {
                     onClick={handleUpdateProfile}
                />
                 
-            </Form>  
+            </Form>
+            <Footer/> 
         </Container>
 
     )

@@ -25,6 +25,13 @@ export const Container = styled.div`
         height: 52px;
     }
 
+    .MuiSvgIcon-root{
+        font-size: 14px;
+    }
+    /* .MuiTableCell-sizeSmall {
+        padding: 6px 8px;
+    } */
+
     .background-color-orange {
             background-color: ${({theme}) => theme.COLORS.ORANGE}; 
             /* color: ${({theme}) => theme.COLORS.WHITE}; 

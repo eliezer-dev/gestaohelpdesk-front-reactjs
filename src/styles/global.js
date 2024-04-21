@@ -17,7 +17,7 @@ export default createGlobalStyle`
 
     body, input, :no-button, textarea{
         font-family: 'Roboto', serif;
-        font-size: 16px;
+        font-size: 14px;
         outline: none
     }
 

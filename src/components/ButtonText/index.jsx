@@ -1,13 +1,21 @@
+import { useEffect } from "react";
 import { Container } from "./styles";
 
-export function ButtonText({icon:Icon, title, ...rest}) {
+export function ButtonText({icon:Icon, title, othersContents, selected=false, ...rest}) {
     return(
     <Container
-        type="button"
-        {...rest}
+        className={selected == true && "background_orange"}
+        
     >
-        {Icon && <Icon size = {20}/>}
-        {title}
+        <div 
+            className={selected == true ? "background_orange button_text" : "button_text"}
+            {...rest}
+        >
+            {Icon && <Icon size = {20}/>}
+            <span>{title}</span>
+            <span>{othersContents}</span>
+        </div>
+       
     </Container>
     )
 }

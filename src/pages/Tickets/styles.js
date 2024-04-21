@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Container = styled.div`
         background: ${({theme}) => theme.COLORS.GRAY_200};
-        height: 100vh;
 
         .ticketInfo {
             font-weight: bold;

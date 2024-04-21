@@ -26,8 +26,6 @@ export function TicketsTable({tickets, rows}) {
     function TablePaginationActions(props) {
         const theme = useTheme();
         const { count, page, rowsPerPage, onPageChange } = props;
-      
-        console.log(rowsPerPage)
 
         const handleFirstPageButtonClick = (event) => {
           onPageChange(event, 0);
@@ -106,17 +104,17 @@ export function TicketsTable({tickets, rows}) {
         <Container>
           <TableContainer component={Paper}>  
                 <div className="contentTable">
-                  <Table sx={{minWidth: 650}} size="small" aria-label="simple table">
+                  <Table sx={{minWidth: 650}} size="small" aria-label="simple table" padding="none">
 
                   <TableHead>
                       <TableRow>
-                      <TableCell> Numero Ticket </TableCell>
+                      <TableCell style={{width:110}}> Numero Ticket </TableCell>
                       <TableCell> Cliente </TableCell>
                       <TableCell> Descrição </TableCell>
                       <TableCell> Atendentes </TableCell>
-                      <TableCell> Status </TableCell>
-                      <TableCell> Data de Criação </TableCell>
-                      <TableCell> Vencimento </TableCell>
+                      <TableCell style={{width:110}}> Status </TableCell>
+                      <TableCell style={{width:145}}> Data de Criação </TableCell>
+                      <TableCell style={{width:90}}> Vencimento </TableCell>
                       <TableCell> Opções </TableCell>
                       </TableRow>
                   </TableHead>
@@ -129,32 +127,40 @@ export function TicketsTable({tickets, rows}) {
                           : tickets
                         ).map((ticket) => (
                           <TableRow key={ticket.id}>
-                            <TableCell component="th" scope="row" align="right" style={{width:130}}>
+                            <TableCell 
+                            component="th" 
+                            scope="row" 
+                            align="right" 
+                           
+                            sx={{fontSize:14, paddingRight:2}}
+                            >
                               {ticket.id}
-                            </TableCell>
-                            <TableCell>
+                            </TableCell >
+                            <TableCell sx={{fontSize:14}} > 
                               {ticket.client.razaoSocialName}
                             </TableCell>
-                            <TableCell  >
+                            <TableCell sx={{fontSize:14}}>
                               {ticket.shortDescription}
                             </TableCell>
-                            <TableCell  >
+                            <TableCell sx={{fontSize:14}} >
                               {
                                   ticket.users.map((user) => (
                                       user.name + ", "
                                   ))
                               }
                             </TableCell>
-                            <TableCell  >
+                            <TableCell sx={{fontSize:14}}>
                               { ticket.status.description}
                             </TableCell>
-                            <TableCell  >
+                            <TableCell sx={{fontSize:14}} >
                               { ticket.createAt}
                             </TableCell>
-                            <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} >
+                            <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} 
+                             
+                              sx={{fontSize:14}}  >
                               {ticket.slaTimeLeft}
                             </TableCell>
-                            <TableCell  className="ticket_options">
+                            <TableCell  className="ticket_options" sx={{fontSize:14}}>
                               <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
                               <DeleteIcon onClick={handleDeleteTicket}/>
                             </TableCell>

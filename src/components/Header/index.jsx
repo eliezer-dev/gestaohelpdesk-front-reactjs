@@ -69,7 +69,7 @@ export function Header({logo=true}) {
             </Menu>
             <Profile>
                 <ul>
-                    <li onClick={handleProfile}>{user.name}</li>    
+                    <li onClick={handleProfile}>{user.name.split(" ", 1)[0]}</li>    
                     <li onClick={handleSignOut}>Sair</li>
                 </ul>
                 <img 

@@ -5,17 +5,23 @@ import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import { TicketsTable } from "../../components/TicketsTable";
 import { Footer } from "../../components/Footer";
+import LogoGestaoHelpdesk  from "../../assets/Pages/Header/Logo_Gestao_Helpdesk.svg"
+import { ButtonText } from "../../components/ButtonText";
+import { FaPerson } from "react-icons/fa6";
+import { IoPeople } from "react-icons/io5";
+import { FaArrowsAlt } from "react-icons/fa";
+import { IoIosPeople } from "react-icons/io";
 
 export function Home(){
     const [header, setHeader] = useState("Chamados atribuídos a mim")
     const [ticketsAssignedUser, setTicketsAssignedUser] = useState([]);
-    const [ticketsAssignedUserQty, setTicketsAssignedUserQty] = useState([]);
+    const [ticketsAssignedUserQty, setTicketsAssignedUserQty] = useState(0);
     const [ticketsNotAssigned, setTicketsNotAssigned] = useState([]);
-    const [ticketsNotAssignedQty, setTicketsNotAssignedQty] = useState([]);
+    const [ticketsNotAssignedQty, setTicketsNotAssignedQty] = useState(0);
     const [allTickets, setAllTickets] = useState([]);
-    const [allTicketsQty, setAllTicketsQty] = useState([]);
+    const [allTicketsQty, setAllTicketsQty] = useState(0);
     const [ticketsAssignedOtherUsers, setTicketsAssignedOtherUsers] = useState([]);
-    const [ticketsAssignedOtherUsersQty, setTicketsAssignedOtherUsersQty] = useState([]);
+    const [ticketsAssignedOtherUsersQty, setTicketsAssignedOtherUsersQty] = useState(0);
     const [tickets, setTickets] = useState([])
     const [optionCode, setOptionCode] = useState(1);
 
@@ -148,12 +154,43 @@ export function Home(){
                 
                 <MenuSide>
                     <div className="logo">
-                        <p>Gestão Heldesk</p>
+                        <img src={LogoGestaoHelpdesk}/>
                     </div>
-                    <p onClick={handleTicketsAssignedUser}>Atribuídos a mim ({ticketsAssignedUserQty})</p>
+                    <div className="menuSite_Buttons">
+                    <ButtonText 
+                        onClick={handleTicketsAssignedUser} 
+                        icon={FaPerson }
+                        title={`Atribuídos a mim`}
+                        othersContents = {`(${ticketsAssignedUserQty})`}
+                        selected={optionCode== 1 ? true : false}
+                    />
+                    <ButtonText 
+                        onClick={handleTicketsAssignedOtherUsers} 
+                        title={`Outros usuários`}
+                        othersContents = {`(${ticketsAssignedOtherUsersQty})`}
+                        icon={IoPeople }
+                        selected={optionCode== 2 ? true : false}
+                    />
+                    <ButtonText 
+                        onClick={handleTicketsNotAssigned} 
+                        title={`Sem atribuição`}
+                        othersContents = {`(${ticketsNotAssignedQty})`}
+                        icon={FaArrowsAlt }
+                        selected={optionCode== 3 ? true : false}
+                    />
+                    <ButtonText 
+                        onClick={handleAllTickets} 
+                        title={`Todos`}
+                        othersContents = {`(${allTicketsQty})`}
+                        icon={IoIosPeople}
+                        selected={optionCode== 4 ? true : false}
+                    />
+                    </div>
+                   
+                    {/* <p onClick={handleTicketsAssignedUser}>Atribuídos a mim ({ticketsAssignedUserQty})</p>
                     <p onClick={handleTicketsAssignedOtherUsers}>Outros usuários ({ticketsAssignedOtherUsersQty})</p>
                     <p onClick={handleTicketsNotAssigned}>Sem atribuição ({ticketsNotAssignedQty})</p>
-                    <p onClick={handleAllTickets}>Todos ({allTicketsQty})</p>
+                    <p onClick={handleAllTickets}>Todos ({allTicketsQty})</p> */}
                 </MenuSide>
 
                 <HeaderTickets>

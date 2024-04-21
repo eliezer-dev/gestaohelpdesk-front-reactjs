@@ -7,12 +7,37 @@ export const Container = styled.div `
 export const Header = styled.div `
     display: flex;
     align-items: center;
+    justify-content: space-between;
     width: 100%;
     height: 144px;
     background: ${({theme}) => theme.COLORS.BACKGROUND_700};
 
-    > button {
-        margin-left: 12px;
+    .arrow_back {
+        margin-left: 24px;
+        cursor: pointer;
+    }
+
+    svg {
+        color: ${({theme}) => theme.COLORS.ORANGE};
+    }
+
+    .logo {
+        width: 198px;
+        height: 100%;
+        background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
+        color: ${({theme}) => theme.COLORS.WHITE};
+        height: 116px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer; 
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     }
 `
 
