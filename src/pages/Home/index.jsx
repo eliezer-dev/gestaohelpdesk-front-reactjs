@@ -11,69 +11,90 @@ import { FaPerson } from "react-icons/fa6";
 import { IoPeople } from "react-icons/io5";
 import { FaArrowsAlt } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
+import { useAuth } from "../../hooks/auth";
 
 export function Home(){
     const [header, setHeader] = useState("Chamados atribuídos a mim")
-    const [ticketsAssignedUser, setTicketsAssignedUser] = useState([]);
     const [ticketsAssignedUserQty, setTicketsAssignedUserQty] = useState(0);
-    const [ticketsNotAssigned, setTicketsNotAssigned] = useState([]);
     const [ticketsNotAssignedQty, setTicketsNotAssignedQty] = useState(0);
-    const [allTickets, setAllTickets] = useState([]);
-    const [allTicketsQty, setAllTicketsQty] = useState(0);
-    const [ticketsAssignedOtherUsers, setTicketsAssignedOtherUsers] = useState([]);
     const [ticketsAssignedOtherUsersQty, setTicketsAssignedOtherUsersQty] = useState(0);
+    const [allTicketsQty, setAllTicketsQty] = useState(0);
     const [tickets, setTickets] = useState([])
     const [optionCode, setOptionCode] = useState(1);
+    const {user} = useAuth();
 
     function handleTicketsAssignedUser() {
-        setHeader("Chamados atribuídos a mim")
-        setTickets(ticketsAssignedUser)
         setOptionCode(1)
+        setHeader("Chamados atribuídos a mim")
+        // fetchTickets(1)
+        
     }
-
 
     function handleTicketsAssignedOtherUsers() {
-        setTickets(ticketsAssignedOtherUsers)
-        setHeader("Chamados atribuídos a outros usuários")
         setOptionCode(2)
+        setHeader("Chamados atribuídos a outros usuários")
+        // fetchTickets(2)
+        
     }
 
+
     function handleTicketsNotAssigned() {
-        setTickets(ticketsNotAssigned)
-        setHeader("Chamados sem atribuição")
         setOptionCode(3)
+        setHeader("Chamados sem atribuição")
+        // fetchTickets(3)
+        
     }
 
     function handleAllTickets() {
-        setTickets(allTickets)
+        setOptionCode(0)
         setHeader("Todos os chamados")
-        setOptionCode(4)
-    }
-
-    async function fetchTickets () {
-        const response = await api.get("/tickets")
-        
-        let allTicketsFormated = formatData(response.data.allTickets);
-        let ticketsAssignedUserFormated = formatData(response.data.ticketsAssignedUser);
-        let ticketsNotSignedFormated = formatData(response.data.ticketsNotAssigned);
-        let ticketsAssignedOtherUsersFormated = formatData(response.data.ticketsAssignedOtherUsers);
-
-        setAllTickets(allTicketsFormated);
-        setAllTicketsQty(allTicketsFormated.length)
-        setTicketsAssignedUser(ticketsAssignedUserFormated);
-        setTicketsAssignedUserQty(ticketsAssignedUserFormated.length);
-        setTicketsNotAssigned(ticketsNotSignedFormated);
-        setTicketsNotAssignedQty(ticketsNotSignedFormated.length);
-        setTicketsAssignedOtherUsers(ticketsAssignedOtherUsersFormated);
-        setTicketsAssignedOtherUsersQty(ticketsAssignedOtherUsersFormated.length);
-    
-        if (tickets.length == 0) {
-            setTickets(ticketsAssignedUserFormated) 
-        }
-       
+        // fetchTickets()
         
     }
 
+    async function fetchTickets (optionCode) {
+        
+        if (optionCode == 1) {
+            const response = await api.get(`/tickets?user=${user.id}`);
+            const ticketsAssignedUserFormated = formatData(response.data); 
+            setTickets(ticketsAssignedUserFormated)
+            fetchTicketsCount()
+            return;
+            
+
+        }else if (optionCode == 2) {
+            const response = await api.get(`/tickets?type=1&user=${user.id}`);
+            const ticketsAssignedOtherUsersFormated = formatData(response.data);
+            setTickets(ticketsAssignedOtherUsersFormated)
+            fetchTicketsCount()
+            return    
+        } else if (optionCode == 3) {
+            const response = await api.get(`/tickets?type=2`);
+            const ticketsNotSignedFormated = formatData(response.data);
+            setTickets(ticketsNotSignedFormated)
+            fetchTicketsCount()
+            return
+        
+        } else if (!optionCode || optionCode == 0) {
+            const response = await api.get("/tickets");
+            const allTicketsFormated = formatData(response.data);
+            setTickets(allTicketsFormated)
+            fetchTicketsCount()
+            return
+        } else {
+            console.error("Opção Inválida.");
+        }      
+        
+    }
+
+    async function fetchTicketsCount() {
+        const response = await api.get("/tickets/count");
+        setTicketsAssignedUserQty(response.data.ticketsAssignedUserCount)
+        setTicketsAssignedOtherUsersQty(response.data.ticketsAssignedOtherUsersCount)
+        setTicketsNotAssignedQty(response.data.ticketsNotAssignedCount)
+        setAllTicketsQty(response.data.allTicketsCount)
+        return;
+    }
 
     function formatData(data) {
         let dataFormated = [];
@@ -110,12 +131,15 @@ export function Home(){
                 return slaTimeLeftInSeconds
             }
             
+            const shortDescription = ticket.shortDescription.length > 65 ? 
+                ticket.shortDescription.slice(0,65) + "..." : ticket.shortDescription
+
             const ticketFormated = {
                 id:ticket.id,
                 description:ticket.description,
-                shortDescription:ticket.shortDescription,
+                shortDescription:shortDescription,
                 client:ticket.client,   
-                users:ticket.users,
+                user:ticket.user,
                 status:ticket.status,
                 createAt:date.toLocaleString().replace(/,/g,""),
                 slaTimeLeft:calcSlaTimeLeft(ticket.slaDateTimeEnd),
@@ -128,23 +152,17 @@ export function Home(){
     }
 
 
-
     useEffect(() => {
-        fetchTickets();
-    },[])
+        fetchTickets(optionCode)
+        fetchTicketsCount()
 
-    setTimeout(() => {
-        fetchTickets();
-        if (optionCode == 1) {
-            setTickets(ticketsAssignedUser)
-        } else if(optionCode == 2) {
-            setTickets(ticketsAssignedOtherUsers)
-        }else if(optionCode == 3) {
-            setTickets(ticketsNotAssigned)
-        }else {
-            setTickets(allTickets)
-        }
-    }, 10000);
+
+        const interval = setInterval(() => {
+            fetchTickets(optionCode);
+        }, 60000);
+    
+        return () => clearInterval(interval);
+    },[optionCode])
 
 
     return (
@@ -183,7 +201,7 @@ export function Home(){
                         title={`Todos`}
                         othersContents = {`(${allTicketsQty})`}
                         icon={IoIosPeople}
-                        selected={optionCode== 4 ? true : false}
+                        selected={optionCode== 0 ? true : false}
                     />
                     </div>
                    
@@ -197,7 +215,10 @@ export function Home(){
                     <Header logo={false}/>
                     <Tickets>
                         <h1>{header}</h1>
-                        <TicketsTable tickets={tickets} rows={10}/>
+                        <TicketsTable 
+                            tickets={tickets} 
+                            rows={12}
+                            />
                     </Tickets>
                 </HeaderTickets>
            

@@ -26,25 +26,20 @@ export const Container = styled.div`
     }
 
     .MuiSvgIcon-root{
-        font-size: 14px;
+        font-size: 16px;
     }
-    /* .MuiTableCell-sizeSmall {
-        padding: 6px 8px;
-    } */
+
 
     .MuiTableCell-root {
-        padding: 6px 8px 6px 2px; 
+        padding: 8px 8px 8px 2px; 
     }
 
     .background-color-orange {
-            background-color: ${({theme}) => theme.COLORS.ORANGE}; 
-            /* color: ${({theme}) => theme.COLORS.WHITE}; 
-            font-weight: bold;
-
-            input {
-                color: ${({theme}) => theme.COLORS.WHITE};  
-            } */
-        }
+        background-color: ${({theme}) => theme.COLORS.ORANGE}; 
+    }
         
+    .MuiTablePagination-root  {
 
+    }
+   
 `

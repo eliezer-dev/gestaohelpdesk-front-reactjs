@@ -100,11 +100,15 @@ export function TicketsTable({tickets, rows}) {
         console.log("remove ticket...")
     }
 
+    useEffect(() => {
+      setPage(0)
+    }, [tickets])
+
     return (
         <Container>
           <TableContainer component={Paper}>  
                 <div className="contentTable">
-                  <Table sx={{minWidth: 650}} size="small" aria-label="simple table" padding="none">
+                  <Table sx={{minWidth: 650}} size="normal" aria-label="simple table" padding="none">
 
                   <TableHead>
                       <TableRow>
@@ -143,11 +147,7 @@ export function TicketsTable({tickets, rows}) {
                               {ticket.shortDescription}
                             </TableCell>
                             <TableCell sx={{fontSize:14}} >
-                              {
-                                  ticket.users.map((user) => (
-                                      user.name + ", "
-                                  ))
-                              }
+                              {ticket?.user?.name}
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
                               { ticket.status.description}
@@ -167,18 +167,18 @@ export function TicketsTable({tickets, rows}) {
                             
                           </TableRow>
                         ))}
-                        {emptyRows > 0 && (
+                        {/* {emptyRows > 0 && (
                           <TableRow style={{ height: 53 * emptyRows }}>
                             <TableCell colSpan={6} />
                           </TableRow>
-                        )}
+                        )} */}
                   </TableBody>
                   </Table>
                 </div>
                 <TableFooter>
                     <TableRow>
                       <TablePagination
-                        rowsPerPageOptions={[5, 10, 15, 25, { label: 'All', value: -1 }]}
+                        rowsPerPageOptions={[5, 10, 12, 15, 25, { label: 'All', value: -1 }]}
                         colSpan={3}
                         count={tickets ? tickets.length : 0}
                         rowsPerPage={rowsPerPage}
