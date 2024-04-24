@@ -466,6 +466,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                                     wrap
                                     disabled
                                     rows={4}
+                                    className={"annotation_text"}
                                 />
                             </div>
                             </TicketAnnotations>

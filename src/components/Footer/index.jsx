@@ -1,5 +1,5 @@
 import { Container } from "./styles";
-import LogoGestaoHelpdeskVertical  from "../../assets/Pages/Header/Logo_Gestao_Helpdesk-vertical.png"
+import LogoGestaoHelpdeskVertical  from "../../assets/shared/Logo_Gestao_Helpdesk-vertical.svg"
 
 export function Footer() {
     return(

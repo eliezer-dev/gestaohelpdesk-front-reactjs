@@ -4,7 +4,8 @@ export const Container = styled.div`
     display: flex;
     height: 40px;
     width: 100%;
-    
+    align-items: center;
+    cursor: pointer;
     
     .button_text {
         height: 100%;
@@ -13,7 +14,6 @@ export const Container = styled.div`
         color: ${({theme}) => theme.COLORS.WHITE};
         font-size: 14px;
         display: flex;
-        cursor: pointer;
         text-align: center;
         justify-content: flex-start;
         align-items: center;
@@ -21,8 +21,10 @@ export const Container = styled.div`
         
     }
     
-    
-    
+    span:hover {
+        opacity: .5;
+    }
+
     svg {
         color:${({theme}) => theme.COLORS.WHITE};
         width: 20px;

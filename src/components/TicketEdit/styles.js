@@ -10,7 +10,7 @@ export const Container = styled.div `
 `;
 
 export const Annotations = styled.div `
-    width: 600px;
+    width: 500px;
     > h1 {
         margin-bottom: 12px;
     }
@@ -44,7 +44,7 @@ export const TicketMain = styled.form `
     gap: 24px;
     flex-direction: column;
     align-items: center;
-    width: 600px;
+    width: 500px;
     margin: 0 auto;
 
     label {
@@ -83,7 +83,7 @@ export const TicketMain = styled.form `
         div {
             display: flex;
             width: 100%;
-            height: 56px;
+            height: 48px;
             
             select {
                 width: 110px;
@@ -93,7 +93,6 @@ export const TicketMain = styled.form `
                 border-bottom-right-radius: 16px;
                 background-color: ${({theme}) => theme.COLORS.BLUE_100};
                 color: ${({theme}) => theme.COLORS.WHITE};
-                font-weight: bold;
             }
         }
     }
@@ -112,7 +111,7 @@ export const TicketMain = styled.form `
     #status-select {
         outline: none;
         width: 100%;
-        height: 56px;
+        height: 48px;
         border-radius: 10px;
         border: none;
         background: ${({theme}) => theme.COLORS.WHITE_100};
@@ -148,7 +147,7 @@ export const TicketAnnotations = styled.div `
     padding: 8px 24px 0px 8px;
     display: flex;
     align-items: flex-start;
-    width: 600px;
+    width: 500px;
     display: flex;
     gap: 12px;
     overflow-y: auto;
@@ -167,6 +166,10 @@ export const TicketAnnotations = styled.div `
         border-radius: 50%;
     }
 
+    .annotation_text {
+        margin-top: 8px;
+    }
+
     .annotation {
         width: 100%;
     }
@@ -175,7 +178,7 @@ export const TicketAnnotations = styled.div `
 export const Select = styled.select`   
     outline: none;
     width: 100%;
-    height: 56px;
+    height: 48px;
     border-radius: 10px;
     border: none;
     background: ${({theme}) => theme.COLORS.WHITE_100};

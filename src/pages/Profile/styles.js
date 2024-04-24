@@ -5,11 +5,12 @@ export const Container = styled.div `
 `;
 
 export const Header = styled.div `
+    padding: 4px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 144px;
+    height: 72px;
     background: ${({theme}) => theme.COLORS.BACKGROUND_700};
 
     .arrow_back {
@@ -22,11 +23,10 @@ export const Header = styled.div `
     }
 
     .logo {
-        width: 198px;
-        height: 100%;
+        width: 192px;
         background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
         color: ${({theme}) => theme.COLORS.WHITE};
-        height: 116px;
+        height: 72px;
         font-weight: bold;
         display: flex;
         align-items: center;
@@ -36,7 +36,6 @@ export const Header = styled.div `
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
         }
     }
 `
@@ -45,12 +44,12 @@ export const Picture = styled.div `
     position: relative;
     width: 186px;
     background: transparent;
-    margin: -90px auto 64px;
+    margin: -40px auto 32px;
 
     > img {
         border-radius: 50%;
-        width: 186px;
-        height: 186px;
+        width: 108px;
+        height: 108px;
     }
 
     > label {
@@ -84,7 +83,7 @@ export const Form = styled.form`
     margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 12px;
     overflow-y: auto;
     margin-bottom: 24px;
 `;

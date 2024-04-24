@@ -13,7 +13,7 @@ import { useAuth } from "../../hooks/auth";
 import { api } from "../../services/api";
 import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 import { Footer } from "../../components/Footer";
-import LogoGestaoHelpdesk  from "../../assets/Pages/Header/Logo_Gestao_Helpdesk2.png"
+import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function Profile () {
     const [userAvatar, setUserAvatar] = useState({avatarPlaceHolder})
@@ -124,7 +124,7 @@ export function Profile () {
                     onClick={handleBack}
                     className="arrow_back"
                 />
-                <div className="logo">
+                <div className="logo" onClick={handleBack}>
                         <img src={LogoGestaoHelpdesk}/>
                 </div>
 

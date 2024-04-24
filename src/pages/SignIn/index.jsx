@@ -1,10 +1,11 @@
-import { Container, Content, Form } from "./styles";
-import imgHelpdesk from "../../assets/Pages/SignIn/imgHelpdesk.svg"
+import { Container, Content, Form, Logo, Background } from "./styles";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
 import { ButtonText } from "../../components/ButtonText";
 import { useState } from "react";
 import { useAuth } from "../../hooks/auth";
+import LogoGestaoHelpdesk from "../../assets/shared/Logo_Gestao_Helpdesk_sem_bordas.svg"
+import { Footer } from "../../components/Footer";
 
 export function SignIn(){
     const [username, setUsername] = useState("");
@@ -19,17 +20,23 @@ export function SignIn(){
     return (
         <Container>
             <Content>
-                <img src={imgHelpdesk} alt="desenho de 2 homens e uma mulher sentado em uma mesa, representando um setor de helpdesk"/>
+                <Background/>
+               
                 <Form>
+                    <Logo> 
+                        <img src={LogoGestaoHelpdesk}/>
+                    </Logo>
+
                     <h1>Entrar</h1>
-                    <Input    
-                        placeholder="Usuário ou e-mail"
+                    <Input   
+                        placeholder="Digite o usuário que deseja acessar"
                         type="text"
                         value={username}
                         onChange={e => {setUsername(e.target.value)}}
+                        className="form_input"
                     />
                     <Input    
-                        placeholder="Senha"
+                        placeholder="Digite a senha de acesso"
                         type="password"
                         value={password}
                         onChange={e => {setPassword(e.target.value)}}
@@ -38,7 +45,6 @@ export function SignIn(){
                     <Button title="Entrar" onClick={handleLogin}/>
                 </Form>
             </Content>
-            
         </Container>
     )
 }

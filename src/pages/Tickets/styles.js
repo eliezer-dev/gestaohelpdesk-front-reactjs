@@ -11,29 +11,29 @@ export const Container = styled.div`
             flex-direction: column;
             align-items: flex-start;
             
-            label {
-                margin-bottom: 8px;
-            }
-
-
             div {
                 width: 250px;
                 margin-bottom: 24px;
+
             }
+
         }
-    
-    
+   
 `
 
 export const Header = styled.div`
     padding-left: 24px;
-    height: 116px;
+    height: 72px;
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700}; 
     display: flex;
     justify-content: center;
     align-content: center;
     flex-direction: row;
     align-items: center;
+
+    h1 {
+        font-size: 24px;
+    }
 
     .header_title {
         width: 500px;
@@ -44,6 +44,7 @@ export const Header = styled.div`
         
         div {
             width: 150px;
+            margin-bottom: 0;
         }
 
         input {
@@ -54,6 +55,7 @@ export const Header = styled.div`
             width: 350px;
             display: flex;
             align-items: center;
+            justify-content:center;
             gap: 8px;
             position: absolute;
             right: 24px;
@@ -61,7 +63,7 @@ export const Header = styled.div`
             label {
                 font-weight: bold;
                 color: ${({theme}) => theme.COLORS.WHITE}; 
-                font-size: 32px;
+                font-size: 24px;
                 text-align: center;
             }
             
@@ -96,9 +98,10 @@ export const Header = styled.div`
     svg {
         color: ${({theme}) => theme.COLORS.ORANGE};
         position: absolute;
-        top: 40px;
+        top: 22px;
         left: 24px;
         cursor: pointer;
+        font-size: 20px;
     }
 
     
@@ -112,7 +115,7 @@ export const Content = styled.div `
 
 `
 export const ClientInfo = styled.div  `
-    width: 600px;
+    width: 500px;
     display: flex;
     flex-direction: column;
 

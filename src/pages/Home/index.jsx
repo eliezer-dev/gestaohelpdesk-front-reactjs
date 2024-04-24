@@ -5,7 +5,7 @@ import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import { TicketsTable } from "../../components/TicketsTable";
 import { Footer } from "../../components/Footer";
-import LogoGestaoHelpdesk  from "../../assets/Pages/Header/Logo_Gestao_Helpdesk.svg"
+import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 import { ButtonText } from "../../components/ButtonText";
 import { FaPerson } from "react-icons/fa6";
 import { IoPeople } from "react-icons/io5";

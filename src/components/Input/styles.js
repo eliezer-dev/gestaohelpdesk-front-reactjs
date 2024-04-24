@@ -8,6 +8,7 @@ export const Container = styled.div`
 
     > label {
         font-weight: bold;
+        margin-bottom: 4px;
     }
 
     > div {
@@ -20,7 +21,7 @@ export const Container = styled.div`
     }
 
     input {
-        height: 56px;
+        height: 48px;
         width: 100%;
         padding: 12px;
         color: ${({theme}) => theme.COLORS.GRAY_200};
