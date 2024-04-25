@@ -1,4 +1,4 @@
-import { Container, Tickets, MenuSide, MenuSideHeaderTickets, HeaderTickets } from "./styles";
+import { Container, Tickets, MenuSide, MenuSideHeaderTickets, HeaderTickets, InputSimple } from "./styles";
 import { Header } from "../../components/Header";
 
 import { api } from "../../services/api";
@@ -11,6 +11,7 @@ import { FaPerson } from "react-icons/fa6";
 import { IoPeople } from "react-icons/io5";
 import { FaArrowsAlt } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
+import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from "../../hooks/auth";
 
 export function Home(){
@@ -22,18 +23,20 @@ export function Home(){
     const [tickets, setTickets] = useState([])
     const [optionCode, setOptionCode] = useState(1);
     const {user} = useAuth();
+    const [searchState, setSearchState] = useState("");
+    const [searchTypeState,setSearchTypeState] = useState(1);
 
     function handleTicketsAssignedUser() {
         setOptionCode(1)
         setHeader("Chamados atribuídos a mim")
-        // fetchTickets(1)
+        setSearchState("")
         
     }
 
     function handleTicketsAssignedOtherUsers() {
         setOptionCode(2)
         setHeader("Chamados atribuídos a outros usuários")
-        // fetchTickets(2)
+        setSearchState("")
         
     }
 
@@ -41,21 +44,25 @@ export function Home(){
     function handleTicketsNotAssigned() {
         setOptionCode(3)
         setHeader("Chamados sem atribuição")
-        // fetchTickets(3)
+        setSearchState("")
         
     }
 
     function handleAllTickets() {
         setOptionCode(0)
         setHeader("Todos os chamados")
-        // fetchTickets()
+        setSearchState("")
         
     }
 
-    async function fetchTickets (optionCode) {
+    async function fetchTickets (dataSearch) { 
         
+        setSearchState(dataSearch)
+
+        const search = dataSearch ? dataSearch : ""
+  
         if (optionCode == 1) {
-            const response = await api.get(`/tickets?user=${user.id}`);
+            const response = await api.get(`/tickets?user=${user.id}&search=${search}&search_type=${searchTypeState}`);
             const ticketsAssignedUserFormated = formatData(response.data); 
             setTickets(ticketsAssignedUserFormated)
             fetchTicketsCount()
@@ -63,20 +70,20 @@ export function Home(){
             
 
         }else if (optionCode == 2) {
-            const response = await api.get(`/tickets?type=1&user=${user.id}`);
+            const response = await api.get(`/tickets?type=1&user=${user.id}&search=${search}&search_type=${searchTypeState}`);
             const ticketsAssignedOtherUsersFormated = formatData(response.data);
             setTickets(ticketsAssignedOtherUsersFormated)
             fetchTicketsCount()
             return    
         } else if (optionCode == 3) {
-            const response = await api.get(`/tickets?type=2`);
+            const response = await api.get(`/tickets?type=2&search=${search}&search_type=${searchTypeState}`);
             const ticketsNotSignedFormated = formatData(response.data);
             setTickets(ticketsNotSignedFormated)
             fetchTicketsCount()
             return
         
         } else if (!optionCode || optionCode == 0) {
-            const response = await api.get("/tickets");
+            const response = await api.get( `/tickets?search=${search}&search_type=${searchTypeState}`);
             const allTicketsFormated = formatData(response.data);
             setTickets(allTicketsFormated)
             fetchTicketsCount()
@@ -86,6 +93,7 @@ export function Home(){
         }      
         
     }
+
 
     async function fetchTicketsCount() {
         const response = await api.get("/tickets/count");
@@ -151,14 +159,17 @@ export function Home(){
         
     }
 
+    function handleTypeSearch (event) {
+        setSearchTypeState(event)
+    }
 
     useEffect(() => {
-        fetchTickets(optionCode)
+        fetchTickets()
         fetchTicketsCount()
 
 
         const interval = setInterval(() => {
-            fetchTickets(optionCode);
+            fetchTickets();
         }, 60000);
     
         return () => clearInterval(interval);
@@ -175,40 +186,57 @@ export function Home(){
                         <img src={LogoGestaoHelpdesk}/>
                     </div>
                     <div className="menuSite_Buttons">
-                    <ButtonText 
-                        onClick={handleTicketsAssignedUser} 
-                        icon={FaPerson }
-                        title={`Atribuídos a mim`}
-                        othersContents = {`(${ticketsAssignedUserQty})`}
-                        selected={optionCode== 1 ? true : false}
-                    />
-                    <ButtonText 
-                        onClick={handleTicketsAssignedOtherUsers} 
-                        title={`Outros usuários`}
-                        othersContents = {`(${ticketsAssignedOtherUsersQty})`}
-                        icon={IoPeople }
-                        selected={optionCode== 2 ? true : false}
-                    />
-                    <ButtonText 
-                        onClick={handleTicketsNotAssigned} 
-                        title={`Sem atribuição`}
-                        othersContents = {`(${ticketsNotAssignedQty})`}
-                        icon={FaArrowsAlt }
-                        selected={optionCode== 3 ? true : false}
-                    />
-                    <ButtonText 
-                        onClick={handleAllTickets} 
-                        title={`Todos`}
-                        othersContents = {`(${allTicketsQty})`}
-                        icon={IoIosPeople}
-                        selected={optionCode== 0 ? true : false}
-                    />
+                        <InputSimple>
+                            
+                            <div className="input_search">
+                                <SearchIcon/>
+                                <input 
+                                    type="text"
+                                    value={searchState}
+                                    onChange={e => {fetchTickets(e.target.value)}}
+                                />
+                                <select
+                                    onChange={e => {handleTypeSearch(e.target.value)}}
+                                >
+                                    <option id={1} value={1}>Ticket</option>
+                                    <option id={2} value={2}>Cliente</option>
+                                    <option id={3} value={3}>CNPJ</option>
+    
+                                </select>
+                            </div>
+                            
+                            
+                        </InputSimple>
+                        <ButtonText 
+                            onClick={handleTicketsAssignedUser} 
+                            icon={FaPerson }
+                            title={`Atribuídos a mim`}
+                            othersContents = {`(${ticketsAssignedUserQty})`}
+                            selected={optionCode== 1 ? true : false}
+                        />
+                        <ButtonText 
+                            onClick={handleTicketsAssignedOtherUsers} 
+                            title={`Outros usuários`}
+                            othersContents = {`(${ticketsAssignedOtherUsersQty})`}
+                            icon={IoPeople }
+                            selected={optionCode== 2 ? true : false}
+                        />
+                        <ButtonText 
+                            onClick={handleTicketsNotAssigned} 
+                            title={`Sem atribuição`}
+                            othersContents = {`(${ticketsNotAssignedQty})`}
+                            icon={FaArrowsAlt }
+                            selected={optionCode== 3 ? true : false}
+                        />
+                        <ButtonText 
+                            onClick={handleAllTickets} 
+                            title={`Todos`}
+                            othersContents = {`(${allTicketsQty})`}
+                            icon={IoIosPeople}
+                            selected={optionCode== 0 ? true : false}
+                        />
                     </div>
                    
-                    {/* <p onClick={handleTicketsAssignedUser}>Atribuídos a mim ({ticketsAssignedUserQty})</p>
-                    <p onClick={handleTicketsAssignedOtherUsers}>Outros usuários ({ticketsAssignedOtherUsersQty})</p>
-                    <p onClick={handleTicketsNotAssigned}>Sem atribuição ({ticketsNotAssignedQty})</p>
-                    <p onClick={handleAllTickets}>Todos ({allTicketsQty})</p> */}
                 </MenuSide>
 
                 <HeaderTickets>

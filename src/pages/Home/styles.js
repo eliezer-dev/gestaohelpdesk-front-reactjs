@@ -47,7 +47,7 @@ export const Tickets = styled.div`
 export const MenuSide = styled.div`
     display: flex;
     flex-direction: column;
-    width: 220px;
+    width: 280px;
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 100%;
@@ -75,6 +75,47 @@ export const MenuSide = styled.div`
         border-right: 1px solid  rgba(224, 224, 224, 1);
     }
 
+`
+
+export const InputSimple = styled.div`
+    width: 100%;
+    height: 50px;
+    padding: 8px 4px;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    justify-content: center ;
+
+    .input_search {
+        background-color: ${({theme}) => theme.COLORS.WHITE};
+        display: flex;
+        width: 100%;
+        border-radius: 24px;
+    }
+
+    input {
+        width: 100%;
+        height: 100%;
+        padding: 4px;
+        border: none;
+    }    
+
+    select {
+        border: none;
+        outline: none;
+        width: 80px;
+        border-top-right-radius: 24px;
+        border-bottom-right-radius: 24px;
+        background-color: ${({theme}) => theme.COLORS.ORANGE};
+        color: ${({theme}) => theme.COLORS.WHITE};
+    }
+    
+
+    svg {
+        color: #000;
+        height: 25px;
+        width: 30px;
+    }
 `
 
 
