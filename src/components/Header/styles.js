@@ -7,14 +7,23 @@ export const Container = styled.div`
 
 `
 export const Logo = styled.div `
-        background-color: ${({theme}) => theme.COLORS.BLUE_100};
+        width: 280px;
+        height: 100%;
+        background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
         color: ${({theme}) => theme.COLORS.WHITE};
-        width: 195px;
+        height: 72px;
         font-weight: bold;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        border-bottom: .2px solid  rgba(224, 224, 224, 1);  
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
+
 `
 
 

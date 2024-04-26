@@ -7,11 +7,11 @@ import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
 import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
+import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function Header({logo=true}) {
     const navigate = useNavigate();
     const {user, signOut} = useAuth();
-    const [itensMenu, setItensMenu] = useState(["Chamados", "Clientes", "Ajuda", "Downloads"])
     const [username, setUsername] = useState("")
     const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
 
@@ -32,6 +32,17 @@ export function Header({logo=true}) {
         navigate("/ticket/new")
     }
 
+    function handleClickMenuHeader(option) {
+        //chamados
+        if (option == 1) {
+            navigate("/")
+        }
+        //clientes
+        if (option == 2) {
+            navigate("/clients")
+        }
+    }
+
     async function getAvatar(){
         const response = await api.get(`/users/avatar/${user.id}`)
         const avatar = response.data;
@@ -44,7 +55,6 @@ export function Header({logo=true}) {
     useEffect(() => {
         setUsername(user.name)
         getAvatar()
-
     }, [])
 
     return (
@@ -52,19 +62,20 @@ export function Header({logo=true}) {
             {
                 logo == true && 
                 <Logo>
-                    <p onClick={handleBack}>Gestão Heldesk</p>
+                    <img  onClick={handleBack} src={LogoGestaoHelpdesk}/>
                 </Logo>
             }
             
             <Menu>
-                    {   
-                        itensMenu.map((item, index) => (
-                            <Fragment key={index}>
-                            <span>{item}</span>
-                            <img src={line1} alt="linha vertical para separar"/>
-                            </Fragment>
-                        ))
-                    }
+                    <span onClick={() => {handleClickMenuHeader(1)}}>Chamados</span>
+                    <img src={line1} alt="linha vertical para separar"/>
+                    <span onClick={() => {handleClickMenuHeader(2)}}>Clientes</span>
+                    <img src={line1} alt="linha vertical para separar"/>
+                    <span onClick={() => {handleClickMenuHeader(3)}}>Usuários</span>
+                    <img src={line1} alt="linha vertical para separar"/>
+                    <span onClick={() => {handleClickMenuHeader(4)}}>Ajuda</span>
+                    <img src={line1} alt="linha vertical para separar"/>
+                    <span onClick={() => {handleClickMenuHeader(5)}}>Downloads</span>
                 <Button title="Novo Chamado" icon={FaEnvelope } onClick={handleNewTicket}/>
             </Menu>
             <Profile>

@@ -72,7 +72,17 @@ export const MenuSide = styled.div`
     }
 
     .menuSite_Buttons {
+        position: relative;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         border-right: 1px solid  rgba(224, 224, 224, 1);
+        button {
+            position: absolute;
+            bottom: 4px;
+            width: 210px;
+        }
     }
 
 `
