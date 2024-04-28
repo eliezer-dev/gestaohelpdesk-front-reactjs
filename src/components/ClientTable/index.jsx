@@ -20,7 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function ClientsTable({clients, rows}) {
+export function ClientsTable({clients, rows, deleteClient}) {
     const navigate = useNavigate();
     
     function TablePaginationActions(props) {
@@ -92,13 +92,10 @@ export function ClientsTable({clients, rows}) {
         setPage(0);
       };
 
-    function handleEditTicket (ticketId) {
-        navigate(`/ticket/${ticketId}`)
+    function handleEditClient (clientId) {
+        navigate(`/clients/${clientId}`)
     }
     
-    function handleDeleteTicket(){
-        console.log("remove ticket...")
-    }
 
     useEffect(() => {
       setPage(0)
@@ -163,8 +160,8 @@ export function ClientsTable({clients, rows}) {
                               { client?.createAt}
                             </TableCell>
                             <TableCell  className="ticket_options" sx={{fontSize:14}}>
-                              <EditIcon onClick={() => {handleEditTicket(client.id)}}/>
-                              <DeleteIcon onClick={handleDeleteTicket}/>
+                              <EditIcon onClick={() => {handleEditClient(client.id)}}/>
+                              <DeleteIcon onClick={() => {deleteClient(client.id)}}/>
                             </TableCell>
                             
                           </TableRow>

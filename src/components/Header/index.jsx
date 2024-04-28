@@ -25,6 +25,7 @@ export function Header({logo=true}) {
     }
 
     function handleBack() {
+        console.log("chegou aqui")
         navigate("/")
     }
 
@@ -61,8 +62,8 @@ export function Header({logo=true}) {
         <Container>
             {
                 logo == true && 
-                <Logo>
-                    <img  onClick={handleBack} src={LogoGestaoHelpdesk}/>
+                <Logo onClick={() => {handleBack()}}>
+                    <img  onClick={() => {handleBack()}} src={LogoGestaoHelpdesk}/>
                 </Logo>
             }
             

@@ -125,11 +125,11 @@ export function Tickets() {
         if(!ticketDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
-                navigate("/")
+                navigate(-1)
                 return
             }
         }else {
-            navigate("/")
+            navigate(-1)
             return
         }
         

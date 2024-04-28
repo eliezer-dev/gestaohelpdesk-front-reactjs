@@ -12,7 +12,8 @@ import { IoPeople } from "react-icons/io5";
 import { FaArrowsAlt } from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
 import SearchIcon from '@mui/icons-material/Search';
-import { useAuth } from "../../hooks/auth";
+import { useAuth } from "../../hooks/auth"
+import { useNavigate } from "react-router-dom";
 
 export function Home(){
     const [header, setHeader] = useState("Chamados atribuídos a mim")
@@ -25,6 +26,7 @@ export function Home(){
     const {user} = useAuth();
     const [searchState, setSearchState] = useState("");
     const [searchTypeState,setSearchTypeState] = useState(1);
+    const navigate = useNavigate();
 
     function handleTicketsAssignedUser() {
         setOptionCode(1)
@@ -139,8 +141,8 @@ export function Home(){
                 return slaTimeLeftInSeconds
             }
             
-            const shortDescription = ticket.shortDescription.length > 65 ? 
-                ticket.shortDescription.slice(0,65) + "..." : ticket.shortDescription
+            const shortDescription = ticket.shortDescription.length > 60 ? 
+                ticket.shortDescription.slice(0,60) + "..." : ticket.shortDescription
 
             const ticketFormated = {
                 id:ticket.id,
@@ -163,6 +165,10 @@ export function Home(){
         setSearchTypeState(event)
     }
 
+    function handleBack() {
+        navigate("/")    
+    }
+
     useEffect(() => {
         fetchTickets()
         fetchTicketsCount()
@@ -182,7 +188,7 @@ export function Home(){
             <MenuSideHeaderTickets>
                 
                 <MenuSide>
-                    <div className="logo">
+                    <div className="logo" onClick={handleBack}>
                         <img src={LogoGestaoHelpdesk}/>
                     </div>
                     <div className="menuSite_Buttons">

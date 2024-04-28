@@ -16,39 +16,28 @@ import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from "../../hooks/auth";
 import { Button } from "../../components/Button";
 import { ClientsTable } from "../../components/ClientTable";
+import { useNavigate } from "react-router-dom";
+import { WindowSharp } from "@mui/icons-material";
 
-export function Client(){
+export function User(){
     const [clients, setClients] = useState([])
     const [optionCode, setOptionCode] = useState(1);
     const {user} = useAuth();
     const [searchState, setSearchState] = useState("");
     const [searchTypeState,setSearchTypeState] = useState(1);
-
+    const navigate = useNavigate();
     
 
-    async function fetchTickets (dataSearch) { 
-        
+    async function fetchClients (dataSearch) { 
         setSearchState(dataSearch)
-
         const search = dataSearch ? dataSearch : ""
-  
         const response = await api.get(`/clients?search=${search}&type=${searchTypeState}`);
-        console.log(response.data)
         const clientFormated = formatData(response.data); 
         setClients(clientFormated)
         return;
         
     }
 
-
-    async function fetchTicketsCount() {
-        const response = await api.get("/tickets/count");
-        setTicketsAssignedUserQty(response.data.ticketsAssignedUserCount)
-        setTicketsAssignedOtherUsersQty(response.data.ticketsAssignedOtherUsersCount)
-        setTicketsNotAssignedQty(response.data.ticketsNotAssignedCount)
-        setAllTicketsQty(response.data.allTicketsCount)
-        return;
-    }
 
     function formatData(data) {
         let dataFormated = [];
@@ -82,13 +71,43 @@ export function Client(){
         setSearchTypeState(event)
     }
 
+    function handleNewClient() {
+        navigate("/clients/new")
+    }
+
+    const deleteClient = clientId => {
+        handleDeleteClient(clientId)
+    } 
+
+    async function handleDeleteClient(clientId) {
+        try {
+            await api.delete(`/clients/${clientId}`)
+            alert("Cadastro removido com sucesso.")
+            fetchClients()
+        } catch (error) {
+            alert("Erro ao deletar o cadastro.")
+            console.error(error)
+            fetchClients()
+        }
+        
+    
+    }
+
+
+    function handleBack(){
+        navigate(-1)
+    }
+
+
+  
+
+
     useEffect(() => {
-        fetchTickets()
-        fetchTicketsCount()
+        fetchClients()
 
 
         const interval = setInterval(() => {
-            fetchTickets();
+            fetchClients();
         }, 60000);
     
         return () => clearInterval(interval);
@@ -101,7 +120,7 @@ export function Client(){
             <MenuSideHeaderTickets>
                 
                 <MenuSide>
-                    <div className="logo">
+                    <div className="logo" onClick={handleBack}>
                         <img src={LogoGestaoHelpdesk}/>
                     </div>
                     <div className="menuSite_Buttons">
@@ -112,7 +131,7 @@ export function Client(){
                                 <input 
                                     type="text"
                                     value={searchState}
-                                    onChange={e => {fetchTickets(e.target.value)}}
+                                    onChange={e => {fetchClients(e.target.value)}}
                                 />
                                 <select
                                     onChange={e => {handleTypeSearch(e.target.value)}}
@@ -123,7 +142,11 @@ export function Client(){
                                 </select>
                             </div>  
                         </InputSimple>
-                        <Button title="Novo Cliente" icon={IoPersonAddSharp }/>
+                        <Button 
+                            title="Novo Cliente" 
+                            icon={IoPersonAddSharp }
+                            onClick={handleNewClient}
+                        />
                         
                     </div>
                    
@@ -136,6 +159,7 @@ export function Client(){
                         <ClientsTable 
                             clients={clients} 
                             rows={12}
+                            deleteClient={deleteClient}
                             />
                     </Tickets>
                 </HeaderTickets>
