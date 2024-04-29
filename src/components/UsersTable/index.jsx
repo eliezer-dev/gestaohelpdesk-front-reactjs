@@ -20,7 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export function ClientsTable({clients, rows, deleteClient}) {
+export function UsersTable({users, rows, deleteUser}) {
     const navigate = useNavigate();
     
     function TablePaginationActions(props) {
@@ -85,21 +85,21 @@ export function ClientsTable({clients, rows, deleteClient}) {
         setPage(newPage);
       };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - clients.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
       };
 
-    function handleEditClient (clientId) {
-        navigate(`/clients/${clientId}`)
+    function handleEditUser (userId) {
+        navigate(`/users/${userId}`)
     }
     
 
     useEffect(() => {
       setPage(0)
-    }, [clients])
+    }, [users])
 
     return (
         <Container>
@@ -109,9 +109,9 @@ export function ClientsTable({clients, rows, deleteClient}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:105}}> Código Cliente </TableCell>
-                      <TableCell> CNPJ </TableCell>
-                      <TableCell> Razão Social </TableCell>
+                      <TableCell style={{width:105}}> Código Usuario </TableCell>
+                      <TableCell> CPF </TableCell>
+                      <TableCell> Nome </TableCell>
                       <TableCell> Endereço </TableCell>
                       <TableCell> Cidade </TableCell>
                       <TableCell> Estado </TableCell>
@@ -123,12 +123,12 @@ export function ClientsTable({clients, rows, deleteClient}) {
 
                   <TableBody>
                         {
-                        clients &&
+                        users &&
                         (rowsPerPage > 0
-                          ? clients.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                          : clients
-                        ).map((client) => (
-                          <TableRow key={client.id}>
+                          ? users.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                          : users
+                        ).map((user) => (
+                          <TableRow key={user.id}>
                             <TableCell 
                             component="th" 
                             scope="row" 
@@ -136,32 +136,32 @@ export function ClientsTable({clients, rows, deleteClient}) {
                            
                             sx={{fontSize:14, paddingRight:2}}
                             >
-                              {client?.id}
+                              {user?.id}
                             </TableCell >
                             <TableCell sx={{fontSize:14}} > 
-                              {client?.cpfCnpj   }
+                              {user?.cpf   }
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
-                              {client?.razaoSocialName}
+                              {user?.name}
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
-                              { client?.address + " " + client?.addressNumber}
+                              { user?.address + " " + user?.addressNumber}
                             </TableCell>
                             <TableCell sx={{fontSize:14}} >
-                              {client?.city}
+                              {user?.city}
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
-                              { client?.state}
+                              { user?.state}
                             </TableCell>
                             <TableCell sx={{fontSize:14}} >
-                              { client?.email}
+                              { user?.email}
                             </TableCell>
                             <TableCell sx={{fontSize:14}} >
-                              { client?.createAt}
+                              { user?.createAt}
                             </TableCell>
                             <TableCell  className="ticket_options" sx={{fontSize:14}}>
-                              <EditIcon onClick={() => {handleEditClient(client.id)}}/>
-                              <DeleteIcon onClick={() => {deleteClient(client.id, client.razaoSocialName)}}/>
+                              <EditIcon onClick={() => {handleEditUser(user.id)}}/>
+                              <DeleteIcon onClick={() => {deleteUser(user.id, user.name)}}/>
                             </TableCell>
                             
                           </TableRow>
@@ -179,7 +179,7 @@ export function ClientsTable({clients, rows, deleteClient}) {
                       <TablePagination
                         rowsPerPageOptions={[5, 10, 12, 15, 25, { label: 'All', value: -1 }]}
                         colSpan={3}
-                        count={clients ? clients.length : 0}
+                        count={users ? users.length : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         slotProps={{

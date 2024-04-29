@@ -6,46 +6,32 @@ import { TextArea } from "../../components/TextArea";
 import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { useAuth } from "../../hooks/auth";
-import { TicketEdit } from "../../components/TicketEdit"; 
+import { useAuth } from "../../hooks/auth"; 
 import { Footer } from "../../components/Footer";
 import { ClientEdit } from "../../components/ClientEdit";
+import { UserEdit } from "../../components/UserEdit";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 
-export function NewClient() {
+export function NewUser() {
     const navigate = useNavigate();
     const {user} = useAuth();
     const params = useParams();
     const [client, setClient] = useState ()
     const [headerState, setHeaderState] = useState();
-    const [clientDataState, setClientDataState] = useState();
-    const [SLATime, setSLATime] = useState("00:00:00");
-    const [slaWon, setslaWon] = useState(false);
+    const [userDataState, setUserDataState] = useState();
 
-
-    
     const getDataForm = dataform => {
         handleSave(dataform)
     } 
 
-    const getClientForm = clientForm => {
-        if (clientForm) {
-            clientForm.createAt = new Date(clientForm.createAt).toLocaleString()
-            setClient(clientForm)
-        }
-        
-    }
-
- 
     async function handleSave(dataForm) {
     
         if (params.id == "new") {
             try {
-                await api.post("/clients", {
-                    cpfCnpj:dataForm.cpfCnpj,
-                    razaoSocialName:dataForm.razaoSocialName,
-                    businessName:dataForm.businessName,
+                await api.post("/users", {
+                    cpf:dataForm.cpf,
+                    name:dataForm.name,
                     cep:dataForm.cep,
                     address:dataForm.address,            
                     addressNumber:dataForm.addressNumber,
@@ -54,27 +40,25 @@ export function NewClient() {
                     state:dataForm.state,
                     city:dataForm.city,
                     email:dataForm.email,
-                    slaDefault:dataForm.slaDefault,
-                    slaUrgency:dataForm.slaUrgency,
+                    password:dataForm.password
                         
                 })
-                alert("Cliente Salvo com sucesso.")
+                alert("Usuário Salvo com sucesso.")
                 navigate(-1)
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
                 }else {
-                    alert ("Erro no servidor ao salvar o cliente.")
+                    alert ("Erro no servidor ao atualizar o usuário.")
                 }
             }
             
            
         } else {
             try {
-                await api.put(`/clients/${params.id}`, {
-                    cpfCnpj:dataForm.cpfCnpj,
-                    razaoSocialName:dataForm.razaoSocialName,
-                    businessName:dataForm.businessName,
+                await api.put(`/users/${params.id}`, {
+                    cpf:dataForm.cpf,
+                    name:dataForm.name,
                     cep:dataForm.cep,
                     address:dataForm.address,            
                     addressNumber:dataForm.addressNumber,
@@ -83,34 +67,31 @@ export function NewClient() {
                     state:dataForm.state,
                     city:dataForm.city,
                     email:dataForm.email,
-                    slaDefault:dataForm.slaDefault,
-                    slaUrgency:dataForm.slaUrgency,
+                    password:dataForm.password,
+                    oldPassword:dataForm.oldPassword
                 })
-                alert("Cliente atualizado com sucesso.")
+                alert("Usuário atualizado com sucesso.")
                 navigate(-1)
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
                 }else {
-                    alert ("Erro no servidor ao salvar o cliente.")
+                    alert ("Erro no servidor ao atualizar o usuário.")
                 }
             }
             
-        }   
-
-        
+        }       
 
     }    
 
-
-    async function fetchClient(id) {
-        const client = await api.get(`/clients/${id}`)
-        setClientDataState(client.data);
+    async function fetchUser(id) {
+        const user = (await api.get(`/users/${id}`)).data
+        setUserDataState(user);
     }
 
     function handleBack() {
         
-        if(!clientDataState) {
+        if(!userDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
                 navigate(-1)
@@ -131,7 +112,7 @@ export function NewClient() {
             setHeaderState("Novo Chamado")
         } else {
             setHeaderState(`Editar chamado número: ${params.id}`)
-            fetchClient(params.id)
+            fetchUser(params.id)
         }
     },[params])
 
@@ -143,33 +124,32 @@ export function NewClient() {
                 <div className="header_title">
                    
                     {
-                        clientDataState ?
+                        userDataState ?
                         <>
-                        <h1>Editar Cliente Nº</h1>
+                        <h1>{`Editar usuario: `}</h1>
                         <Input
                             type="text"
-                            value={`${clientDataState.id}`}
+                            value={`${userDataState.id}`}
                             disabled   
                         />
                         
                         </> 
                         :
-                        <h1>Novo Cliente</h1>
+                        <h1>Novo Usuário</h1>
                     }
 
                 </div>
                 <Logo>
                     <img src={LogoGestaoHelpdesk}/>
-                </Logo>   
+                </Logo>
             </Header>
             <Content>
-                <ClientEdit
-                    typeForm = {params.id == "new" ? "new" : "edit"} 
-                    clientData = {clientDataState && clientDataState }
+                <UserEdit
+                    userData = {userDataState && userDataState }
                     getDataForm = {getDataForm}
-                    getClientForm = {getClientForm}
-                />              
-               
+    
+                />
+
             </Content>
             <Footer/>
             

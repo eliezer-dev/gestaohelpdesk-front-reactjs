@@ -15,12 +15,11 @@ import { IoPersonAddSharp } from "react-icons/io5";
 import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from "../../hooks/auth";
 import { Button } from "../../components/Button";
-import { ClientsTable } from "../../components/ClientTable";
 import { useNavigate } from "react-router-dom";
-import { WindowSharp } from "@mui/icons-material";
+import { UsersTable } from "../../components/UsersTable";
 
-export function User(){
-    const [clients, setClients] = useState([])
+export function Users(){
+    const [users, setUsers] = useState([])
     const [optionCode, setOptionCode] = useState(1);
     const {user} = useAuth();
     const [searchState, setSearchState] = useState("");
@@ -28,12 +27,12 @@ export function User(){
     const navigate = useNavigate();
     
 
-    async function fetchClients (dataSearch) { 
+    async function fetchUsers (dataSearch) { 
         setSearchState(dataSearch)
         const search = dataSearch ? dataSearch : ""
-        const response = await api.get(`/clients?search=${search}&type=${searchTypeState}`);
-        const clientFormated = formatData(response.data); 
-        setClients(clientFormated)
+        const response = (await api.get(`/users?search=${search}&type=${searchTypeState}`)).data;
+        const usersFormated = formatData(response); 
+        setUsers(usersFormated)
         return;
         
     }
@@ -41,24 +40,24 @@ export function User(){
 
     function formatData(data) {
         let dataFormated = [];
-        data && data.map((client) => {
-            const date = new Date(client.createAt);
+        data && data.map((user) => {
+            const date = new Date(user.createAt);
 
             
-            const razaoSocialName = client.razaoSocialName.length > 65 ? 
-                client.razaoSocialName.slice(0,65) + "..." : client.razaoSocialName
+            const name = user.name.length > 65 ? 
+                user.name.slice(0,65) + "..." : user.name
 
             const ticketFormated = {
-                id:client.id,
-                cpfCnpj:client.cpfCnpj,
-                razaoSocialName:razaoSocialName,
-                businessName:client.businessName,
-                cep:client.cep,
-                address:client.address,   
-                addressNumber:client.addressNumber,
-                state:client.state,
-                city:client.city,
-                email:client.email,
+                id:user.id,
+                cpf:user.cpf,
+                name,
+                cep:user.cep,
+                address:user.address,   
+                addressNumber:user.addressNumber,
+                addressNumber2:user.addressNumber2,
+                state:user.state,
+                city:user.city,
+                email:user.email,
                 createAt:date.toLocaleString().replace(/,/g,""),
             };
             dataFormated.push(ticketFormated);
@@ -71,24 +70,30 @@ export function User(){
         setSearchTypeState(event)
     }
 
-    function handleNewClient() {
-        navigate("/clients/new")
+    function handleNewUser() {
+        navigate("/users/new")
     }
 
-    const deleteClient = clientId => {
-        handleDeleteClient(clientId)
+    const deleteUser = (userId, name)  => {
+        handleDeleteUser(userId, name)
     } 
 
-    async function handleDeleteClient(clientId) {
-        try {
-            await api.delete(`/clients/${clientId}`)
-            alert("Cadastro removido com sucesso.")
-            fetchClients()
-        } catch (error) {
-            alert("Erro ao deletar o cadastro.")
-            console.error(error)
-            fetchClients()
+    async function handleDeleteUser(userId, name) {
+        const deleteUserConfirm = confirm(`Deseja realmente deletar o usuário ${name}`)
+        if (deleteUserConfirm) {
+            try {
+                await api.delete(`/users/${userId}`)
+                alert("Cadastro removido com sucesso.")
+                fetchUsers()
+                return
+            } catch (error) {
+                alert("Erro ao deletar o cadastro.")
+                console.error(error)
+                fetchUsers()
+                return
+            }
         }
+        return
         
     
     }
@@ -103,11 +108,11 @@ export function User(){
 
 
     useEffect(() => {
-        fetchClients()
+        fetchUsers()
 
 
         const interval = setInterval(() => {
-            fetchClients();
+            fetchUsers();
         }, 60000);
     
         return () => clearInterval(interval);
@@ -131,21 +136,21 @@ export function User(){
                                 <input 
                                     type="text"
                                     value={searchState}
-                                    onChange={e => {fetchClients(e.target.value)}}
+                                    onChange={e => {fetchUsers(e.target.value)}}
                                 />
                                 <select
                                     onChange={e => {handleTypeSearch(e.target.value)}}
                                 >
-                                    <option id={1} value={1}>Razão</option>
-                                    <option id={2} value={2}>CNPJ</option>
+                                    <option id={1} value={1}>Nome</option>
+                                    <option id={2} value={2}>CPF</option>
                                     <option id={3} value={3}>Código</option>
                                 </select>
                             </div>  
                         </InputSimple>
                         <Button 
-                            title="Novo Cliente" 
+                            title="Novo Usuario" 
                             icon={IoPersonAddSharp }
-                            onClick={handleNewClient}
+                            onClick={handleNewUser}
                         />
                         
                     </div>
@@ -155,12 +160,12 @@ export function User(){
                 <HeaderTickets>
                     <Header logo={false}/>
                     <Tickets>
-                        <h1>Cadastro de Clientes</h1>
-                        <ClientsTable 
-                            clients={clients} 
+                        <h1>Cadastro de Usuários</h1>
+                        <UsersTable 
+                            users={users} 
                             rows={12}
-                            deleteClient={deleteClient}
-                            />
+                            deleteUser={deleteUser}
+                        />
                     </Tickets>
                 </HeaderTickets>
            

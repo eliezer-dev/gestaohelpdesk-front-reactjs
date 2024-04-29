@@ -19,7 +19,7 @@ import { ClientsTable } from "../../components/ClientTable";
 import { useNavigate } from "react-router-dom";
 import { WindowSharp } from "@mui/icons-material";
 
-export function Client(){
+export function Clients(){
     const [clients, setClients] = useState([])
     const [optionCode, setOptionCode] = useState(1);
     const {user} = useAuth();
@@ -75,22 +75,26 @@ export function Client(){
         navigate("/clients/new")
     }
 
-    const deleteClient = clientId => {
-        handleDeleteClient(clientId)
+    const deleteClient = (clientId, razaoSocialName) => {
+        handleDeleteClient(clientId, razaoSocialName)
     } 
 
-    async function handleDeleteClient(clientId) {
-        try {
-            await api.delete(`/clients/${clientId}`)
-            alert("Cadastro removido com sucesso.")
-            fetchClients()
-        } catch (error) {
-            alert("Erro ao deletar o cadastro.")
-            console.error(error)
-            fetchClients()
-        }
-        
-    
+    async function handleDeleteClient(clientId, razaoSocialName) {
+        const deleteClientConfirm = confirm(`Deseja realmente excluir o cliente ${razaoSocialName}?`)
+        if (deleteClientConfirm) {
+            try {
+                await api.delete(`/clients/${clientId}`)
+                alert("Cadastro removido com sucesso.")
+                fetchClients()
+                return
+            } catch (error) {
+                alert("Erro ao deletar o cadastro.")
+                console.error(error)
+                fetchClients()
+                return
+            }
+        }       
+        return
     }
 
 

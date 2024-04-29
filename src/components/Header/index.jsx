@@ -42,6 +42,11 @@ export function Header({logo=true}) {
         if (option == 2) {
             navigate("/clients")
         }
+
+        //usuarios
+        if (option == 3) {
+            navigate("/users")
+        }
     }
 
     async function getAvatar(){
@@ -75,8 +80,6 @@ export function Header({logo=true}) {
                     <span onClick={() => {handleClickMenuHeader(3)}}>Usuários</span>
                     <img src={line1} alt="linha vertical para separar"/>
                     <span onClick={() => {handleClickMenuHeader(4)}}>Ajuda</span>
-                    <img src={line1} alt="linha vertical para separar"/>
-                    <span onClick={() => {handleClickMenuHeader(5)}}>Downloads</span>
                 <Button title="Novo Chamado" icon={FaEnvelope } onClick={handleNewTicket}/>
             </Menu>
             <Profile>

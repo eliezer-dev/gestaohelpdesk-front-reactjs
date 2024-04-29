@@ -25,6 +25,7 @@ export function Profile () {
     const [addressNumber, setAddressNumber] = useState("");
     const [state, setState] = useState("");
     const [city, setCity] = useState("");
+    const [neighborhoodState, setNeighborhoodState] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [disableInput, setDisableInput] = useState(false);
@@ -63,6 +64,7 @@ export function Profile () {
                addressNumber,
                state,
                city,
+               neighborhood:neighborhoodState
           }
           let userUpdated = updated
           if (newPassword && !oldPassword) {
@@ -115,6 +117,7 @@ export function Profile () {
           setAddressNumber(user.addressNumber)
           setState(user.state)
           setCity(user.city)
+          setNeighborhoodState(user.neighborhood)
     },[])
 
     return (
@@ -200,6 +203,14 @@ export function Profile () {
                     type="text"
                     value={city}
                     onChange={e => {setCity(e.target.value)}}
+                /> 
+                <Input
+                    disabled={disableInput}
+                    icon={LiaCitySolid}
+                    placeholder="Bairro"
+                    type="text"
+                    value={neighborhoodState}
+                    onChange={e => {setNeighborhoodState(e.target.value)}}
                 /> 
                 <Input
                     disabled={disableInput}

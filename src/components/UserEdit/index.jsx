@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 import { useAuth } from "../../hooks/auth";
 
-export function ClientEdit({getDataForm, clientData}) {
+export function UserEdit({getDataForm, userData}) {
     const brazilStatesList = [
         { codigo: 'AC', nome: 'Acre' },
         { codigo: 'AL', nome: 'Alagoas' },
@@ -40,9 +40,8 @@ export function ClientEdit({getDataForm, clientData}) {
         { codigo: 'SE', nome: 'Sergipe' },
         { codigo: 'TO', nome: 'Tocantins' }
     ]
-    const [cpfCnpjState, setCpfCnpjState] = useState("")
-    const [razaoSocialState, setRazaoSocialState] = useState("");
-    const [businessNameState, setBusinessNameState] = useState("");
+    const [cpfState, setCpfState] = useState("")
+    const [nameState, setNameState] = useState("");
     const [cepState, setCepState] = useState("");
     const [addressState, setAddressState] = useState("");
     const [addressNumberState, setAddressNumberState] = useState();
@@ -51,25 +50,11 @@ export function ClientEdit({getDataForm, clientData}) {
     const [stateState, setStateState] = useState("");
     const [cityState, setCityState] = useState("");
     const [emailState, setEmailState] = useState("");
-    const [slaDefaultState, setSlaDefaultState] = useState("");
-    const [slaUrgencyState, setSlaUrgencyState] = useState("")
+    const [oldPasswordState, setOldPasswordState] = useState("");
+    const [passwordState, setPasswordState] = useState("");
+    const [confirmNewPasswordState, setConfirmNewPasswordState] = useState("");
 
-    const [inputClientSearchState, setInputClientSearchState] = useState(false)
-    const [clientsFound, setClientsFound] = useState([]);
-    const [clientSelected, setClientSelected] = useState();
-    const [userId, setUserID] = useState();
-    const [status, setStatus] = useState();
-    const [statusList, setStatusList] = useState([]);
-    const [categoryState, setCategoryState] = useState();
-    const [categoriesListState, setCategoriesListState] = useState([]);
-    const [typeOfService, setTypeOfService] = useState();
-    const [scheduledDateTime, setScheduledDateTime]= useState();
-    const [isSheduled, setIsSheduled] = useState(false);
-    const [typeSearchState, setTypeSearchState] = useState(1);
-    const [annotationsListState, setAnnotatiosListState] = useState([]);
-    const [annotationState, setAnnotationState] = useState("")
-    const {user} = useAuth();
-    const [stateListState, setStateListState] = useState(brazilStatesList)
+    const [stateListState] = useState(brazilStatesList)
 
 
     async function viaCep(event) {
@@ -95,13 +80,12 @@ export function ClientEdit({getDataForm, clientData}) {
             return
         }
         return
-       
-    }
+    }   
 
-    function handleCnpj (event) {
+    function handleCpf (event) {
         if (/^\d+$/.test(event) || event == "") {
-            if (event.length <= 14) {
-                setCpfCnpjState(event)
+            if (event.length <= 11) {
+                setCpfState(event)
                 return
             }
             return
@@ -109,28 +93,10 @@ export function ClientEdit({getDataForm, clientData}) {
         return
     }
 
-    function handleSlaUrgency (event) {
-        if ((/^\d+$/.test(event) || event == "") && event.length <= 3) {
-            setSlaUrgencyState(event)
-            return
-         }
-         return
-    }
-
-    function handleSlaDefault (event) {
-        if ((/^\d+$/.test(event) || event == "") && event.length <= 3) {
-            console.log(event.length <= 3)
-            setSlaDefaultState(event)
-            return
-         }
-         return
-    }
-
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
-
 
     function handleSave () {
         const dataFormIsOK = dataFormValidator();
@@ -139,9 +105,8 @@ export function ClientEdit({getDataForm, clientData}) {
         }
         
         const dataForm = {
-            cpfCnpj: cpfCnpjState,
-            razaoSocialName: razaoSocialState,
-            businessName:businessNameState,
+            cpf: cpfState,
+            name: nameState,
             cep:cepState,
             address:addressState,
             addressNumber:addressNumberState,
@@ -150,10 +115,9 @@ export function ClientEdit({getDataForm, clientData}) {
             state:stateState,
             city:cityState,
             email:emailState,
-            slaDefault:slaDefaultState,
-            slaUrgency:slaUrgencyState,
-            addresNumber2:addressNumber2State
-          
+            addresNumber2:addressNumber2State,
+            password:passwordState,
+            oldPassword:oldPasswordState          
 
         }
         getDataForm(dataForm)
@@ -163,16 +127,27 @@ export function ClientEdit({getDataForm, clientData}) {
    
 
     function dataFormValidator() {
-        if (!razaoSocialState) {
-            alert ("Razão Social não informada")
+        if (!nameState) {
+            alert ("Nome não informado")
             return false;
-        }else if (!businessNameState) {
-            alert ("Nome Fantasia não informada")
+        
+        }else if (!cpfState) {
+            alert ("CPF não informado")
             return false;
-        }else if (!cpfCnpjState) {
-            alert ("CNPJ não informado.")
-            return false;
-       
+
+        }else if (cpfState.length < 11) {
+            alert ("CPF inválido")
+            return false
+        
+        }else if (!cepState) {
+            alert ("Cep não informado.")
+            return false
+         
+
+        }else if (cepState.length <8) {
+            alert ("Cep inválido")
+            return false
+           
         }else if (!addressState) {
             alert ("Endereço não informado.")
             return false;
@@ -187,7 +162,7 @@ export function ClientEdit({getDataForm, clientData}) {
             return false;
         
         }else if (!cityState) {
-            alert ("Cidade não informado")
+            alert ("Cidade não informada")
             return false;
         
         }else if (!stateState || stateState == "default") {
@@ -199,17 +174,25 @@ export function ClientEdit({getDataForm, clientData}) {
             return false;    
         
         }else if (!validateEmail(emailState)) {
-            alert ("e-mail invalido")
-            return false;    
+            alert ("e-mail inválido.")
+            return false;
+            
+        }else if (!passwordState && !userData) {
+            alert("senha não informada")
+            return false
         
-        }else if (!slaDefaultState) {
-            alert ("SLA padrão não informado")
-            return false;    
+        }else if (passwordState && passwordState.length < 8) {
+            alert ("A senha precisa ter no mínimo um tamanho 8 caracteres.")
+            return false
+                
+        }else if (passwordState !=  confirmNewPasswordState) {
+            alert ("As senhas digitadas não são iguais.")
+            return false
         
-        }else if (!slaUrgencyState) {
-            alert ("SLA urgente não informado")
-            return false;    
-          
+        }else if (passwordState && !oldPasswordState && userData) {
+            alert ("A senha atual não foi informada")
+            return false
+
         }else {
             return true
         }   
@@ -218,48 +201,37 @@ export function ClientEdit({getDataForm, clientData}) {
 
 
     useEffect(() => {
-        if (clientData) {
-            setRazaoSocialState(clientData?.razaoSocialName)
-            setBusinessNameState(clientData?.businessName)
-            setCpfCnpjState(clientData?.cpfCnpj)
-            setCepState(clientData?.cep)
-            setAddressState(clientData?.address)
-            setAddressNumberState(clientData?.addressNumber)
-            setAddressNumber2State(clientData?.addressNumber2)
-            setNeighborhoodState(clientData?.neighborhood)
-            setEmailState(clientData?.email)
-            setCityState(clientData?.city)
-            setSlaDefaultState(clientData?.slaDefault)
-            setSlaUrgencyState(clientData?.slaUrgency)
-            setStateState(clientData?.state)
-
+        if (userData) {
+            setNameState(userData?.name)
+            setCpfState(userData?.cpf)
+            setCepState(userData?.cep)
+            setAddressState(userData?.address)
+            setAddressNumberState(userData?.addressNumber)
+            setAddressNumber2State(userData?.addressNumber2)
+            setNeighborhoodState(userData?.neighborhood)
+            setEmailState(userData?.email)
+            setCityState(userData?.city)
+            setStateState(userData?.state)
 
         }           
-    },[clientData])
+    },[userData])
 
     return (
         <Container>
                 <TicketMain>
                     
                     <Input
-                        placeholder="Digite a Razão Social"
+                        placeholder="Digite o Nome do Usuário"
                         type="text"
-                        value={razaoSocialState}
-                        onChange={e => {setRazaoSocialState(e.target.value)}}
+                        value={nameState}
+                        onChange={e => {setNameState(e.target.value)}}
                         required
                     />
                     <Input
-                        placeholder="Digite o Nome Fantasia"
+                        placeholder="Digite o CPF"
                         type="text"
-                        value={businessNameState}
-                        onChange={e => {setBusinessNameState(e.target.value)}}
-                        required
-                    />
-                    <Input
-                        placeholder="Digite o CNPJ"
-                        type="text"
-                        value={cpfCnpjState}
-                        onChange={e => {handleCnpj(e.target.value)}}
+                        value={cpfState}
+                        onChange={e => {handleCpf(e.target.value)}}
                         required
                     />
                     <CepAddressInput>
@@ -341,9 +313,7 @@ export function ClientEdit({getDataForm, clientData}) {
                         }
 
                         </Select>
-                    </NeighborhoodCityStateInput>
-                    
-                    
+                    </NeighborhoodCityStateInput>                   
                     <Input
                         placeholder="Digite o email"
                         type="text"
@@ -351,28 +321,32 @@ export function ClientEdit({getDataForm, clientData}) {
                         onChange={e => {setEmailState(e.target.value)}}
                         required
                     />
-                    <SlaInput>
+                    {
+                        userData && 
                         <Input
-                            placeholder="SLA Padrão (em horas)"
-                            type="text"
-                            value={slaDefaultState}
-                            onChange={e => {handleSlaDefault(e.target.value)}}
-                            required
+                        placeholder="Digite a senha atual"
+                        type="password"
+                        value={oldPasswordState}
+                        onChange={e => {setOldPasswordState(e.target.value)}}
+                        required
                         />
-                        <Input
-                            placeholder="SLA Urgencias (em horas)"
-                            type="text"
-                            value={slaUrgencyState}
-                            onChange={e => {handleSlaUrgency(e.target.value)}}
-                            required
-                        />
-                    </SlaInput>
-                   
-                   
+                    }
                     
-
-                    
-                    <Button title={clientData ? "Atualizar" : "Salvar"} onClick={handleSave}/> 
+                    <Input
+                        placeholder="Digite a nova senha"
+                        type="password"
+                        value={passwordState}
+                        onChange={e => {setPasswordState(e.target.value)}}
+                        required
+                    />
+                    <Input
+                        placeholder="Digite a confirmação da nova senha"
+                        type="password"
+                        value={confirmNewPasswordState}
+                        onChange={e => {setConfirmNewPasswordState(e.target.value)}}
+                        required
+                    />             
+                    <Button title={userData ? "Atualizar" : "Salvar"} onClick={handleSave}/> 
                 </TicketMain>
         </Container>
     )
