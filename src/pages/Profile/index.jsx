@@ -16,7 +16,7 @@ import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function Profile () {
-    const [userAvatar, setUserAvatar] = useState({avatarPlaceHolder})
+    const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
     const [name, setName] = useState("");
     const [cpf, setCpf] = useState("");
     const [email, setEmail] = useState("");
@@ -45,6 +45,7 @@ export function Profile () {
     async function getAvatar(){
         const response = await api.get(`/users/avatar/${user.id}`)
         const avatar = response.data;
+        console.log(avatar)
         if (avatar == ''){
             return;
         }
@@ -133,7 +134,8 @@ export function Profile () {
 
             </Header>   
             <Picture>
-                <img src={userAvatar || avatarPlaceHolder} alt="Foto do usuário"/>
+                <img 
+                    src={userAvatar || avatarPlaceHolder} alt="Foto do usuário"/>
                 <label>
                     <FiCamera/>
                     <input id="avatar" type="file" onChange={handleChangeAvatar}/>
