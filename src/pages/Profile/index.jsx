@@ -45,7 +45,6 @@ export function Profile () {
     async function getAvatar(){
         const response = await api.get(`/users/avatar/${user.id}`)
         const avatar = response.data;
-        console.log(avatar)
         if (avatar == ''){
             return;
         }

@@ -119,7 +119,6 @@ export function ClientEdit({getDataForm, clientData}) {
 
     function handleSlaDefault (event) {
         if ((/^\d+$/.test(event) || event == "") && event.length <= 3) {
-            console.log(event.length <= 3)
             setSlaDefaultState(event)
             return
          }

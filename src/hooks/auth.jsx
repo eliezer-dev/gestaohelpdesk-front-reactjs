@@ -8,7 +8,6 @@ function AuthProvider({children}) {
     async function signIn({username, password}) {
         try {
             const response = await api.post("/users/auth", {email:username, password})
-            console.log(response)
             const token = response.data.access_token
             const user = response.data.user
             api.defaults.headers.common['Authorization'] = token
@@ -18,10 +17,10 @@ function AuthProvider({children}) {
         } catch (error) {
             if (error.response) {
                 alert(error.response.data)
-                console.log(error.response.data)
+                console.error(error.response.data)
             } else {
                 alert ("Não foi possível entrar")
-                console.log(error.message)
+                console.error(error.message)
             }
         }
     }

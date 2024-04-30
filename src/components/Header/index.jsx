@@ -25,7 +25,6 @@ export function Header({logo=true}) {
     }
 
     function handleBack() {
-        console.log("chegou aqui")
         navigate("/")
     }
 
