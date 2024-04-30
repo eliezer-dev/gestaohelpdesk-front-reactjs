@@ -99,7 +99,7 @@ export function Clients(){
 
 
     function handleBack(){
-        navigate(-1)
+        navigate("/")
     }
 
 

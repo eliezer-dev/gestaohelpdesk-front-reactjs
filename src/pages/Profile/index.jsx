@@ -104,7 +104,7 @@ export function Profile () {
     }
 
     function handleBack(){
-          navigate(-1);
+          navigate("/");
     }
 
     useEffect(() => {

@@ -100,7 +100,7 @@ export function Users(){
 
 
     function handleBack(){
-        navigate(-1)
+        navigate("/")
     }
 
 

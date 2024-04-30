@@ -44,7 +44,7 @@ export function NewUser() {
                         
                 })
                 alert("Usuário Salvo com sucesso.")
-                navigate(-1)
+                navigate("/")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
@@ -72,7 +72,7 @@ export function NewUser() {
                     oldPassword:dataForm.oldPassword
                 })
                 alert("Usuário atualizado com sucesso.")
-                navigate(-1)
+                navigate("/")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
@@ -95,11 +95,11 @@ export function NewUser() {
         if(!userDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
-                navigate(-1)
+                navigate("/")
                 return
             }
         }else {
-            navigate(-1)
+            navigate("/")
             return
         }
         
