@@ -56,6 +56,7 @@ export function NewUser() {
            
         } else {
             try {
+                console.log(dataForm)
                 await api.put(`/users/${params.id}`, {
                     cpf:dataForm.cpf,
                     name:dataForm.name,

@@ -20,6 +20,7 @@ export function Tickets() {
     const [ticketDataState, setTicketDataState] = useState();
     const [SLATime, setSLATime] = useState("00:00:00");
     const [slaWon, setslaWon] = useState(false);
+    const [processingState, setProcessingState] = useState("false");
 
 
     
@@ -37,35 +38,26 @@ export function Tickets() {
 
  
     async function handleSave(dataForm) {
-        if (dataForm.shortDescription == "") {
-            alert ("Preencha o campo Breve Descrição do Chamado")
-            return
-        }
-        
-        if (dataForm.description == "") {
-            alert ("Preencha a descrição do chamado")
-            return
-        }
-
-        if (!dataForm.client) {
-            alert ("Pesquise o cliente")
-            return
-        }
 
         if (params.id == "new") {
+            setProcessingState("false")
+            console.log(dataForm, client)
             const ticketSaved = await api.post("/tickets", {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
                 client:{id:client.id},
-                users:[user.id],
+                users:[{id:user.id}],
                 typeOfService:dataForm.typeOfService,            
                 status:{id:dataForm.status},
                 category:{id:dataForm.category},
                 scheduledDateTime:dataForm.scheduledDateTime
             })
+            console.log("teste" + JSON.stringify(ticketSaved.data))
+            setProcessingState("false")
             alert("Chamado salvo com sucesso.")
-            navigate(`/ticket/${ticketSaved.data.id}`)
+            navigate("/")
         } else {
+            setProcessingState("true")
             await api.put(`/tickets/${params.id}`, {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
@@ -76,6 +68,7 @@ export function Tickets() {
                 category:{id:dataForm.category},
                 scheduledDateTime:dataForm.scheduledDateTime
             })
+            setProcessingState("false")
             alert("Chamado atualizado com sucesso.")
             navigate("/")
         }   
@@ -125,11 +118,11 @@ export function Tickets() {
         if(!ticketDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
-                navigate(-1)
+                navigate("/")
                 return
             }
         }else {
-            navigate(-1)
+            navigate("/")
             return
         }
         
@@ -213,6 +206,7 @@ export function Tickets() {
                     ticketData = {ticketDataState && ticketDataState }
                     getDataForm = {getDataForm}
                     getClientForm = {getClientForm}
+                    processing={processingState}
                 />
                 
                     

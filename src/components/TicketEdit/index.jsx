@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 import { useAuth } from "../../hooks/auth";
 
-export function TicketEdit({getDataForm, getClientForm, ticketData}) {
+export function TicketEdit({getDataForm, getClientForm, ticketData, processing="false"}) {
     
     const [shortDescription, setShortDescription] = useState("");
     const [description, setDescription] = useState("");
@@ -31,6 +31,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
     const [annotationState, setAnnotationState] = useState("")
     const {user} = useAuth();
 
+
     function salvar () {
         const dataFormIsOK = dataFormValidator();
         if (!dataFormIsOK) {
@@ -40,7 +41,6 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
         const dataForm = {
             shortDescription,
             description,
-            client:clientSearch,
             status,
             typeOfService,
             category:categoryState,
@@ -218,7 +218,6 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                 setScheduledDateTime(ticketData.scheduledDateTime)
             }
             fetchAnnotations();
-
         }           
     },[ticketData])
 
@@ -229,7 +228,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                     <div className="clienteSearch">
                         <div id="search">
                             <Input
-                                disabled={inputClientSearchState}
+                                disabled={inputClientSearchState || processing=="true"}
                                 id="inputClientSearch"
                                 icon={FiSearch}
                                 placeholder="Pesquise o Cliente"
@@ -238,7 +237,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                                 onChange={e => {handleClientSearch(e.target.value)}}
                             /> 
                                 <select
-                                    disabled={inputClientSearchState}
+                                    disabled={inputClientSearchState || processing=="true"}
                                     name="typeOfsearch" 
                                     id="typeOfsearch"
                                     onChange={e => {changeTypeSearch(e.target.value)}}
@@ -257,7 +256,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                         
                         {
                             clientsFound?.length > 0 && 
-                            <select 
+                            <select
                             name="clients" 
                             id="clients-select" 
                             onChange={e => {handleClientSelect(e)}}
@@ -285,6 +284,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                     </div>
                     
                     <Input
+                        disabled={processing=="true"}
                         placeholder="Breve descrição do chamado."
                         type="text"
                         value={shortDescription}
@@ -292,6 +292,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                         required
                     />
                     <TextArea
+                        disabled={processing=="true"}
                         placeholder="Descrição do Chamado"
                         type="textarea"
                         rows="10"
@@ -309,6 +310,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                             defaultChecked
                             required
                             onChange={e => {handleSelectCategory(e)}}
+                            disabled={processing=="true"}
                         >   
                             {
                                 !ticketData && 
@@ -345,6 +347,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                             defaultChecked
                             onChange={e => {handleSelectStatus(e)}}
                             required
+                            disabled={processing=="true"}
                         >   
                             {!ticketData && 
                                 <option 
@@ -379,6 +382,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                         defaultChecked
                         onChange={e => {setTypeOfService(e.target.value)}}
                         required
+                        disabled={processing=="true"}
                         >
                             {!ticketData && 
                                 <option 
@@ -416,6 +420,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                                 type="checkbox"
                                 checked={isSheduled}
                                 onChange={e => {handleSheduled(e)}}
+                                disabled={processing=="true"}
                             />                         
                         </CheckBoxItem>
                         {
@@ -425,13 +430,28 @@ export function TicketEdit({getDataForm, getClientForm, ticketData}) {
                                 type="datetime-local"
                                 value={scheduledDateTime}
                                 onChange={e => {setScheduledDateTime(e.target.value)}}
+                                disabled={processing=="true"}
                             >
                             </Input>
                         }
 
                     </div>
                     {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
-                    <Button title={ticketData ? "Atualizar" : "Salvar"} onClick={salvar}/> 
+                    {
+                        ticketData ?
+                        <Button title={processing=="true" ? "Processando" : "Atualizar"} 
+                            onClick={salvar}
+                            disabled={processing=="true"}
+                        />
+                        :
+                        <Button 
+                            title={processing=="true" ? "Processando" : "Salvar"} 
+                            onClick={salvar}
+                            disabled={processing=="true"}
+                            />
+                    }
+                    
+                     
                 </TicketMain>
                 {
                 ticketData &&
