@@ -8,6 +8,7 @@ function AuthProvider({children}) {
     async function signIn({username, password}) {
         try {
             const response = await api.post("/users/auth", {email:username, password})
+            console.log(response)
             const token = response.data.access_token
             const user = response.data.user
             api.defaults.headers.common['Authorization'] = token
