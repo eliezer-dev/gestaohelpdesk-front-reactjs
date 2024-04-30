@@ -1,17 +1,23 @@
 version: 1
 frontend:
   phases:
-    preBuild:
-      commands:
-        - npm ci --cache .npm --prefer-offline
+    # Build configuration
     build:
       commands:
+        - npm install
         - npm run build
-        - VITE_API_URL=$VITE_API_URL
   artifacts:
+    # Files to be uploaded to S3 after build
     baseDirectory: dist
     files:
       - '**/*'
   cache:
+    # Cache settings for npm
     paths:
-      - .npm/**/*
+      - node_modules/**/*
+
+# Configuração das variáveis de ambiente
+env:
+  variables:
+    VITE_API_URL: $VITE_API_URL
+
