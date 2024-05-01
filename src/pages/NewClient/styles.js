@@ -106,38 +106,6 @@ export const Content = styled.div`
     justify-content: center;
 `;
 
-export const ClientInfo = styled.div`
-    width: 31.25rem;
-    display: flex;
-    flex-direction: column;
-
-    h1 {
-        margin-bottom: .75rem;
-    }
-
-    .cepAndAddress {
-        display: flex;
-        gap: .5rem;
-
-        > div:first-of-type {
-            width: 9.375rem;
-        }
-    }
-
-    .cityAndStateInput {
-        display: flex;
-        gap: .5rem;
-    }
-
-    .numberAndComplement {
-        display: flex;
-        gap: .5rem;
-
-        > div:first-of-type {
-            width: 9.375rem;
-        }
-    }
-`;
 
 export const Logo = styled.div`
     position: absolute;

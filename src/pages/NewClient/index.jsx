@@ -1,13 +1,9 @@
-import { Container, Header, ClientInfo, Content, Logo} from "./styles";
+import { Container, Header, Content, Logo} from "./styles";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from "react-router-dom";
 import {Input} from '../../components/Input'
-import { TextArea } from "../../components/TextArea";
-import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { useAuth } from "../../hooks/auth";
-import { TicketEdit } from "../../components/TicketEdit"; 
 import { Footer } from "../../components/Footer";
 import { ClientEdit } from "../../components/ClientEdit";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
@@ -15,14 +11,10 @@ import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function NewClient() {
     const navigate = useNavigate();
-    const {user} = useAuth();
     const params = useParams();
     const [client, setClient] = useState ()
     const [headerState, setHeaderState] = useState();
     const [clientDataState, setClientDataState] = useState();
-    const [SLATime, setSLATime] = useState("00:00:00");
-    const [slaWon, setslaWon] = useState(false);
-
 
     
     const getDataForm = dataform => {

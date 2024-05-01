@@ -7,19 +7,19 @@ export const Container = styled.div`
     }
 `;
 
-export const MenuSideHeaderTickets = styled.div`
+export const MenuSideHeaderClientsList = styled.div`
     display: flex;
     height: calc(100% - 3.5rem);
 `;
 
-export const HeaderTickets = styled.div`
+export const HeaderClientsList = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
 `;
 
-export const Tickets = styled.div`
+export const ClientsList = styled.div`
     height: calc(100% - 4.5rem);
     display: flex;
     flex-direction: column;

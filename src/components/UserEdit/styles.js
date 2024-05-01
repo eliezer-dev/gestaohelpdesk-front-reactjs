@@ -58,11 +58,6 @@ export const Select = styled.select`
     }
 `;
 
-export const SlaInput = styled.div`
-    width: 100%;
-    display: flex;
-    gap: 1.25rem;
-`;
 
 export const NeighborhoodCityStateInput = styled.div`
     width: 100%;

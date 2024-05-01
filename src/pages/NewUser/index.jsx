@@ -1,24 +1,16 @@
-import { Container, Header, ClientInfo, Content, Logo} from "./styles";
+import { Container, Header, Content, Logo} from "./styles";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate, useParams } from "react-router-dom";
 import {Input} from '../../components/Input'
-import { TextArea } from "../../components/TextArea";
-import { Button } from "../../components/Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { useAuth } from "../../hooks/auth"; 
 import { Footer } from "../../components/Footer";
-import { ClientEdit } from "../../components/ClientEdit";
-import { UserEdit } from "../../components/UserEdit";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
-
+import {UserEdit} from "../../components/UserEdit"
 
 export function NewUser() {
     const navigate = useNavigate();
-    const {user} = useAuth();
     const params = useParams();
-    const [client, setClient] = useState ()
-    const [headerState, setHeaderState] = useState();
     const [userDataState, setUserDataState] = useState();
 
     const getDataForm = dataform => {
@@ -85,11 +77,6 @@ export function NewUser() {
 
     }    
 
-    async function fetchUser(id) {
-        const user = (await api.get(`/users/${id}`)).data
-        setUserDataState(user);
-    }
-
     function handleBack() {
         
         if(!userDataState) {
@@ -109,13 +96,8 @@ export function NewUser() {
    
 
     useEffect(() => {
-        if (params.id == "new") {
-            setHeaderState("Novo Chamado")
-        } else {
-            setHeaderState(`Editar chamado número: ${params.id}`)
-            fetchUser(params.id)
-        }
-    },[params])
+        
+    },[])
 
     return (
         <Container>
@@ -148,7 +130,6 @@ export function NewUser() {
                 <UserEdit
                     userData = {userDataState && userDataState }
                     getDataForm = {getDataForm}
-    
                 />
 
             </Content>

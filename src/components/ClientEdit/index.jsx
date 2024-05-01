@@ -1,14 +1,8 @@
 import { Container, TicketMain, Select, SlaInput, NumberAddressLine2, CepAddressInput, NeighborhoodCityStateInput} from "./styles";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import { TextArea } from "../TextArea";
-import { Fragment, useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { FiSearch } from "react-icons/fi";
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
-import { useAuth } from "../../hooks/auth";
+import { useEffect, useState} from "react";
 
 export function ClientEdit({getDataForm, clientData}) {
     const brazilStatesList = [
@@ -54,21 +48,6 @@ export function ClientEdit({getDataForm, clientData}) {
     const [slaDefaultState, setSlaDefaultState] = useState("");
     const [slaUrgencyState, setSlaUrgencyState] = useState("")
 
-    const [inputClientSearchState, setInputClientSearchState] = useState(false)
-    const [clientsFound, setClientsFound] = useState([]);
-    const [clientSelected, setClientSelected] = useState();
-    const [userId, setUserID] = useState();
-    const [status, setStatus] = useState();
-    const [statusList, setStatusList] = useState([]);
-    const [categoryState, setCategoryState] = useState();
-    const [categoriesListState, setCategoriesListState] = useState([]);
-    const [typeOfService, setTypeOfService] = useState();
-    const [scheduledDateTime, setScheduledDateTime]= useState();
-    const [isSheduled, setIsSheduled] = useState(false);
-    const [typeSearchState, setTypeSearchState] = useState(1);
-    const [annotationsListState, setAnnotatiosListState] = useState([]);
-    const [annotationState, setAnnotationState] = useState("")
-    const {user} = useAuth();
     const [stateListState, setStateListState] = useState(brazilStatesList)
 
 
@@ -76,7 +55,7 @@ export function ClientEdit({getDataForm, clientData}) {
         const cep = event.replace(/[^0-9]/g,'');
         setCepState(cep)
             
-            if (event && event.length == 8) {
+            if (cep && cep.length == 8) {
                 const response = (await api.get(`https://viacep.com.br/ws/${event}/json/`)).data
                 if (response.erro) {
                     alert ("Consulta não realizada.")
@@ -94,11 +73,9 @@ export function ClientEdit({getDataForm, clientData}) {
     }
             
     function handleCnpj (event) {
-        if (/^\d+$/.test(event) || event == "") {
-            if (event.length <= 14) {
-                setCpfCnpjState(event)
-                return
-            }
+        const cnpj = event.replace(/[^0-9]/g,'');
+        if (cnpj.length <= 14) {
+            setCpfCnpjState(cnpj)
             return
         }
         return

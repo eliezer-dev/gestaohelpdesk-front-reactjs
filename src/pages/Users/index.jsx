@@ -1,19 +1,11 @@
-import { Container, Tickets, MenuSide, MenuSideHeaderTickets, HeaderTickets, InputSimple } from "./styles";
+import { Container, UsersList, MenuSide, MenuSideHeaderUsersList, HeaderUsersList, InputSimple } from "./styles";
 import { Header } from "../../components/Header";
-
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
-import { TicketsTable } from "../../components/TicketsTable";
 import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
-import { ButtonText } from "../../components/ButtonText";
-import { FaPerson } from "react-icons/fa6";
-import { IoPeople } from "react-icons/io5";
-import { FaArrowsAlt } from "react-icons/fa";
-import { IoIosPeople } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 import SearchIcon from '@mui/icons-material/Search';
-import { useAuth } from "../../hooks/auth";
 import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { UsersTable } from "../../components/UsersTable";
@@ -21,7 +13,6 @@ import { UsersTable } from "../../components/UsersTable";
 export function Users(){
     const [users, setUsers] = useState([])
     const [optionCode, setOptionCode] = useState(1);
-    const {user} = useAuth();
     const [searchState, setSearchState] = useState("");
     const [searchTypeState,setSearchTypeState] = useState(1);
     const navigate = useNavigate();
@@ -122,7 +113,7 @@ export function Users(){
     return (
         <Container>
             
-            <MenuSideHeaderTickets>
+            <MenuSideHeaderUsersList>
                 
                 <MenuSide>
                     <div className="logo" onClick={handleBack}>
@@ -157,19 +148,19 @@ export function Users(){
                    
                 </MenuSide>
 
-                <HeaderTickets>
+                <HeaderUsersList>
                     <Header logo={false}/>
-                    <Tickets>
+                    <UsersList>
                         <h1>Cadastro de Usuários</h1>
                         <UsersTable 
                             users={users} 
                             rows={12}
                             deleteUser={deleteUser}
                         />
-                    </Tickets>
-                </HeaderTickets>
+                    </UsersList>
+                </HeaderUsersList>
            
-            </MenuSideHeaderTickets>
+            </MenuSideHeaderUsersList>
             <Footer/> 
            
             

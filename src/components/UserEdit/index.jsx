@@ -1,14 +1,9 @@
-import { Container, TicketMain, Select, SlaInput, NumberAddressLine2, CepAddressInput, NeighborhoodCityStateInput} from "./styles";
+import { Container, TicketMain, Select, NumberAddressLine2, CepAddressInput, NeighborhoodCityStateInput} from "./styles";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import { TextArea } from "../TextArea";
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/api";
-import { FiSearch } from "react-icons/fi";
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
-import { useAuth } from "../../hooks/auth";
+
 
 export function UserEdit({getDataForm, userData}) {
     const brazilStatesList = [
@@ -59,9 +54,8 @@ export function UserEdit({getDataForm, userData}) {
 
     async function viaCep(event) {
         const cep = event.replace(/[^0-9]/g,'');
-        setCepState(cep)
-            
-            if (event && event.length == 8) {
+        setCepState(cep) 
+            if (cep && cep.length == 8) {
                 const response = (await api.get(`https://viacep.com.br/ws/${event}/json/`)).data
                 if (response.erro) {
                     alert ("Consulta não realizada.")
@@ -79,11 +73,9 @@ export function UserEdit({getDataForm, userData}) {
     }   
 
     function handleCpf (event) {
-        if (/^\d+$/.test(event) || event == "") {
-            if (event.length <= 11) {
-                setCpfState(event)
-                return
-            }
+        const cpf = event.replace(/[^0-9]/g,'');
+        if (cpf.length <= 11) {
+            setCpfState(cpf)
             return
         }
         return

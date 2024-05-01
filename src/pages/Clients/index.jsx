@@ -1,28 +1,20 @@
-import { Container, Tickets, MenuSide, MenuSideHeaderTickets, HeaderTickets, InputSimple } from "./styles";
+import { Container, ClientsList, MenuSide, MenuSideHeaderClientsList, HeaderClientsList, InputSimple } from "./styles";
 import { Header } from "../../components/Header";
 
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
-import { TicketsTable } from "../../components/TicketsTable";
 import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
-import { ButtonText } from "../../components/ButtonText";
-import { FaPerson } from "react-icons/fa6";
-import { IoPeople } from "react-icons/io5";
-import { FaArrowsAlt } from "react-icons/fa";
-import { IoIosPeople } from "react-icons/io";
 import { IoPersonAddSharp } from "react-icons/io5";
 import SearchIcon from '@mui/icons-material/Search';
-import { useAuth } from "../../hooks/auth";
 import { Button } from "../../components/Button";
 import { ClientsTable } from "../../components/ClientTable";
 import { useNavigate } from "react-router-dom";
-import { WindowSharp } from "@mui/icons-material";
+
 
 export function Clients(){
     const [clients, setClients] = useState([])
     const [optionCode, setOptionCode] = useState(1);
-    const {user} = useAuth();
     const [searchState, setSearchState] = useState("");
     const [searchTypeState,setSearchTypeState] = useState(1);
     const navigate = useNavigate();
@@ -121,7 +113,7 @@ export function Clients(){
     return (
         <Container>
             
-            <MenuSideHeaderTickets>
+            <MenuSideHeaderClientsList>
                 
                 <MenuSide>
                     <div className="logo" onClick={handleBack}>
@@ -156,19 +148,19 @@ export function Clients(){
                    
                 </MenuSide>
 
-                <HeaderTickets>
+                <HeaderClientsList>
                     <Header logo={false}/>
-                    <Tickets>
+                    <ClientsList>
                         <h1>Cadastro de Clientes</h1>
                         <ClientsTable 
                             clients={clients} 
                             rows={12}
                             deleteClient={deleteClient}
                             />
-                    </Tickets>
-                </HeaderTickets>
+                    </ClientsList>
+                </HeaderClientsList>
            
-            </MenuSideHeaderTickets>
+            </MenuSideHeaderClientsList>
             <Footer/> 
            
             
