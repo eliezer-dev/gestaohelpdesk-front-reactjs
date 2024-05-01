@@ -6,14 +6,13 @@ import { Fragment, useEffect, useState } from "react";
 import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
-import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function Header({logo=true}) {
     const navigate = useNavigate();
-    const {user, signOut} = useAuth();
-    const [username, setUsername] = useState("")
-    const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
+    const {user, signOut, avatar} = useAuth();
+    const [username, setUsername] = useState(user.name)
+    const [userAvatar, setUserAvatar] = useState(avatar)
 
     function handleSignOut() {
         signOut()
@@ -52,18 +51,9 @@ export function Header({logo=true}) {
         }
     }
 
-    async function getAvatar(){
-        const response = await api.get(`/users/avatar/${user.id}`)
-        const avatar = response.data;
-        if (avatar == ''){
-            return;
-        }
-        setUserAvatar(`data:image/jpeg;base64,${avatar}`)
-    }
-
+    
     useEffect(() => {
-        setUsername(user.name)
-        getAvatar()
+        
     }, [])
 
     return (
@@ -88,8 +78,9 @@ export function Header({logo=true}) {
                     <li onClick={handleProfile}>{user.name.split(" ", 1)[0]}</li>    
                     <li onClick={handleSignOut}>Sair</li>
                 </ul>
+                
                 <img 
-                    src={userAvatar || avatarPlaceHolder}
+                    src={userAvatar}
                     onClick={handleProfile }
                 />
 

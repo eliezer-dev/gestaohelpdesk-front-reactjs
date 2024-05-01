@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-   
+   background: ${({theme}) => theme.COLORS.GRAY_200};
 `;
 
 export const Header = styled.div`
@@ -87,3 +87,29 @@ export const Form = styled.form`
     overflow-y: auto;
     margin-bottom: 1.5rem;
 `;
+
+export const Select = styled.select`   
+    outline: none;
+    width: 5rem;
+    height: 3rem;
+    border-radius: .625rem;
+    border: none;
+    background: ${({theme}) => theme.COLORS.WHITE_100};
+    margin-bottom: .5rem;
+    padding: .75rem;
+    color: ${({theme}) => theme.COLORS.GRAY_200};
+    
+    option {
+        padding-block:.5rem;
+    }
+`    
+
+export const CityState = styled.div `
+    display: flex;
+    gap: .75rem;
+
+    .city_input {
+        width: 100%;
+    }
+`
+

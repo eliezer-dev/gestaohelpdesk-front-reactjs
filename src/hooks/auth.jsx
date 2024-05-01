@@ -1,6 +1,7 @@
 import {createContext, useContext, useState, useEffect } from "react";
 export const AuthContext = createContext({})
 import { api } from "../services/api";
+import avatarPlaceHolder from "../assets/avatar_placeholder.svg"
 
 function AuthProvider({children}) {
     const [data, setData] = useState({})
@@ -13,7 +14,9 @@ function AuthProvider({children}) {
             api.defaults.headers.common['Authorization'] = token
             localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(user))
             localStorage.setItem("@gestaohelpdesk:token", token)
-            setData({user, token})
+
+            const avatar = await getAvatar(user.id);
+            setData({user, token, avatar})
         } catch (error) {
             if (error.response) {
                 alert(error.response.data)
@@ -25,24 +28,44 @@ function AuthProvider({children}) {
         }
     }
 
+    async function getAvatar(userId){
+
+        try {
+            const response = await api.get(`/users/avatar/${userId}`)
+            const avatar = (`data:image/jpeg;base64,${response.data}`)
+            localStorage.setItem("@gestaohelpdesk:avatar", avatar)
+            return avatar
+        } catch(error) {
+            const avatar = avatarPlaceHolder
+            return avatar;
+        }
+                
+    }
+
     function signOut() {
         localStorage.removeItem("@gestaohelpdesk:user")
         localStorage.removeItem("@gestaohelpdesk:token")
+        localStorage.removeItem("@gestaohelpdesk:avatar")
         api.defaults.headers.common['Authorization'] = "";
         setData({})
     }
 
     async function updateProfile(userUpdated, avatarFile) {
         try {
-            await api.put(`/users/${data.user.id}`, userUpdated)
-            localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(userUpdated))
-            setData({user:userUpdated, token:data.token})
+            let avatar = data.avatar;
             
             if (avatarFile) {
                 const fileUploadForm = new FormData
                 fileUploadForm.append("avatar", avatarFile)
                 await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)
+                const avatar = (`data:image/jpeg;base64,${avatarFile}`)
+                localStorage.setItem("@gestaohelpdesk:avatar", avatar)
             }
+
+            await api.put(`/users/${data.user.id}`, userUpdated)
+            localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(userUpdated))
+            setData({user:userUpdated, token:data.token, avatar})
+            
             return alert ("Os seus dados foram atualizados com sucesso.")
             
        } catch (error) {
@@ -60,12 +83,13 @@ function AuthProvider({children}) {
     useEffect(() => {
         const user = localStorage.getItem("@gestaohelpdesk:user")
         const token = localStorage.getItem("@gestaohelpdesk:token")
-
+        const avatar = localStorage.getItem("@gestaohelpdesk:avatar")
         if(user && token) {
             api.defaults.headers.common['Authorization'] = token;
             setData({
                 token,
-                user: JSON.parse(user)
+                user: JSON.parse(user),
+                avatar
             })
         }
     },[])
@@ -75,7 +99,8 @@ function AuthProvider({children}) {
             signIn,
             user:data.user,
             signOut,
-            updateProfile
+            updateProfile,
+            avatar:data.avatar
             }}>
             {children}
         </AuthContext.Provider>

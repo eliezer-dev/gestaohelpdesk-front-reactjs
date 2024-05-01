@@ -1,106 +1,211 @@
-import { Container, Form, Header, Picture } from "./styles";
+import { Container, Form, Header, Picture, Select, CityState } from "./styles";
 import { useEffect, useState } from "react";
-import {FiCamera, FiLock, FiMail, FiUser, FiClipboard } from 'react-icons/fi';
+import {FiCamera, FiLock, FiMail, FiUser} from 'react-icons/fi';
 import { PiAddressBookLight } from "react-icons/pi";
 import { GoNumber} from "react-icons/go";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { LiaCitySolid } from "react-icons/lia";
 import { Input } from "../../components/Input";
 import { Button } from "../../components/Button";
-import { ButtonText } from "../../components/ButtonText";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/auth";
-import { api } from "../../services/api";
-import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 
 export function Profile () {
-    const [userAvatar, setUserAvatar] = useState(avatarPlaceHolder)
-    const [name, setName] = useState("");
-    const [cpf, setCpf] = useState("");
-    const [email, setEmail] = useState("");
-    const [cep, setCep] = useState("");
-    const [address, setAddress] = useState("");
-    const [addressNumber, setAddressNumber] = useState("");
-    const [state, setState] = useState("");
-    const [city, setCity] = useState("");
+    const brazilStatesList = [
+        { codigo: 'AC', nome: 'Acre' },
+        { codigo: 'AL', nome: 'Alagoas' },
+        { codigo: 'AP', nome: 'Amapá' },
+        { codigo: 'AM', nome: 'Amazonas' },
+        { codigo: 'BA', nome: 'Bahia' },
+        { codigo: 'CE', nome: 'Ceará' },
+        { codigo: 'DF', nome: 'Distrito Federal' },
+        { codigo: 'ES', nome: 'Espírito Santo' },
+        { codigo: 'GO', nome: 'Goiás' },
+        { codigo: 'MA', nome: 'Maranhão' },
+        { codigo: 'MT', nome: 'Mato Grosso' },
+        { codigo: 'MS', nome: 'Mato Grosso do Sul' },
+        { codigo: 'MG', nome: 'Minas Gerais' },
+        { codigo: 'PA', nome: 'Pará' },
+        { codigo: 'PB', nome: 'Paraíba' },
+        { codigo: 'PR', nome: 'Paraná' },
+        { codigo: 'PE', nome: 'Pernambuco' },
+        { codigo: 'PI', nome: 'Piauí' },
+        { codigo: 'RJ', nome: 'Rio de Janeiro' },
+        { codigo: 'RN', nome: 'Rio Grande do Norte' },
+        { codigo: 'RS', nome: 'Rio Grande do Sul' },
+        { codigo: 'RO', nome: 'Rondônia' },
+        { codigo: 'RR', nome: 'Roraima' },
+        { codigo: 'SC', nome: 'Santa Catarina' },
+        { codigo: 'SP', nome: 'São Paulo' },
+        { codigo: 'SE', nome: 'Sergipe' },
+        { codigo: 'TO', nome: 'Tocantins' }
+    ]
+    const {user, updateProfile, avatar} = useAuth();
+    const [userAvatarState, setUserAvatarState] = useState(avatar)
+    const [nameState, setNameState] = useState("");
+    const [cpfState, setCpfState] = useState("");
+    const [emailState, setEmailState] = useState("");
+    const [cepState, setCepState] = useState("");
+    const [addressState, setAddressState] = useState("");
+    const [addressNumberState, setAddressNumberState] = useState("");
+    const [stateState, setStateState] = useState("");
+    const [cityState, setCityState] = useState("");
     const [neighborhoodState, setNeighborhoodState] = useState("");
-    const [oldPassword, setOldPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [disableInput, setDisableInput] = useState(false);
+    const [oldPasswordState, setOldPasswordState] = useState("");
+    const [newPasswordState, setNewPasswordState] = useState("");
+    const [disableInputState, setDisableInputState] = useState(false);
     const navigate = useNavigate();
-    const {user, updateProfile} = useAuth();
-    const [avatarFile, setAvatarFile] = useState(null)
-    const [newPasswordConfirm, setNewPasswordConfirm] = useState("")
+    const [avatarFileState, setAvatarFileState] = useState(null)
+    const [newPasswordConfirmState, setNewPasswordConfirmState] = useState("")
+    const [stateListState] = useState(brazilStatesList)
 
     function handleChangeAvatar(event) {
         const file = event.target.files[0]
-        setAvatarFile(file)
+        setAvatarFileState(file)
         const imagePreview = URL.createObjectURL(file)
-        setUserAvatar(imagePreview)
+        setUserAvatarState(imagePreview)
     }
 
-
-    async function getAvatar(){
-        const response = await api.get(`/users/avatar/${user.id}`)
-        const avatar = response.data;
-        if (avatar == ''){
-            return;
+    function handleCpf (event) {
+        const cpf = event.replace(/[^0-9]/g,'');
+        if (cpf.length <= 11) {
+            setCpfState(cpf)
+            return
         }
-        setUserAvatar(`data:image/jpeg;base64,${avatar}`)
-
+        return
     }
 
+    function handleCep(event) {
+        const cep = event.replace(/[^0-9]/g,'');
+        
+        if (cep.length <= 8) {
+            setCepState(cep)
+            return
+        }
+        return
+    }   
 
-    async function handleUpdateProfile() {
-          setDisableInput(true);
+
+     async function handleUpdateProfile() {
+          const dataFormIsOK = dataFormValidator();
+          if (dataFormIsOK == false) return
+
+          setDisableInputState(true);
           let updated = {
-               name,
-               cpf,
-               email,
-               cep,
-               address,
-               addressNumber,
-               state,
-               city,
+               name:nameState,
+               cpf:cpfState,
+               email:emailState,
+               cep:cepState,
+               address:addressState,
+               addressNumber:addressNumberState,
+               state:stateState,
+               city:cityState,
                neighborhood:neighborhoodState
           }
           let userUpdated = updated
-          if (newPassword && !oldPassword) {
-               setDisableInput(false);
+          if (newPasswordState && !oldPasswordState) {
+               setDisableInputState(false);
                return alert ("Senha atual não informada.")
           }
 
-          if (newPassword & !newPasswordConfirm) {
-            setDisableInput(false);
+          if (newPasswordState & !newPasswordConfirmState) {
+            setDisableInputState(false);
             return alert ("Digita a confirmação da nova senha.")
           }
 
 
-          if (newPassword && oldPassword) {
+          if (newPasswordState && oldPasswordState) {
 
-                if (newPassword != newPasswordConfirm) {
-                    setNewPassword("")
-                    setNewPasswordConfirm("")
-                    setDisableInput(false);
+                if (newPasswordState != newPasswordConfirmState) {
+                    setNewPasswordState("")
+                    setNewPasswordConfirmState("")
+                    setDisableInputState(false);
                     return alert ("A nova senha e a confirmação da nova senha estão diferentes.")
                 }
                updated = {
                     ...updated,
-                    oldPassword,
-                    newPassword
+                    oldPasswordState,
+                    newPasswordState
                }
-               setNewPassword("")
-               setOldPassword("")
-               setNewPassword("")
+               setNewPasswordState("")
+               setOldPasswordState("")
+               setNewPasswordState("")
                
           }
     userUpdated = Object.assign(user, updated)
-    await updateProfile(userUpdated, avatarFile)   
-    setDisableInput(false);
+    await updateProfile(userUpdated, avatarFileState)   
+    setDisableInputState(false);
     handleBack() 
 
+    }
+
+
+    function dataFormValidator() {
+        if (!nameState) {
+            alert ("Nome não informado")
+            return false;
+        
+        }else if (!cpfState) {
+            alert ("CPF não informado")
+            return false;
+
+        }else if (cpfState.length < 11) {
+            alert ("CPF inválido")
+            return false
+        
+        }else if (!cepState) {
+            alert ("Cep não informado.")
+            return false
+         
+
+        }else if (cepState.length <8) {
+            alert ("Cep inválido")
+            return false
+           
+        }else if (!addressState) {
+            alert ("Endereço não informado.")
+            return false;
+
+        }else if (!addressNumberState) {
+            alert ("Número não informado.")
+            return false;
+
+   
+        }else if (!neighborhoodState) {
+            alert ("Bairro não informado")
+            return false;
+        
+        }else if (!cityState) {
+            alert ("Cidade não informada")
+            return false;
+        
+        }else if (!stateState || stateState == "default") {
+            alert ("Estado não informado")
+            return false;    
+        
+        }else if (!emailState) {
+            alert ("e-mail não informado")
+            return false;    
+        
+        }else if (!validateEmail()) {
+            alert ("e-mail inválido.")
+            return false;
+                
+        }else {
+            return true
+        }   
+         
+    }
+
+    
+
+
+
+    function validateEmail() {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(emailState);
     }
 
     function handleBack(){
@@ -108,15 +213,14 @@ export function Profile () {
     }
 
     useEffect(() => {
-          getAvatar()
-          setName(user.name)
-          setCpf(user.cpf)
-          setEmail(user.email)
-          setCep(user.cep)
-          setAddress(user.address)
-          setAddressNumber(user.addressNumber)
-          setState(user.state)
-          setCity(user.city)
+          setNameState(user.name)
+          setCpfState(user.cpf)
+          setEmailState(user.email)
+          setCepState(user.cep)
+          setAddressState(user.address)
+          setAddressNumberState(user.addressNumber)
+          setStateState(user.state)
+          setCityState(user.city)
           setNeighborhoodState(user.neighborhood)
     },[])
 
@@ -134,7 +238,7 @@ export function Profile () {
             </Header>   
             <Picture>
                 <img 
-                    src={userAvatar || avatarPlaceHolder} alt="Foto do usuário"/>
+                    src={userAvatarState} alt="Foto do usuário"/>
                 <label>
                     <FiCamera/>
                     <input id="avatar" type="file" onChange={handleChangeAvatar}/>
@@ -142,71 +246,94 @@ export function Profile () {
             </Picture>
             <Form>
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiUser}
                     placeholder="Nome"
                     type="text"
-                    value={name}
-                    onChange={e => {setName(e.target.value)}}
+                    value={nameState}
+                    onChange={e => {setNameState(e.target.value)}}
                 /> 
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiUser}
                     placeholder="CPF"
                     type="text"
-                    value={cpf}
-                    onChange={e => {setCpf(e.target.value)}}
+                    value={cpfState}
+                    onChange={e => {handleCpf(e.target.value)}}
                 /> 
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiMail}
                     placeholder="E-mail"
                     type="text"
-                    value={email}
-                    onChange={e => {setEmail(e.target.value)}}
+                    value={emailState}
+                    onChange={e => {setEmailState(e.target.value)}}
                 />   
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={GoNumber}
                     placeholder="Cep"
                     type="text"
-                    value={cep}
-                    onChange={e => {setCep(e.target.value)}}
+                    value={cepState}
+                    onChange={e => {handleCep(e.target.value)}}
                 /> 
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={PiAddressBookLight}
                     placeholder="Endereço"
                     type="text"
-                    value={address}
-                    onChange={e => {setAddress(e.target.value)}}
+                    value={addressState}
+                    onChange={e => {setAddressState(e.target.value)}}
                 />
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={GoNumber}
                     placeholder="Número"
                     type="text"
-                    value={addressNumber}
-                    onChange={e => {setAddressNumber(e.target.value)}}
+                    value={addressNumberState}
+                    onChange={e => {setAddressNumberState(e.target.value)}}
                 />
+                <CityState>
                 <Input
-                    disabled={disableInput}
-                    icon={LiaCitySolid}
-                    placeholder="Estado"
-                    type="text"
-                    value={state}
-                    onChange={e => {setState(e.target.value)}}
-                />   
-                <Input
-                    disabled={disableInput}
+                    className="city_input"
+                    disabled={disableInputState}
                     icon={LiaCitySolid}
                     placeholder="Cidade"
                     type="text"
-                    value={city}
-                    onChange={e => {setCity(e.target.value)}}
+                    value={cityState}
+                    onChange={e => {setCityState(e.target.value)}}
                 /> 
+                <Select
+                    name="statesSelect" 
+                    id="statesSelect"
+                    onChange={e => {setStateState(e.target.value)}}
+                >
+                    <option 
+                        value={"default"}
+                        selected
+                    >
+                       Selecione
+                    </option>
+                    {
+                        stateListState?.length > 0 && 
+                        stateListState.map((state, index) => (     
+                            <option 
+                                key={index} 
+                                id={index} 
+                                value={state.codigo}
+                                selected={state.codigo == stateState ? true : false}
+                            >
+                                {state.codigo}
+                            </option>
+                        ))
+                    }
+
+                </Select>
+               
+                </CityState>   
+                
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={LiaCitySolid}
                     placeholder="Bairro"
                     type="text"
@@ -214,31 +341,31 @@ export function Profile () {
                     onChange={e => {setNeighborhoodState(e.target.value)}}
                 /> 
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiLock}
                     placeholder="Senha atual"
                     type="password"
-                    value={oldPassword}
-                    onChange={e => {setOldPassword(e.target.value)}}
+                    value={oldPasswordState}
+                    onChange={e => {setOldPasswordState(e.target.value)}}
                 />
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiLock}
                     placeholder="Nova senha"
                     type="password"
-                    value={newPassword}
-                    onChange={e => {setNewPassword(e.target.value)}}
+                    value={newPasswordState}
+                    onChange={e => {setNewPasswordState(e.target.value)}}
                 />
                 <Input
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     icon={FiLock}
                     placeholder="Confirmar nova senha"
                     type="password"
-                    value={newPasswordConfirm}
-                    onChange={e => {setNewPasswordConfirm(e.target.value)}}
+                    value={newPasswordConfirmState}
+                    onChange={e => {setNewPasswordConfirmState(e.target.value)}}
                 />
                <Button
-                    disabled={disableInput}
+                    disabled={disableInputState}
                     title="Salvar"
                     onClick={handleUpdateProfile}
                />
