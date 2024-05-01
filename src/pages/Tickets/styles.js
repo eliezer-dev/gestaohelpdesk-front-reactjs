@@ -1,30 +1,27 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
-        background: ${({theme}) => theme.COLORS.GRAY_200};
+    background: ${({theme}) => theme.COLORS.GRAY_200};
 
-        .ticketInfo {
-            font-weight: bold;
-            margin-top: 24px;
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            
-            div {
-                width: 250px;
-                margin-bottom: 24px;
+    .ticketInfo {
+        font-weight: bold;
+        margin-top: 1.5rem;
+        width: 18.75rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
 
-            }
-
+        div {
+            width: 15.625rem;
+            margin-bottom: 1.5rem;
         }
-   
-`
+    }
+`;
 
 export const Header = styled.div`
-    padding-left: 24px;
-    height: 72px;
-    background-color: ${({theme}) => theme.COLORS.BACKGROUND_700}; 
+    padding-left: 1.5rem;
+    height: 4.5rem;
+    background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     display: flex;
     justify-content: center;
     align-content: center;
@@ -32,18 +29,18 @@ export const Header = styled.div`
     align-items: center;
 
     h1 {
-        font-size: 24px;
+        font-size: 1.5rem;
     }
 
     .header_title {
-        width: 500px;
+        width: 31.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
-        
+        gap: .75rem;
+
         div {
-            width: 150px;
+            width: 9.375rem;
             margin-bottom: 0;
         }
 
@@ -52,99 +49,92 @@ export const Header = styled.div`
         }
 
         .header_tittle_sla {
-            width: 350px;
+            width: 21.875rem;
             display: flex;
             align-items: center;
             justify-content:center;
-            gap: 8px;
+            gap: .5rem;
             position: absolute;
-            right: 24px;
+            right: 1.5rem;
 
             label {
                 font-weight: bold;
                 color: ${({theme}) => theme.COLORS.WHITE}; 
-                font-size: 24px;
+                font-size: 1.5rem;
                 text-align: center;
             }
             
             .color-orange {
-                color: ${({theme}) => theme.COLORS.ORANGE};
-                
+                color: ${({theme}) => theme.COLORS.ORANGE}; 
             }  
 
             input {
                 text-align: center;
             }
         }
-       
     }
 
     .background-color-orange {
-            background-color: ${({theme}) => theme.COLORS.ORANGE}; 
-            color: ${({theme}) => theme.COLORS.WHITE}; 
-            font-weight: bold;
+        background-color: ${({theme}) => theme.COLORS.ORANGE}; 
+        color: ${({theme}) => theme.COLORS.WHITE}; 
+        font-weight: bold;
 
-            input {
-                color: ${({theme}) => theme.COLORS.WHITE};  
-            }
+        input {
+            color: ${({theme}) => theme.COLORS.WHITE};  
         }
-
-      
+    }
 
     h1 {
         color: ${({theme}) => theme.COLORS.WHITE}; 
     }
 
     svg {
-        color: ${({theme}) => theme.COLORS.ORANGE};
+        color: ${({theme}) => theme.COLORS.ORANGE}; 
         position: absolute;
-        top: 22px;
-        left: 24px;
+        top: 1.375rem; 
+        left: 1.5rem; 
         cursor: pointer;
-        font-size: 20px;
+        font-size: 1.25rem; 
     }
+`;
 
-    
-`
-export const Content = styled.div `
-   display: flex;
-   gap: 36px;
-   justify-content: space-between;
-   padding: 24px;
-   justify-content: center;
+export const Content = styled.div`
+    display: flex;
+    gap: 2.25rem; 
+    justify-content: space-between;
+    padding: 1.5rem; 
+    justify-content: center;
+`;
 
-`
-export const ClientInfo = styled.div  `
-    width: 500px;
+export const ClientInfo = styled.div`
+    width: 31.25rem; 
     display: flex;
     flex-direction: column;
 
     h1 {
-        margin-bottom: 12px;
+        margin-bottom: .75rem; 
     }
 
     .cepAndAddress {
         display: flex;
-        gap: 8px;
+        gap: .5rem; 
 
         > div:first-of-type {
-            width: 150px;
+            width: 9.375rem; 
         }
     }
 
     .cityAndStateInput {
         display: flex;
-        gap: 8px;
-
+        gap: .5rem; 
     }
 
     .numberAndComplement {
         display: flex;
-        gap: 8px;
+        gap: .5rem; 
 
         > div:first-of-type {
-            width: 150px;
+            width: 9.375rem; 
         }
     }
-
-`
+`;

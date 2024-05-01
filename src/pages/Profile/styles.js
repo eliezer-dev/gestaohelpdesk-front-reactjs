@@ -1,20 +1,20 @@
 import styled from "styled-components";
 
-export const Container = styled.div `
+export const Container = styled.div`
    
 `;
 
-export const Header = styled.div `
-    padding: 4px;
+export const Header = styled.div`
+    padding: .25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    height: 72px;
+    height: 4.5rem;
     background: ${({theme}) => theme.COLORS.BACKGROUND_700};
 
     .arrow_back {
-        margin-left: 24px;
+        margin-left: 1.5rem;
         cursor: pointer;
     }
 
@@ -23,10 +23,10 @@ export const Header = styled.div `
     }
 
     .logo {
-        width: 192px;
+        width: 12rem;
         background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
         color: ${({theme}) => theme.COLORS.WHITE};
-        height: 72px;
+        height: 4.5rem;
         font-weight: bold;
         display: flex;
         align-items: center;
@@ -38,31 +38,31 @@ export const Header = styled.div `
             height: 100%;
         }
     }
-`
+`;
 
-export const Picture = styled.div `
+export const Picture = styled.div`
     position: relative;
-    width: 186px;
+    width: 11.625rem;
     background: transparent;
-    margin: -40px auto 32px;
+    margin: -2.5rem auto 2rem;
 
     > img {
         border-radius: 50%;
-        width: 108px;
-        height: 108px;
+        width: 6.75rem;
+        height: 6.75rem;
     }
 
     > label {
-        width: 48px;
-        height: 48px;
+        width: 3rem;
+        height: 3rem;
         border-radius: 50%;
         position: absolute;
         display: flex;
         align-items: center;
         justify-content: center;
         background-color: ${({theme}) => theme.COLORS.ORANGE};
-        bottom: 7px;
-        right: 7px;
+        bottom: 0.437rem;
+        right: 0.437rem;
         
         input {
             display: none;
@@ -71,20 +71,19 @@ export const Picture = styled.div `
 
         svg {
             cursor: pointer;
-            width: 20px;
-            height: 20px;
+            width: 1.25rem;
+            height: 1.25rem;
             color: ${({theme}) => theme.COLORS.BACKGROUND_800};
         }
     }
+`;
 
-`
 export const Form = styled.form`
-    width: 400px;
+    width: 25rem;
     margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 0.75rem;
     overflow-y: auto;
-    margin-bottom: 24px;
+    margin-bottom: 1.5rem;
 `;
-

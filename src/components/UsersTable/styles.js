@@ -12,34 +12,32 @@ export const Container = styled.div`
     }
 
     .contentTable {
-        height: calc(100%-52px);
+        height: calc(100% - 3.25rem);
         overflow-y: auto;
     }
 
     .ticket_options svg {
-        margin-right: 8px;
+        margin-right: .5rem;
         cursor: pointer;
     }
 
     .MuiTableFooter-root {
-        height: 52px;
+        height: 3.25rem;
     }
 
-    .MuiSvgIcon-root{
-        font-size: 16px;
+    .MuiSvgIcon-root {
+        font-size: 1rem;
     }
-
 
     .MuiTableCell-root {
-        padding: 8px 8px 8px 2px; 
+        padding: .5rem .5rem .5rem .125rem;
     }
 
     .background-color-orange {
         background-color: ${({theme}) => theme.COLORS.ORANGE}; 
     }
         
-    .MuiTablePagination-root  {
+    .MuiTablePagination-root {
 
     }
-   
-`
+`;

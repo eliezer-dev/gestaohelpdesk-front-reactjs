@@ -2,17 +2,17 @@ import styled from "styled-components";
 
 export const Container = styled.div `
     display: flex;
-    gap: 36px;
+    gap: 2.25rem;
     
 `;
 
 
 export const TicketMain = styled.form `
     display: flex;
-    gap: 24px;
+    gap: 1.5rem;
     flex-direction: column;
     align-items: center;
-    width: 500px;
+    width: 31.25rem;
     margin: 0 auto;  
    
 
@@ -21,10 +21,10 @@ export const TicketMain = styled.form `
 export const CepAddressInput = styled.div`
     width: 100%;
     display: flex;
-    gap:20px;
+    gap:1.25rem;
     
     .input_cep {
-        width: 180px;
+        width: 11.25rem;
     }
     
     .input_address{
@@ -36,10 +36,10 @@ export const CepAddressInput = styled.div`
 export const NumberAddressLine2 = styled.div`
     width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
 
     .addressNumber_input {
-        width: 180px;
+        width: 9.375rem
     }
 
     .addressNumber2_input {
@@ -49,33 +49,33 @@ export const NumberAddressLine2 = styled.div`
 
 export const Select = styled.select`   
     outline: none;
-    width: 80px;
-    height: 48px;
-    border-radius: 10px;
+    width: 5rem;
+    height: 3rem;
+    border-radius: .625rem;
     border: none;
     background: ${({theme}) => theme.COLORS.WHITE_100};
-    margin-bottom: 8px;
-    padding: 12px;
+    margin-bottom: .5rem;
+    padding: .75rem;
     color: ${({theme}) => theme.COLORS.GRAY_200};
     
     option {
-        padding-block:8px;
+        padding-block:.5rem;
     }
 `    
 
 export const SlaInput = styled.div `
     width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
 `
 
 export const NeighborhoodCityStateInput = styled.div `
     width: 100%;
     display: flex;
-    gap: 20px;
+    gap: 1.25rem;
     
     #statesSelect {
-        width: 180px;
+        width: 11.25rem;
     }
     
 `

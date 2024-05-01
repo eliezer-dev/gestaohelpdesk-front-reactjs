@@ -10,7 +10,7 @@ export const Container = styled.div`
 
 export const MenuSideHeaderTickets = styled.div `
     display: flex;
-    height: calc(100% - 56px);
+    height: calc(100% - 3.5rem);
     
 ` 
 
@@ -24,7 +24,7 @@ export const HeaderTickets = styled.div `
 
 
 export const Tickets = styled.div`
-    height: calc(100% - 72px);
+    height: calc(100% - 4.5rem);
     display: flex;
     flex-direction: column;
     h1 {
@@ -34,20 +34,20 @@ export const Tickets = styled.div`
         color: ${({theme}) => theme.COLORS.WHITE};
         background-color: ${({theme}) => theme.COLORS.BLUE_100};;
         text-align: center;
-        height: 40px;
+        height: 2.5rem;
         width: 100%;
-        font-size: 20px;
+        font-size: 1.25rem;
     }
 
     > div {
-        height: calc(100% - 40px);
+        height: calc(100% - 2.5rem);
     }
     border-bottom: 1px solid rgba(224, 224, 224, 1);
 `
 export const MenuSide = styled.div`
     display: flex;
     flex-direction: column;
-    width: 280px;
+    width: 17.5rem;
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 100%;
@@ -57,7 +57,7 @@ export const MenuSide = styled.div`
         height: 100%;
         background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
         color: ${({theme}) => theme.COLORS.WHITE};
-        height: 72px;
+        height: 4.5rem;
         font-weight: bold;
         display: flex;
         align-items: center;
@@ -79,35 +79,35 @@ export const MenuSide = styled.div`
 
 export const InputSimple = styled.div`
     width: 100%;
-    height: 50px;
-    padding: 8px 4px;
+    height: 3.125rem;
+    padding: .5rem .25rem;
     display: flex;
     align-content: center;
     align-items: center;
     justify-content: center ;
 
     .input_search {
-        height: 30px;
+        height: 1.875rem;
         justify-content: center;
         background-color: ${({theme}) => theme.COLORS.WHITE};
         display: flex;
         width: 100%;
-        border-radius: 20px;
+        border-radius: 1.25rem;
     }
 
     input {
         width: 100%;
         height: 100%;
-        padding: 4px;
+        padding: .25rem;
         border: none;
     }    
 
     select {
         border: none;
         outline: none;
-        width: 80px;
-        border-top-right-radius: 24px;
-        border-bottom-right-radius: 24px;
+        width: 5rem;
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
         background-color: ${({theme}) => theme.COLORS.ORANGE};
         color: ${({theme}) => theme.COLORS.WHITE};
     }
@@ -115,8 +115,8 @@ export const InputSimple = styled.div`
 
     svg {
         color: #000;
-        height: 25px;
-        width: 30px;
+        height: 1.562rem;
+        width: 1.875rem;
     }
 `
 

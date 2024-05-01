@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     display: flex;
-    height: 40px;
+    height: 2.5rem;
     width: 100%;
     align-items: center;
     cursor: pointer;
@@ -12,12 +12,12 @@ export const Container = styled.div`
         width: 100%;
         border: none;
         color: ${({theme}) => theme.COLORS.WHITE};
-        font-size: 14px;
+        font-size: .875rem;
         display: flex;
         text-align: center;
         justify-content: flex-start;
         align-items: center;
-        padding-right: 12px;
+        padding-right: .75rem;
         
     }
     
@@ -27,13 +27,13 @@ export const Container = styled.div`
 
     svg {
         color:${({theme}) => theme.COLORS.WHITE};
-        width: 20px;
-        height: 20px;
-        margin-right: 8px;
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-right: .5rem;
     }
 
     span:first-of-type {
-        margin-right: 8px;
+        margin-right: .5rem;
     }
 
     .background_orange {

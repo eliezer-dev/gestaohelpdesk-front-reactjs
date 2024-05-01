@@ -1,17 +1,17 @@
 import styled from "styled-components"
 
 export const Container = styled.div`
-    height: 72px;
+    height: 4.5rem;
     display: flex;
     border-bottom: .2px solid  rgba(224, 224, 224, 1);   
 
 `
 export const Logo = styled.div `
-        width: 280px;
+        width: 17.5rem;
         height: 100%;
         background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
         color: ${({theme}) => theme.COLORS.WHITE};
-        height: 72px;
+        height: 4.5rem;
         font-weight: bold;
         display: flex;
         align-items: center;
@@ -36,20 +36,20 @@ export const Menu = styled.div `
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
+        gap: .75rem;
         
         > span {
-            margin-inline: 40px;
+            margin-inline: 2.5rem;
             &:hover {
                 cursor: pointer;
-                text-decoration: underline ${({theme}) => theme.COLORS.BLUE_100} 4px;
+                text-decoration: underline ${({theme}) => theme.COLORS.BLUE_100} .25rem;
 
         }
         }
        
         > button {
-            width: 150px;
-            margin-right: 24px;
+            width: 9.375rem;
+            margin-right: 1.5rem;
             overflow: hidden;
         }
 
@@ -59,11 +59,11 @@ export const Menu = styled.div `
 export const Profile = styled.div`
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     cursor: pointer;
-    width: 148px;
+    width: 9.25rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-right: 12px;
+    padding-right: .75rem;
     
     
     > ul {    
@@ -79,7 +79,7 @@ export const Profile = styled.div`
 
         > li:first-of-type {
             color:${({theme}) => theme.COLORS.WHITE};
-            margin-bottom: 4px;
+            margin-bottom: .25rem;
             font-weight: 700;
             
         }
@@ -88,8 +88,8 @@ export const Profile = styled.div`
 
     > img {
         
-        width: 64px;
-        height: 64px;
+        width: 4rem;
+        height: 4rem;
         border-radius: 50%;
 
         &:hover {

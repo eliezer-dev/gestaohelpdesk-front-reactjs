@@ -2,20 +2,20 @@ import styled from "styled-components";
 
 export const Container = styled.button `
     width: 100%;
-    height: 40px;
+    height: 2.5rem;
     
     background: ${({theme}) => theme.COLORS.ORANGE};
     color: ${({theme}) => theme.COLORS.WHITE};
-    font-size: 12px;
+    font-size: .75rem;
     font-weight: bold;
     cursor: pointer;
     
     border:none;
-    border-radius: 24px;
-    padding: 12px;
+    border-radius: 1.5rem;
+    padding: .75rem;
        
     display: flex;
-    gap: 12px;
+    gap: .75rem;
     align-items: center;
     justify-content: center;
     
@@ -24,7 +24,7 @@ export const Container = styled.button `
     }
 
     > svg {
-        height: 16px;
-        width: 16px;
+        height: 1rem;
+        width: 1rem;
     }
 `;

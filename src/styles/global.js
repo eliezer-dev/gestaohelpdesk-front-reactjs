@@ -42,7 +42,7 @@ export default createGlobalStyle`
     /* Works on Chrome, Edge, and Safari */
     *::-webkit-scrollbar {
         background: transparent;
-        width: 8px;
+        width: .5rem;
     }
 
     *::-webkit-scrollbar-track {
@@ -51,7 +51,7 @@ export default createGlobalStyle`
 
     *::-webkit-scrollbar-thumb {
         background-color: ${({theme}) => theme.COLORS.ORANGE};
-        border-radius: 8px;
+        border-radius: .5rem;
         
     }
 

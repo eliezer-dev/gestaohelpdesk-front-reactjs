@@ -12,26 +12,25 @@ export const Container = styled.div`
     }
 
     .contentTable {
-        height: calc(100%-52px);
+        height: calc(100% - 3.25rem);
         overflow-y: auto;
     }
 
     .ticket_options svg {
-        margin-right: 8px;
+        margin-right: 0.5rem;
         cursor: pointer;
     }
 
     .MuiTableFooter-root {
-        height: 52px;
+        height: 3.25rem;
     }
 
     .MuiSvgIcon-root{
-        font-size: 16px;
+        font-size: 1rem;
     }
 
-
     .MuiTableCell-root {
-        padding: 8px 8px 8px 2px; 
+        padding: 0.5rem 0.5rem 0.5rem .125rem;
     }
 
     .background-color-orange {
@@ -41,5 +40,5 @@ export const Container = styled.div`
     .MuiTablePagination-root  {
 
     }
-   
-`
+`;
+

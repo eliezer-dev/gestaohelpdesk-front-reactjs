@@ -6,17 +6,17 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: center;
     background: ${({theme}) => theme.COLORS.WHITE_100};
-    border-radius: 16px;
-    margin-bottom: 8px;
+    border-radius: 1rem;
+    margin-bottom: .5rem;
     
 
     > textarea {
         width: 100%;
-        padding: 12px;
+        padding: .75rem;
         color: ${({theme}) => theme.COLORS.GRAY_200};
         background: transparent ;
         border: 0;
-        border-radius: 10px;
+        border-radius: .625rem;
         resize: none;
 
         &::placeholder {
@@ -25,11 +25,11 @@ export const Container = styled.div`
     }
     
     > svg {
-        margin-left: 16px
+        margin-left: 1rem;
     }
 
     p {
-        padding-right: 12px;
+        padding-right: .75rem;
         width: 100%;
         text-align: right;
     }
