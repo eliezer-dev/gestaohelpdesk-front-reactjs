@@ -76,17 +76,24 @@ export function NewUser() {
         }       
 
     }    
+    
+    async function fetchUser() {
+        const user = (await api.get(`/users/${params.id}`)).data
+        setUserDataState(user);
+    }
+
+
 
     function handleBack() {
         
         if(!userDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
-                navigate("/")
+                navigate("/users")
                 return
             }
         }else {
-            navigate("/")
+            navigate("/users")
             return
         }
         
@@ -96,8 +103,9 @@ export function NewUser() {
    
 
     useEffect(() => {
-        
-    },[])
+        if (params.id != "new") fetchUser();
+          
+    },[params])
 
     return (
         <Container>
