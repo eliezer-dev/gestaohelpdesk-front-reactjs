@@ -58,7 +58,7 @@ function AuthProvider({children}) {
                 const fileUploadForm = new FormData
                 fileUploadForm.append("avatar", avatarFile)
                 await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)
-                const avatar = (`data:image/jpeg;base64,${avatarFile}`)
+                avatar = (`data:image/jpeg;base64,${avatarFile}`)
                 localStorage.setItem("@gestaohelpdesk:avatar", avatar)
             }
 
