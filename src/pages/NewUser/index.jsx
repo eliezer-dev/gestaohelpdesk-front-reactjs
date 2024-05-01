@@ -44,12 +44,12 @@ export function NewUser() {
                         
                 })
                 alert("Usuário Salvo com sucesso.")
-                navigate("/")
+                navigate("/users")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
                 }else {
-                    alert ("Erro no servidor ao atualizar o usuário.")
+                    alert ("Erro no servidor ao salvar o usuário.")
                 }
             }
             
@@ -72,7 +72,7 @@ export function NewUser() {
                     oldPassword:dataForm.oldPassword
                 })
                 alert("Usuário atualizado com sucesso.")
-                navigate("/")
+                navigate("/users")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)

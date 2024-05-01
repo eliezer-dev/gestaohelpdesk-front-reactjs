@@ -58,11 +58,9 @@ export function UserEdit({getDataForm, userData}) {
 
 
     async function viaCep(event) {
-        if (/^\d+$/.test(event) || event == "") {
-            if (event.length <= 8) {
-                setCepState(event)
-            }
-        
+        const cep = event.replace(/[^0-9]/g,'');
+        setCepState(cep)
+            
             if (event && event.length == 8) {
                 const response = (await api.get(`https://viacep.com.br/ws/${event}/json/`)).data
                 if (response.erro) {
@@ -77,8 +75,6 @@ export function UserEdit({getDataForm, userData}) {
                 return
             
             }
-            return
-        }
         return
     }   
 

@@ -73,11 +73,9 @@ export function ClientEdit({getDataForm, clientData}) {
 
 
     async function viaCep(event) {
-        if (/^\d+$/.test(event) || event == "") {
-            if (event.length <= 8) {
-                setCepState(event)
-            }
-        
+        const cep = event.replace(/[^0-9]/g,'');
+        setCepState(cep)
+            
             if (event && event.length == 8) {
                 const response = (await api.get(`https://viacep.com.br/ws/${event}/json/`)).data
                 if (response.erro) {
@@ -92,12 +90,9 @@ export function ClientEdit({getDataForm, clientData}) {
                 return
             
             }
-            return
-        }
         return
-       
     }
-
+            
     function handleCnpj (event) {
         if (/^\d+$/.test(event) || event == "") {
             if (event.length <= 14) {

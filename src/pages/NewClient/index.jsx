@@ -59,7 +59,7 @@ export function NewClient() {
                         
                 })
                 alert("Cliente Salvo com sucesso.")
-                navigate("/")
+                navigate("/clients")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
@@ -87,7 +87,7 @@ export function NewClient() {
                     slaUrgency:dataForm.slaUrgency,
                 })
                 alert("Cliente atualizado com sucesso.")
-                navigate("/")
+                navigate("/clients")
             } catch (error) {
                 if (error.message && error.response.data) {
                     alert(error.response.data)
@@ -113,11 +113,11 @@ export function NewClient() {
         if(!clientDataState) {
             const getConfirm = confirm("Deseja realmente sair? Os dados digitados serão perdidos.")
             if (getConfirm) {
-                navigate("/")
+                navigate("/clients")
                 return
             }
         }else {
-            navigate("/")
+            navigate("/clients")
             return
         }
         
