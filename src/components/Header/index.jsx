@@ -68,7 +68,6 @@ export function Header({logo=true}) {
     
     useEffect(() => {
         if (!avatar) {
-            console.log("get avatar()")
             getAvatar(user.id)
         }
         

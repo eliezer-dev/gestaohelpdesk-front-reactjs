@@ -41,7 +41,7 @@ export function Tickets() {
 
         if (params.id == "new") {
             setProcessingState("false")
-            const ticketSaved = await api.post("/tickets", {
+            await api.post("/tickets", {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
                 client:{id:client.id},
@@ -51,7 +51,6 @@ export function Tickets() {
                 category:{id:dataForm.category},
                 scheduledDateTime:dataForm.scheduledDateTime
             })
-            console.log("teste" + JSON.stringify(ticketSaved.data))
             setProcessingState("false")
             alert("Chamado salvo com sucesso.")
             navigate("/")
