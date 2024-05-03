@@ -112,9 +112,9 @@ export function TicketsTable({tickets, rows}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:105}}> Numero Ticket </TableCell>
+                      <TableCell style={{width:60}}> Chamado </TableCell>
                       <TableCell> Cliente </TableCell>
-                      <TableCell> Descrição </TableCell>
+                      <TableCell> Descrição  </TableCell>
                       <TableCell> Atendentes </TableCell>
                       <TableCell style={{width:110}}> Status </TableCell>
                       <TableCell style={{width:145}}> Data de Criação </TableCell>
@@ -136,7 +136,7 @@ export function TicketsTable({tickets, rows}) {
                             scope="row" 
                             align="right" 
                            
-                            sx={{fontSize:14, paddingRight:2}}
+                            sx={{fontSize:14, paddingRight:4}}
                             >
                               {ticket.id}
                             </TableCell >

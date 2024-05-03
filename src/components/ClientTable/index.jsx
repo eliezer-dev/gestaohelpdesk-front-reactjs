@@ -109,7 +109,7 @@ export function ClientsTable({clients, rows, deleteClient}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:105}}> Código Cliente </TableCell>
+                      <TableCell style={{width:60}}>Código</TableCell>
                       <TableCell> CNPJ </TableCell>
                       <TableCell> Razão Social </TableCell>
                       <TableCell> Endereço </TableCell>

@@ -109,7 +109,7 @@ export function UsersTable({users, rows, deleteUser}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:105}}> Código Usuario </TableCell>
+                      <TableCell style={{width:60}}> Código</TableCell>
                       <TableCell> CPF </TableCell>
                       <TableCell> Nome </TableCell>
                       <TableCell> Endereço </TableCell>

@@ -30,7 +30,7 @@ export const Container = styled.div`
     }
 
     .MuiTableCell-root {
-        padding: .5rem .5rem .5rem .125rem;
+        padding: 8px 8px 8px 8px
     }
 
     .background-color-orange {
