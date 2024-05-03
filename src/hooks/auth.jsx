@@ -5,6 +5,7 @@ import avatarPlaceHolder from "../assets/avatar_placeholder.svg"
 
 function AuthProvider({children}) {
     const [data, setData] = useState({})
+    const [avatar, setAvatar] = useState()
 
     async function signIn({username, password}) {
         try {
@@ -12,11 +13,11 @@ function AuthProvider({children}) {
             const token = response.data.access_token
             const user = response.data.user
             api.defaults.headers.common['Authorization'] = token
+            setData({user, token})
             localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(user))
             localStorage.setItem("@gestaohelpdesk:token", token)
+            return
 
-            const avatar = await getAvatar(user.id);
-            setData({user, token, avatar})
         } catch (error) {
             if (error.response) {
                 alert(error.response.data)
@@ -28,43 +29,35 @@ function AuthProvider({children}) {
         }
     }
 
-    async function getAvatar(userId){
-
-        try {
-            const response = await api.get(`/users/avatar/${userId}`)
-            const avatar = (`data:image/jpeg;base64,${response.data}`)
-            localStorage.setItem("@gestaohelpdesk:avatar", avatar)
-            return avatar
-        } catch(error) {
-            const avatar = avatarPlaceHolder
-            return avatar;
-        }
-                
+    function avatarUpdate(image){
+        setAvatar(image)           
     }
 
     function signOut() {
         localStorage.removeItem("@gestaohelpdesk:user")
         localStorage.removeItem("@gestaohelpdesk:token")
-        localStorage.removeItem("@gestaohelpdesk:avatar")
         api.defaults.headers.common['Authorization'] = "";
         setData({})
+        setAvatar()
     }
 
-    async function updateProfile(userUpdated, avatarFile) {
+    async function updateProfile(userUpdated, avatarFileToForm) {
         try {
             let avatar = data.avatar;
             
-            if (avatarFile) {
+            if (avatarFileToForm) {
                 const fileUploadForm = new FormData
-                fileUploadForm.append("avatar", avatarFile)
-                await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)
-                avatar = (`data:image/jpeg;base64,${avatarFile}`)
-                localStorage.setItem("@gestaohelpdesk:avatar", avatar)
+                fileUploadForm.append("avatar", avatarFileToForm)
+                const response = (await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)).data
+                console.log(response)
+                avatar = `data:image/jpeg;base64,${response}`
             }
 
             await api.put(`/users/${data.user.id}`, userUpdated)
             localStorage.setItem("@gestaohelpdesk:user", JSON.stringify(userUpdated))
-            setData({user:userUpdated, token:data.token, avatar})
+            
+            setData({user:userUpdated, token:data.token})
+            setAvatar(avatar)
             
             return alert ("Os seus dados foram atualizados com sucesso.")
             
@@ -73,23 +66,21 @@ function AuthProvider({children}) {
                  return alert(error.response.data)
             }else {
                  alert("Não foi possível atualizar as suas informações. Tente novamente.")
-                 return console.log(error.message)
+                 return console.error(error.message)
             }
        }
     }
 
 
-
     useEffect(() => {
         const user = localStorage.getItem("@gestaohelpdesk:user")
         const token = localStorage.getItem("@gestaohelpdesk:token")
-        const avatar = localStorage.getItem("@gestaohelpdesk:avatar")
+       
         if(user && token) {
             api.defaults.headers.common['Authorization'] = token;
             setData({
                 token,
-                user: JSON.parse(user),
-                avatar
+                user: JSON.parse(user)
             })
         }
     },[])
@@ -100,7 +91,8 @@ function AuthProvider({children}) {
             user:data.user,
             signOut,
             updateProfile,
-            avatar:data.avatar
+            avatar,
+            avatarUpdate
             }}>
             {children}
         </AuthContext.Provider>

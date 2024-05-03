@@ -7,12 +7,12 @@ import { useAuth } from "../../hooks/auth";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
+import avatarPlaceHolder from "../../assets/avatar_placeholder.svg"
 
 export function Header({logo=true}) {
     const navigate = useNavigate();
-    const {user, signOut, avatar} = useAuth();
-    const [username, setUsername] = useState(user.name)
-    const [userAvatar, setUserAvatar] = useState(avatar)
+    const {user, signOut, avatar, avatarUpdate} = useAuth();
+    const [userAvatar, setUserAvatar] = useState(avatar || avatarPlaceHolder)
 
     function handleSignOut() {
         signOut()
@@ -51,10 +51,29 @@ export function Header({logo=true}) {
         }
     }
 
+    async function getAvatar(userId){
+
+        try {
+            const response = (await api.get(`/users/avatar/${userId}`)).data
+            setUserAvatar(`data:image/jpeg;base64,${response}`)
+            avatarUpdate(`data:image/jpeg;base64,${response}`)
+    
+        } catch(error) {
+            setUserAvatar(avatarPlaceHolder)
+            avatarUpdate(avatarPlaceHolder)
+        }
+                
+    }
+
     
     useEffect(() => {
+        if (!avatar) {
+            console.log("get avatar()")
+            getAvatar(user.id)
+        }
         
-    }, [])
+        
+    }, [avatar, user])
 
     return (
         <Container>

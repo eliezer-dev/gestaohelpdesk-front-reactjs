@@ -41,7 +41,6 @@ export function Tickets() {
 
         if (params.id == "new") {
             setProcessingState("false")
-            console.log(dataForm, client)
             const ticketSaved = await api.post("/tickets", {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
