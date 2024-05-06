@@ -104,7 +104,7 @@ export function Clients(){
 
         const interval = setInterval(() => {
             fetchClients();
-        }, 60000);
+        }, 300000);
     
         return () => clearInterval(interval);
     },[optionCode])

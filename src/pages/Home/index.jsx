@@ -144,6 +144,10 @@ export function Home(){
         let dataFormated = [];
         data && data.map((ticket) => {
             const date = new Date(ticket.createAt);
+            let dateSchedule;
+            if (ticket.scheduledDateTime != null) {
+                dateSchedule = new Date(ticket.scheduledDateTime);
+            }
 
             const calcSlaTimeLeft = function (slaDateTimeEnd) {
                 let slaTimeLeft
@@ -175,19 +179,18 @@ export function Home(){
                 return slaTimeLeftInSeconds
             }
             
-            const shortDescription = ticket.shortDescription.length > 60 ? 
-                ticket.shortDescription.slice(0,60) + "..." : ticket.shortDescription
-
             const ticketFormated = {
                 id:ticket.id,
                 description:ticket.description,
-                shortDescription:shortDescription,
+                shortDescription:ticket.shortDescription,
                 client:ticket.client,   
                 user:ticket.user,
                 status:ticket.status,
                 createAt:date.toLocaleString().replace(/,/g,""),
                 slaTimeLeft:calcSlaTimeLeft(ticket.slaDateTimeEnd),
-                slaTimeInSeconds:calcSlaTimeLeftInSeconds(ticket.slaDateTimeEnd)
+                slaTimeInSeconds:calcSlaTimeLeftInSeconds(ticket.slaDateTimeEnd),
+                typeOfService:ticket.typeOfService,
+                scheduledDateTime: dateSchedule != null ? dateSchedule.toLocaleString().replace(/,/g,"") : dateSchedule,
             };
             dataFormated.push(ticketFormated);
         })
@@ -210,7 +213,7 @@ export function Home(){
 
         const interval = setInterval(() => {
             fetchTickets();
-        }, 60000);
+        }, 300000);
     
         return () => clearInterval(interval);
     },[optionCode])

@@ -19,6 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import PrintIcon from '@mui/icons-material/Print';
 
 export function TicketsTable({tickets, rows}) {
     const navigate = useNavigate();
@@ -112,14 +113,17 @@ export function TicketsTable({tickets, rows}) {
 
                   <TableHead>
                       <TableRow>
-                      <TableCell style={{width:60}}> Chamado </TableCell>
+                      
+                      <TableCell> Chamado </TableCell>
                       <TableCell> Cliente </TableCell>
-                      <TableCell> Descrição  </TableCell>
+                      <TableCell sx={{whiteSpace: 'nowrap', width:200}}> Descrição  </TableCell>
                       <TableCell> Atendentes </TableCell>
                       <TableCell style={{width:110}}> Status </TableCell>
-                      <TableCell style={{width:145}}> Data de Criação </TableCell>
+                      <TableCell style={{width:100, maxWidth:100}}> Criado Em </TableCell>
                       <TableCell style={{width:90}}> Vencimento </TableCell>
+                      <TableCell style={{width:100, maxWidth:100}}> Agendado</TableCell>
                       <TableCell> Opções </TableCell>
+                      <TableCell> T </TableCell>  {/*Atendimento interno ou externo*/}
                       </TableRow>
                   </TableHead>
 
@@ -133,36 +137,55 @@ export function TicketsTable({tickets, rows}) {
                           <TableRow key={ticket.id}>
                             <TableCell 
                             component="th" 
-                            scope="row" 
-                            align="right" 
-                           
-                            sx={{fontSize:14, paddingRight:4}}
+                            scope="row"
+                            align="left"                            
+                            sx={{fontSize:14, paddingRight:4 }}
                             >
                               {ticket.id}
                             </TableCell >
                             <TableCell sx={{fontSize:14}} > 
-                              {ticket.client.razaoSocialName}
+                              {ticket.client.businessName}
                             </TableCell>
-                            <TableCell sx={{fontSize:14}}>
+                            <TableCell sx={
+                              {fontSize:14, 
+                              whiteSpace: 'nowrap', 
+                              width:440,
+                              overflow:"hidden",
+                              textOverflow: 'ellipsis',
+                              maxWidth:450
+                              }}>
                               {ticket.shortDescription}
                             </TableCell>
                             <TableCell sx={{fontSize:14}} >
-                              {ticket?.user?.name}
+                              {ticket?.user?.username}
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
                               { ticket.status.description}
                             </TableCell>
-                            <TableCell sx={{fontSize:14}} >
+                            <TableCell sx={{fontSize:10}} >
                               { ticket.createAt}
                             </TableCell>
-                            <TableCell className={ticket.slaTimeInSeconds < 0 && "background-color-orange"} 
+                            <TableCell className={(ticket.slaTimeInSeconds < 0 && (ticket.status.type != 2 && ticket.status.type != 3)) && "background-color-orange"} 
                              
                               sx={{fontSize:14}}  >
-                              {ticket.slaTimeLeft}
+                              {  
+                                ticket.status.type == 2 || ticket.status.type == 3 ?
+                                "00:00:00" :  
+                                ticket.slaTimeLeft
+                              }
+                            </TableCell>
+                            <TableCell sx={{fontSize:10}} >
+                              {ticket.scheduledDateTime && ticket.scheduledDateTime}
                             </TableCell>
                             <TableCell  className="ticket_options" sx={{fontSize:14}}>
                               <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
-                              <DeleteIcon onClick={handleDeleteTicket}/>
+                              <PrintIcon onClick={handleDeleteTicket}/>
+                            </TableCell>
+                            <TableCell 
+                              align="center"
+                              sx={{fontSize:14, fontWeight:'bold'}} 
+                              > 
+                              {ticket.typeOfService == 1 ? "I" : "E"}
                             </TableCell>
                             
                           </TableRow>

@@ -104,7 +104,7 @@ export function Users(){
 
         const interval = setInterval(() => {
             fetchUsers();
-        }, 60000);
+        }, 300000);
     
         return () => clearInterval(interval);
     },[optionCode])
