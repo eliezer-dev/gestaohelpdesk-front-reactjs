@@ -51,6 +51,7 @@ export const MenuSide = styled.div`
     background-color: ${({theme}) => theme.COLORS.BACKGROUND_700};
     color: ${({theme}) => theme.COLORS.WHITE};
     height: 100%;
+    position: relative;
     
     .logo {
         width: 100%;

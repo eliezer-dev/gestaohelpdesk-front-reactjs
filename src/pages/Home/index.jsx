@@ -7,13 +7,14 @@ import { TicketsTable } from "../../components/TicketsTable";
 import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
 import { ButtonText } from "../../components/ButtonText";
-import { FaPerson } from "react-icons/fa6";
-import { IoPeople } from "react-icons/io5";
-import { FaArrowsAlt } from "react-icons/fa";
+import { FaPerson, FaRegSquareCheck } from "react-icons/fa6";
+import { IoPeople, IoLockClosed } from "react-icons/io5";
+import { FaArrowsAlt} from "react-icons/fa";
 import { IoIosPeople } from "react-icons/io";
 import SearchIcon from '@mui/icons-material/Search';
 import { useAuth } from "../../hooks/auth"
 import { useNavigate } from "react-router-dom";
+
 
 export function Home(){
     const [header, setHeader] = useState("Chamados atribuídos a mim")
@@ -21,6 +22,8 @@ export function Home(){
     const [ticketsNotAssignedQty, setTicketsNotAssignedQty] = useState(0);
     const [ticketsAssignedOtherUsersQty, setTicketsAssignedOtherUsersQty] = useState(0);
     const [allTicketsQty, setAllTicketsQty] = useState(0);
+    const [completedTicketsQty, setCompletedTicketsQty] = useState(0);
+    const [closedTicketsQty, setClosedTicketsQty] = useState(0);
     const [tickets, setTickets] = useState([])
     const [optionCode, setOptionCode] = useState(1);
     const {user} = useAuth();
@@ -57,6 +60,18 @@ export function Home(){
         
     }
 
+    function handleCompletedTickets() {
+        setOptionCode(4)
+        setHeader("Chamados Concluídos")
+        setSearchState("")
+    }
+
+    function handleClosedTickets() {
+        setOptionCode(5)
+        setHeader("Chamados Fechados")
+        setSearchState("")
+    }
+
     async function fetchTickets (dataSearch) { 
         
         setSearchState(dataSearch)
@@ -77,6 +92,7 @@ export function Home(){
             setTickets(ticketsAssignedOtherUsersFormated)
             fetchTicketsCount()
             return    
+        
         } else if (optionCode == 3) {
             const response = await api.get(`/tickets?type=2&search=${search}&search_type=${searchTypeState}`);
             const ticketsNotSignedFormated = formatData(response.data);
@@ -84,12 +100,28 @@ export function Home(){
             fetchTicketsCount()
             return
         
+        } else if (optionCode == 4) {
+            const response = await api.get(`/tickets?type=3&search=${search}&search_type=${searchTypeState}`);
+            const completedTicketsFormated = formatData(response.data);
+            setTickets(completedTicketsFormated)
+            fetchTicketsCount()
+            return
+
+
+        } else if (optionCode == 5) {
+            const response = await api.get(`/tickets?type=4&search=${search}&search_type=${searchTypeState}`);
+            const closedTicketsFormated = formatData(response.data);
+            setTickets(closedTicketsFormated)
+            fetchTicketsCount()
+            return
+
         } else if (!optionCode || optionCode == 0) {
             const response = await api.get( `/tickets?search=${search}&search_type=${searchTypeState}`);
             const allTicketsFormated = formatData(response.data);
             setTickets(allTicketsFormated)
             fetchTicketsCount()
             return
+
         } else {
             console.error("Opção Inválida.");
         }      
@@ -103,6 +135,8 @@ export function Home(){
         setTicketsAssignedOtherUsersQty(response.data.ticketsAssignedOtherUsersCount)
         setTicketsNotAssignedQty(response.data.ticketsNotAssignedCount)
         setAllTicketsQty(response.data.allTicketsCount)
+        setCompletedTicketsQty(response.data.completedTicketsCount)
+        setClosedTicketsQty(response.data.closedTicketsCount)
         return;
     }
 
@@ -235,12 +269,28 @@ export function Home(){
                             selected={optionCode== 3 ? true : false}
                         />
                         <ButtonText 
+                            onClick={handleCompletedTickets} 
+                            title={`Concluídos`}
+                            othersContents = {`(${completedTicketsQty})`}
+                            icon={FaRegSquareCheck}
+                            selected={optionCode== 4 ? true : false}
+                        />
+                        <ButtonText 
                             onClick={handleAllTickets} 
                             title={`Todos`}
                             othersContents = {`(${allTicketsQty})`}
                             icon={IoIosPeople}
                             selected={optionCode== 0 ? true : false}
+                            
                         />
+                        <ButtonText 
+                            onClick={handleClosedTickets} 
+                            title={`Fechados`}
+                            othersContents = {`(${closedTicketsQty})`}
+                            icon={IoLockClosed}
+                            selected={optionCode == 5 ? true : false}
+                        />
+                        
                     </div>
                    
                 </MenuSide>

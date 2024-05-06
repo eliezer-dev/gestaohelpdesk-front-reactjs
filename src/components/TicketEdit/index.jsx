@@ -148,7 +148,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
         const status = await api.get("/status")
         
         if (!ticketData) {
-            const statusListForNewTicketForm = status.data.filter((status) => status.type == null || status.type == 1)
+            const statusListForNewTicketForm = status.data.filter((status) => status.type == null || status.type == 1 || status.type == 0)
             setStatusList(statusListForNewTicketForm)
             return
         }
