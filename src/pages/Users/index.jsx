@@ -38,7 +38,7 @@ export function Users(){
             const name = user.name.length > 65 ? 
                 user.name.slice(0,65) + "..." : user.name
 
-            const ticketFormated = {
+            const userFormated = {
                 id:user.id,
                 cpf:user.cpf,
                 name,
@@ -50,8 +50,9 @@ export function Users(){
                 city:user.city,
                 email:user.email,
                 createAt:date.toLocaleString().replace(/,/g,""),
+                username:user.username
             };
-            dataFormated.push(ticketFormated);
+            dataFormated.push(userFormated);
         })
         return dataFormated;
         

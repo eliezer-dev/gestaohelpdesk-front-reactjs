@@ -34,7 +34,8 @@ export const Container = styled.div`
     }
 
     .background-color-orange {
-        background-color: ${({theme}) => theme.COLORS.ORANGE}; 
+        color: ${({theme}) => theme.COLORS.ORANGE}; 
+        font-weight: bold;
     }
         
     .MuiTablePagination-root  {

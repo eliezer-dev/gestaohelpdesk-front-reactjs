@@ -48,6 +48,7 @@ export function UserEdit({getDataForm, userData}) {
     const [oldPasswordState, setOldPasswordState] = useState("");
     const [passwordState, setPasswordState] = useState("");
     const [confirmNewPasswordState, setConfirmNewPasswordState] = useState("");
+    const [usernameState, setUsernameState] = useState("");
 
     const [stateListState] = useState(brazilStatesList)
 
@@ -200,6 +201,7 @@ export function UserEdit({getDataForm, userData}) {
             setEmailState(userData?.email)
             setCityState(userData?.city)
             setStateState(userData?.state)
+            setUsernameState(userData?.username)
 
         }           
     },[userData])
@@ -301,7 +303,14 @@ export function UserEdit({getDataForm, userData}) {
                         }
 
                         </Select>
-                    </NeighborhoodCityStateInput>                   
+                    </NeighborhoodCityStateInput>
+                    <Input
+                        placeholder="Digite o username, usado apenas na visualização do chamado."
+                        type="text"
+                        value={emailState}
+                        onChange={e => {setEmailState(e.target.value)}}
+                        required
+                    />                  
                     <Input
                         placeholder="Digite o email"
                         type="text"

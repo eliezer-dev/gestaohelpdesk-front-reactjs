@@ -82,6 +82,8 @@ export function TicketsTable({tickets, rows}) {
     
     const [rowsPerPage, setRowsPerPage] = useState(rows);
 
+    const [userNameState, setUserNamaState] = useState([]);
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
       };
@@ -97,9 +99,16 @@ export function TicketsTable({tickets, rows}) {
         navigate(`/ticket/${ticketId}`)
     }
     
-    function handleDeleteTicket(){
-        console.log("remove ticket...")
-    }
+
+    function getUserName(name) {
+      if (typeof name === 'string' && name.trim() != '') {
+        const userName = name?.trim()?.split(' '); 
+        const firstName = userName[0]
+        const lastName = userName.length >=2 ? userName[userName.length - 1] : ""
+        return `${firstName} ${lastName}`
+      }
+      return ""
+    } 
 
     useEffect(() => {
       setPage(0)
@@ -114,14 +123,15 @@ export function TicketsTable({tickets, rows}) {
                   <TableHead>
                       <TableRow>
                       
-                      <TableCell> Chamado </TableCell>
+                      <TableCell align="right"> Chamado </TableCell>
                       <TableCell> Cliente </TableCell>
                       <TableCell sx={{whiteSpace: 'nowrap', width:200}}> Descrição  </TableCell>
                       <TableCell> Atendentes </TableCell>
                       <TableCell style={{width:110}}> Status </TableCell>
                       <TableCell style={{width:100, maxWidth:100}}> Criado Em </TableCell>
+                      <TableCell align="left" style={{width:100, maxWidth:100}}> Agendado Em</TableCell>
                       <TableCell style={{width:90}}> Vencimento </TableCell>
-                      <TableCell style={{width:100, maxWidth:100}}> Agendado</TableCell>
+                      
                       <TableCell> Opções </TableCell>
                       <TableCell> T </TableCell>  {/*Atendimento interno ou externo*/}
                       </TableRow>
@@ -138,8 +148,8 @@ export function TicketsTable({tickets, rows}) {
                             <TableCell 
                             component="th" 
                             scope="row"
-                            align="left"                            
-                            sx={{fontSize:14, paddingRight:4 }}
+                            align="right"                            
+                            sx={{fontSize:14, fontWeight:'bold' }}
                             >
                               {ticket.id}
                             </TableCell >
@@ -156,14 +166,17 @@ export function TicketsTable({tickets, rows}) {
                               }}>
                               {ticket.shortDescription}
                             </TableCell>
-                            <TableCell sx={{fontSize:14}} >
-                              {ticket?.user?.username}
+                            <TableCell sx={{fontSize:14, fontWeight:'bold'}} >
+                              {getUserName(ticket?.user?.name)}
                             </TableCell>
                             <TableCell sx={{fontSize:14}}>
                               { ticket.status.description}
                             </TableCell>
-                            <TableCell sx={{fontSize:10}} >
+                            <TableCell sx={{fontSize:12}} >
                               { ticket.createAt}
+                            </TableCell>
+                            <TableCell align="center" sx={{fontSize:12}} >
+                              {ticket.scheduledDateTime ? ticket.scheduledDateTime: " - "}
                             </TableCell>
                             <TableCell className={(ticket.slaTimeInSeconds < 0 && (ticket.status.type != 2 && ticket.status.type != 3)) && "background-color-orange"} 
                              
@@ -174,12 +187,10 @@ export function TicketsTable({tickets, rows}) {
                                 ticket.slaTimeLeft
                               }
                             </TableCell>
-                            <TableCell sx={{fontSize:10}} >
-                              {ticket.scheduledDateTime && ticket.scheduledDateTime}
-                            </TableCell>
+                            
                             <TableCell  className="ticket_options" sx={{fontSize:14}}>
                               <EditIcon onClick={() => {handleEditTicket(ticket.id)}}/>
-                              <PrintIcon onClick={handleDeleteTicket}/>
+                              <PrintIcon/>
                             </TableCell>
                             <TableCell 
                               align="center"
