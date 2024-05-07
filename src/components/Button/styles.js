@@ -19,12 +19,22 @@ export const Container = styled.button `
     align-items: center;
     justify-content: center;
     
-    &:hover {
-        opacity: .5;
+    /* &:hover {
+        opacity: unset;
+    } */
+
+    /* &:hover.button_disabled {
+        opacity: 1;
+    } */
+
+    &.button_disabled:hover {
+        filter:unset;
     }
 
     > svg {
         height: 1rem;
         width: 1rem;
     }
+
+    
 `;

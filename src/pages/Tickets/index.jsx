@@ -84,6 +84,11 @@ export function Tickets() {
                 slaTimeSeconds = Math.trunc(((slaTimeLeftInSeconds%3600)%60))
             
             if (slaTimeLeftInSeconds < 0){
+                if (ticket.status.type == 2 || ticket.status.type == 3) {
+                    setSLATime(`-- 00:00:00`)
+                    return
+                }
+
                 setslaWon(true)
                 slaTimeHours = slaTimeHours * -1
                 slaTimeMinutes = slaTimeMinutes * -1

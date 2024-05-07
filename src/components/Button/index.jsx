@@ -4,9 +4,11 @@ export function Button({title, icon:Icon, disabled, ...rest}) {
     return(
         <Container
             type="button"
+            disabled={disabled}
             {...rest}
+            className={disabled && "button_disabled"}
         >
-            {disabled ? "Processando..." : title}
+            {title}
             {Icon && <Icon size = {20}/>}
         </Container>
     )

@@ -30,6 +30,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
     const [annotationsListState, setAnnotatiosListState] = useState([]);
     const [annotationState, setAnnotationState] = useState("")
     const {user} = useAuth();
+    const [ticketClosedState, setTicketClosedState] = useState(false);
 
 
     function salvar () {
@@ -212,6 +213,10 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
             setStatus(ticketData.status.id)
             setCategoryState(ticketData.category.id)
             setTypeOfService(ticketData.typeOfService)
+
+            if (ticketData.status.type == 3) {
+                setTicketClosedState(true)
+            }
             
             if (ticketData.scheduledDateTime) {
                 setIsSheduled(true)
@@ -228,7 +233,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                     <div className="clienteSearch">
                         <div id="search">
                             <Input
-                                disabled={inputClientSearchState || processing=="true"}
+                                disabled={inputClientSearchState || processing=="true" || ticketClosedState == true}
                                 id="inputClientSearch"
                                 icon={FiSearch}
                                 placeholder="Pesquise o Cliente"
@@ -237,7 +242,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                                 onChange={e => {handleClientSearch(e.target.value)}}
                             /> 
                                 <select
-                                    disabled={inputClientSearchState || processing=="true"}
+                                    disabled={inputClientSearchState || processing=="true" || ticketClosedState == true}
                                     name="typeOfsearch" 
                                     id="typeOfsearch"
                                     onChange={e => {changeTypeSearch(e.target.value)}}
@@ -284,7 +289,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                     </div>
                     
                     <Input
-                        disabled={processing=="true"}
+                        disabled={processing=="true" || ticketClosedState == true}
                         placeholder="Breve descrição do chamado."
                         type="text"
                         value={shortDescription}
@@ -292,7 +297,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                         required
                     />
                     <TextArea
-                        disabled={processing=="true"}
+                        disabled={processing=="true" || ticketClosedState == true}
                         placeholder="Descrição do Chamado"
                         type="textarea"
                         rows="10"
@@ -310,7 +315,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                             defaultChecked
                             required
                             onChange={e => {handleSelectCategory(e)}}
-                            disabled={processing=="true"}
+                            disabled={processing=="true" || ticketClosedState == true}
                         >   
                             {
                                 !ticketData && 
@@ -382,7 +387,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                         defaultChecked
                         onChange={e => {setTypeOfService(e.target.value)}}
                         required
-                        disabled={processing=="true"}
+                        disabled={processing=="true" || ticketClosedState == true}
                         >
                             {!ticketData && 
                                 <option 
@@ -420,7 +425,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                                 type="checkbox"
                                 checked={isSheduled}
                                 onChange={e => {handleSheduled(e)}}
-                                disabled={processing=="true"}
+                                disabled={processing=="true" || ticketClosedState == true}
                             />                         
                         </CheckBoxItem>
                         {
@@ -430,18 +435,17 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                                 type="datetime-local"
                                 value={scheduledDateTime}
                                 onChange={e => {setScheduledDateTime(e.target.value)}}
-                                disabled={processing=="true"}
+                                disabled={processing=="true" || ticketClosedState == true}
                             >
                             </Input>
                         }
 
                     </div>
-                    {/* <Button title={typeForm == "new" ? "Salvar" : "Atualizar"} onClick={salvar}/>  */}
                     {
                         ticketData ?
                         <Button title={processing=="true" ? "Processando" : "Atualizar"} 
                             onClick={salvar}
-                            disabled={processing=="true"}
+                            disabled={(processing=="true") ? true : false}
                         />
                         :
                         <Button 
@@ -464,10 +468,19 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                         rows={4}
                         characteresUsed={annotationState.length}
                         onChange={e => {setAnnotationState(e.target.value)}}
+                        disabled={processing == true || ticketClosedState == true}
                         />
                     <div className="annotations_buttons">
-                        <Button title="Salvar" onClick={handleSaveAnnotation}/>
-                        <Button title="Cancelar" onClick={() => {setAnnotationState("")}}/> 
+                        <Button 
+                            title="Salvar" 
+                            onClick={handleSaveAnnotation}
+                            disabled={processing == true || ticketClosedState == true}
+                            />
+                        <Button 
+                            title="Cancelar" 
+                            onClick={() => {setAnnotationState("")}}
+                            disabled={processing == true || ticketClosedState == true}
+                        /> 
                     </div>    
                       
                     <div className="annotationSaved">  
