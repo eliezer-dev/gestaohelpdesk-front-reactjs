@@ -125,11 +125,11 @@ export function TicketsTable({tickets, rows}) {
                       
                       <TableCell align="right"> Chamado </TableCell>
                       <TableCell> Cliente </TableCell>
-                      <TableCell sx={{whiteSpace: 'nowrap', width:200}}> Descrição  </TableCell>
+                      <TableCell sx={{whiteSpace: 'nowrap'}}> Descrição  </TableCell>
                       <TableCell> Atendentes </TableCell>
                       <TableCell style={{width:110}}> Status </TableCell>
                       <TableCell style={{width:100, maxWidth:100}}> Criado Em </TableCell>
-                      <TableCell align="left" style={{width:100, maxWidth:100}}> Agendado Em</TableCell>
+                      <TableCell align="left" style={{width:100, maxWidth:100}}> Agendado</TableCell>
                       <TableCell style={{width:90}}> Vencimento </TableCell>
                       
                       <TableCell> Opções </TableCell>
@@ -159,10 +159,10 @@ export function TicketsTable({tickets, rows}) {
                             <TableCell sx={
                               {fontSize:14, 
                               whiteSpace: 'nowrap', 
-                              width:440,
+                              width:400,
                               overflow:"hidden",
                               textOverflow: 'ellipsis',
-                              maxWidth:450
+                              maxWidth:400
                               }}>
                               {ticket.shortDescription}
                             </TableCell>

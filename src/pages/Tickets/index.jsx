@@ -21,7 +21,7 @@ export function Tickets() {
     const [SLATime, setSLATime] = useState("00:00:00");
     const [slaWon, setslaWon] = useState(false);
     const [processingState, setProcessingState] = useState("false");
-
+   
 
     
     const getDataForm = dataform => {
@@ -38,6 +38,13 @@ export function Tickets() {
 
  
     async function handleSave(dataForm) {
+        let users = []
+        if (dataForm.user != '') {
+            const user = {
+                id:dataForm.user
+            }
+            users.push(user)
+        }
 
         if (params.id == "new") {
             setProcessingState("false")
@@ -45,7 +52,7 @@ export function Tickets() {
                 shortDescription:dataForm.shortDescription,
                 description:dataForm.description,
                 client:{id:client.id},
-                users:[{id:user.id}],
+                users,
                 typeOfService:dataForm.typeOfService,            
                 status:{id:dataForm.status},
                 category:{id:dataForm.category},
@@ -115,6 +122,8 @@ export function Tickets() {
         setClient(ticket.data.client)
         adjustSLATime(ticket.data)
     }
+
+   
 
     function handleBack() {
         

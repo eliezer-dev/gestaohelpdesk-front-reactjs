@@ -10,6 +10,7 @@ import TextField from '@mui/material/TextField';
 import avatarPlaceholder from "../../assets/avatar_placeholder.svg"
 import { useAuth } from "../../hooks/auth";
 
+
 export function TicketEdit({getDataForm, getClientForm, ticketData, processing="false"}) {
     
     const [shortDescription, setShortDescription] = useState("");
@@ -31,6 +32,9 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
     const [annotationState, setAnnotationState] = useState("")
     const {user} = useAuth();
     const [ticketClosedState, setTicketClosedState] = useState(false);
+    const [usersDataState, setUsersDataState] = useState();
+    const [userState, setUserState] = useState();
+
 
 
     function salvar () {
@@ -45,7 +49,8 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
             status,
             typeOfService,
             category:categoryState,
-            scheduledDateTime
+            scheduledDateTime,
+            user: userState,
         }
         getDataForm(dataForm)
         return
@@ -57,6 +62,10 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
 
     function handleSelectCategory(event) {
         setCategoryState(event.target.childNodes[event.target.selectedIndex].id)
+    }
+
+    function handleSelectUser(event) {
+        setUserState(event.target.childNodes[event.target.selectedIndex].id)
     }
 
    
@@ -92,6 +101,14 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
             return true
         }   
          
+    }
+
+    function getUserSelected(userIdSelect) {
+        if (!ticketData && userIdSelect == user.id) return true
+
+        if (ticketData && ticketData?.user.id == userIdSelect) return true
+
+        return false
     }
 
 
@@ -180,6 +197,11 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
         
     }
 
+    async function fetchUsersList(){
+        const users = await api.get('/users')
+        setUsersDataState(users.data)
+    }
+
     async function getAvatar(userId){
         const response = await api.get(`/users/avatar${userId}`)
         return response.data
@@ -203,6 +225,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
     }
 
     useEffect(() => {
+        fetchUsersList()
         fetchStatus()
         fetchCategory()
         if (ticketData) {
@@ -339,6 +362,38 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                                         selected={ticketData?.category?.id == category.id ? true : false}
                                     >
                                     {category.description}
+                                    </option>
+
+                                ))
+
+                            }
+                    </Select>
+                    <Select
+                            name="usersList" 
+                            id="usersList-select" 
+                            defaultChecked
+                            required
+                            onChange={e => {handleSelectUser(e)}}
+                            disabled={processing=="true" || ticketClosedState == true}
+                        >   
+                            {
+                                <option
+                                >   
+                                    Sem atribuição
+                                </option>
+                            }
+
+
+                            {
+                                usersDataState && 
+                                usersDataState.map(user => (
+                                    <option 
+                                        key={user.id} 
+                                        id={user.id} 
+                                        value={user.name}
+                                        selected={getUserSelected(user.id)}
+                                    >
+                                    {user.name}
                                     </option>
 
                                 ))
