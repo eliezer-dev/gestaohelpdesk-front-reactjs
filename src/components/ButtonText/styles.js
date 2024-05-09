@@ -21,7 +21,7 @@ export const Container = styled.div`
         
     }
     
-    span:hover {
+    &:hover {
         opacity: .5;
     }
 
@@ -36,7 +36,7 @@ export const Container = styled.div`
         margin-right: .5rem;
     }
 
-    .background_orange {
+    .background_blue {
         color: ${({theme}) => theme.COLORS.WHITE};
         background-color: ${({theme}) => theme.COLORS.BLUE_100};
     }

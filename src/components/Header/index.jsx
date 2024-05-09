@@ -46,8 +46,9 @@ export function Header({logo=true}) {
             navigate("/users")
         }
 
+        //configurações
         if (option == 4) {
-            navigate("/helps")
+            navigate("/configurations")
         }
     }
 
@@ -88,7 +89,8 @@ export function Header({logo=true}) {
                     <img src={line1} alt="linha vertical para separar"/>
                     <span onClick={() => {handleClickMenuHeader(2)}}>Clientes</span>
                     <img src={line1} alt="linha vertical para separar"/>
-                    <span onClick={() => {handleClickMenuHeader(3)}}>Usuários</span>               
+                    <span onClick={() => {handleClickMenuHeader(3)}}>Usuários</span>
+                    <span onClick={() => {handleClickMenuHeader(4)}}>Configurações</span>                
                 <Button title="Novo Chamado" icon={FaEnvelope } onClick={handleNewTicket}/>
             </Menu>
             <Profile>

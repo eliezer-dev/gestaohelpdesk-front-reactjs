@@ -62,7 +62,6 @@ export function Profile () {
     const [stateListState] = useState(brazilStatesList)
 
     function handleChangeAvatar(event) {
-        console.log(event)
         const file = event.target.files[0]
         setAvatarFileState(file)
         const imagePreview = URL.createObjectURL(file)
