@@ -8,6 +8,7 @@ import { NewClient } from '../pages/NewClient';
 import { NewUser } from '../pages/NewUser';
 import { Configurations } from '../pages/Configurations';
 import { NewCategorie } from '../pages/NewCategorie';
+import { NewStatus } from '../pages/NewStatus';
 
 export function AppRoutes(){
    return(
@@ -19,6 +20,7 @@ export function AppRoutes(){
             <Route path="/configurations" element={<Configurations/>}/>
             <Route path="/configurations/:option" element={<Configurations/>}/>
             <Route path="/configurations/categories/:id" element={<NewCategorie/>}/>
+            <Route path="/configurations/status/:id" element={<NewStatus/>}/>
             <Route path="/" element={<Home/>} />
             <Route path="/ticket/:id" element={<Tickets/>} />
             <Route path="/clients/:id" element={<NewClient/>} />

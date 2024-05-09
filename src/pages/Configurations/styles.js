@@ -7,19 +7,19 @@ export const Container = styled.div`
     }
 `;
 
-export const MenuSideHeaderCategoriesList = styled.div`
+export const MenuSideHeaderTable = styled.div`
     display: flex;
     height: calc(100% - 3.5rem);
 `;
 
-export const HeaderCategoriesList = styled.div`
+export const HeaderTable = styled.div`
     height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
 `;
 
-export const CategoriesList = styled.div`
+export const Table = styled.div`
     overflow: hidden;
     height: calc(100% - 4.5rem);
     display: flex;
@@ -45,7 +45,7 @@ export const CategoriesList = styled.div`
         justify-content: center;
         position: relative;
     }
-    .categories_button_insert {
+    .table_button_insert {
         height: 100%;
         width: 100%;
         position: absolute;

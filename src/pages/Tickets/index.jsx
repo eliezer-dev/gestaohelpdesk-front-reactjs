@@ -233,6 +233,12 @@ export function Tickets() {
                                 disabled
                             />
                             <Input 
+                                label="Fantasia"
+                                type="text"
+                                value={client?.businessName}
+                                disabled
+                            />
+                            <Input 
                                 label="CPNJ"
                                 type="text"
                                 value={client?.cpfCnpj}

@@ -1,12 +1,9 @@
-import { Container, CategoriesList, MenuSide, MenuSideHeaderCategoriesList, HeaderCategoriesList} from "./styles";
+import { Container, Table, MenuSide, MenuSideHeaderTable, HeaderTable} from "./styles";
 import { Header } from "../../components/Header";
 import { api } from "../../services/api";
 import { useEffect, useState } from "react";
 import { Footer } from "../../components/Footer";
 import LogoGestaoHelpdesk  from "../../assets/shared/Logo_Gestao_Helpdesk.svg"
-import { IoPersonAddSharp } from "react-icons/io5";
-import SearchIcon from '@mui/icons-material/Search';
-import { Button } from "../../components/Button";
 import { useNavigate } from "react-router-dom";
 import { CategoriesTable } from "../../components/CategoriesTable";
 import { ButtonText } from "../../components/ButtonText";
@@ -14,11 +11,20 @@ import { useParams } from "react-router-dom";
 import { BiCategory } from "react-icons/bi";
 import { GrStatusInfo } from "react-icons/gr";
 import { TbCategoryPlus } from "react-icons/tb";
+import { FaPlus } from "react-icons/fa";
+import { StatusTable } from "../../components/StatusTable";
 
 export function Configurations(){
     const [categoriesState, setCategoriesState] = useState([])
+    const [statusState, setStatusState] = useState([])
     const navigate = useNavigate();
     const params = useParams();
+
+    async function fetchStatus() {
+        const response = (await api.get(`/status`)).data
+        setStatusState(response)
+        return response
+    }
 
     async function fetchCategories() {
         const response = (await api.get(`/categories`)).data
@@ -38,6 +44,10 @@ export function Configurations(){
 
     const deleteCategory = (categoryId, description)  => {
         handledeleteCategory(categoryId, description)
+    } 
+
+    const deleteStatus = (statusId, description)  => {
+        handleDeleteStatus(statusId, description)
     } 
 
     async function handledeleteCategory(categoryId, description) {
@@ -60,6 +70,26 @@ export function Configurations(){
     
     }
 
+    async function handleDeleteStatus(statusId, description) {
+        const deleteCategoryConfirm = confirm(`Deseja realmente deletar o status ${description}`)
+        if (deleteCategoryConfirm) {
+            try {
+                await api.delete(`/status/${statusId}`)
+                alert("Cadastro removido com sucesso.")
+                fetchStatus()
+                return
+            } catch (error) {
+                alert("Erro ao deletar o cadastro.")
+                console.error(error)
+                fetchStatus()
+                return
+            }
+        }
+        return
+        
+    
+    }
+
 
     function handleBack(){
         navigate("/")
@@ -71,10 +101,11 @@ export function Configurations(){
 
     useEffect(() => {
         fetchCategories()
-
+        fetchStatus()
 
         const interval = setInterval(() => {
             fetchCategories();
+            fetchStatus()
         }, 300000);
     
         return () => clearInterval(interval);
@@ -84,7 +115,7 @@ export function Configurations(){
     return (
         <Container>
             
-            <MenuSideHeaderCategoriesList>
+            <MenuSideHeaderTable>
                 
                 <MenuSide>
                     <div className="logo" onClick={handleBack}>
@@ -109,16 +140,16 @@ export function Configurations(){
                    
                 </MenuSide>
 
-                <HeaderCategoriesList>
+                <HeaderTable>
                     <Header logo={false}/>
                     {
                         params.option == "categories" &&
-                        <CategoriesList>
+                        <Table>
                             <div className="title_config">
                                 <ButtonText
                                     onClick={() => {navigate("/configurations/categories/new")}}
                                     title="Inserir"
-                                    className="categories_button_insert"
+                                    className="table_button_insert"
                                     icon={TbCategoryPlus}
                                 />
                                 <h1>Cadastro de Categorias</h1>
@@ -130,11 +161,32 @@ export function Configurations(){
                                 rows={12}
                                 deleteCategory={deleteCategory}
                             />
-                        </CategoriesList>
+                        </Table>
                     }
-                </HeaderCategoriesList>
+                    {
+                        params.option == "status" &&
+                        <Table>
+                            <div className="title_config">
+                                <ButtonText
+                                    onClick={() => {navigate("/configurations/status/new")}}
+                                    title="Inserir"
+                                    className="table_button_insert"
+                                    icon={FaPlus}
+                                />
+                                <h1>Cadastro de Status</h1>
+                                
+                            </div>
+                            
+                            <StatusTable
+                                statusList={statusState} 
+                                rows={12}
+                                deleteStatus={deleteStatus}
+                            />
+                        </Table>
+                    }
+                </HeaderTable>
            
-            </MenuSideHeaderCategoriesList>
+            </MenuSideHeaderTable>
             <Footer/> 
            
             
