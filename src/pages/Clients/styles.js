@@ -87,7 +87,9 @@ export const InputSimple = styled.div`
     align-content: center;
     align-items: center;
     justify-content: center;
+    
     .input_search {
+        padding-left: 5px;
         height: 1.875rem;
         justify-content: center;
         background-color: ${({theme}) => theme.COLORS.WHITE};
@@ -111,6 +113,7 @@ export const InputSimple = styled.div`
         color: ${({theme}) => theme.COLORS.WHITE};
     }
     svg {
+        align-self: center;
         color: #000;
         height: 1.562rem; 
         width: 1.875rem;

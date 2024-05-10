@@ -97,6 +97,7 @@ export const InputSimple = styled.div`
         display: flex;
         width: 100%;
         border-radius: 1.25rem;
+        padding-left: 5px;
     }
 
     input {
@@ -117,6 +118,7 @@ export const InputSimple = styled.div`
     }
 
     svg {
+        align-self: center;
         color: #000;
         height: 1.562rem;
         width: 1.875rem;

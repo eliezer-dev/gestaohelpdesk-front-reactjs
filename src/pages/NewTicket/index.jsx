@@ -11,7 +11,7 @@ import { TicketEdit } from "../../components/TicketEdit";
 import { Footer } from "../../components/Footer";
 
 
-export function Tickets() {
+export function NewTicket() {
     const navigate = useNavigate();
     const {user} = useAuth();
     const params = useParams();
@@ -196,23 +196,7 @@ export function Tickets() {
                     
             </Header>
             <Content>
-                {/* <div className="ticketInfo">
-                    <label>Número do Chamado: </label>
-                    <Input      
-                        type="text"
-                        disabled={true}
-                    />
-                    <label>Prioridade </label>
-                    <Input      
-                        type="text"
-                        disabled={true}
-                    />
-                    <label>SLA </label>
-                    <Input      
-                        type="text"
-                        disabled={true}
-                    />
-                </div> */}
+            
                 <TicketEdit
                     typeForm = {params.id == "new" ? "new" : "edit"} 
                     ticketData = {ticketDataState && ticketDataState }
