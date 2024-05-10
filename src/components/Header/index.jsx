@@ -55,7 +55,7 @@ export function Header({logo=true}) {
     async function getAvatar(userId){
 
         try {
-            const response = (await api.get(`/users/avatar/${userId}`)).data
+            const response = (await api.get(`/users/avatar`)).data
             setUserAvatar(`data:image/jpeg;base64,${response}`)
             avatarUpdate(`data:image/jpeg;base64,${response}`)
     

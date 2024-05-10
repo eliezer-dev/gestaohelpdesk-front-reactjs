@@ -365,7 +365,7 @@ export function Profile () {
                     onChange={e => {setNewPasswordConfirmState(e.target.value)}}
                 />
                <Button
-                    disabled={disableInputState}
+                    disabled={disableInputState || user.userRole == 3}
                     title="Salvar"
                     onClick={handleUpdateProfile}
                />

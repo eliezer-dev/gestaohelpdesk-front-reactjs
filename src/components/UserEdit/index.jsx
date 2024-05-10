@@ -3,6 +3,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { useAuth } from "../../hooks/auth";
 
 
 export function UserEdit({getDataForm, userData}) {
@@ -49,9 +50,10 @@ export function UserEdit({getDataForm, userData}) {
     const [passwordState, setPasswordState] = useState("");
     const [confirmNewPasswordState, setConfirmNewPasswordState] = useState("");
     const [usernameState, setUsernameState] = useState("");
+    const [userRoleState, setUserRoleState] = useState();
 
     const [stateListState] = useState(brazilStatesList)
-
+    const {user} = useAuth()
 
     async function viaCep(event) {
         const cep = event.replace(/[^0-9]/g,'');
@@ -106,7 +108,8 @@ export function UserEdit({getDataForm, userData}) {
             email:emailState,
             addresNumber2:addressNumber2State,
             password:passwordState,
-            oldPassword:oldPasswordState          
+            oldPassword:oldPasswordState,
+            userRole:userRoleState          
 
         }
         getDataForm(dataForm)
@@ -181,7 +184,10 @@ export function UserEdit({getDataForm, userData}) {
         }else if (passwordState && !oldPasswordState && userData) {
             alert ("A senha atual não foi informada")
             return false
-
+        }else if (!userRoleState) {
+            alert ("Função do usuário não selecionada.")
+            return false
+        
         }else {
             return true
         }   
@@ -202,6 +208,7 @@ export function UserEdit({getDataForm, userData}) {
             setCityState(userData?.city)
             setStateState(userData?.state)
             setUsernameState(userData?.username)
+            setUserRoleState(userData.userRole)
 
         }           
     },[userData])
@@ -304,13 +311,39 @@ export function UserEdit({getDataForm, userData}) {
 
                         </Select>
                     </NeighborhoodCityStateInput>
-                    <Input
-                        placeholder="Digite o username, usado apenas na visualização do chamado."
-                        type="text"
-                        value={emailState}
-                        onChange={e => {setEmailState(e.target.value)}}
-                        required
-                    />                  
+                        <Select
+                                    name="userRoleSelect" 
+                                    id="userRoleSelect"
+                                    onChange={e => {setUserRoleState(e.target.value)}}
+                        >
+                            <option 
+                                    value={"default"}
+                                    selected
+                                >
+                                Selecione a função do usuário
+                            </option>
+                                
+                            <option 
+                                value={1}
+                                selected={userRoleState == 1? true : false}
+                            >
+                                Suporte
+                            </option>
+                            <option 
+                                value={2}
+                                selected={userRoleState == 2 ? true : false}
+                            >
+                                Gerente
+                            </option>
+                            <option 
+                                value={3}
+                                selected={userRoleState == 3 ? true : false}
+                            >
+                                Usuário de Teste - Somente Leitura
+                            </option>
+        
+
+                        </Select>                  
                     <Input
                         placeholder="Digite o email"
                         type="text"
@@ -343,7 +376,11 @@ export function UserEdit({getDataForm, userData}) {
                         onChange={e => {setConfirmNewPasswordState(e.target.value)}}
                         required
                     />             
-                    <Button title={userData ? "Atualizar" : "Salvar"} onClick={handleSave}/> 
+                    <Button 
+                        title={userData ? "Atualizar" : "Salvar"} 
+                        onClick={handleSave}
+                        disabled={user.userRole == 3 || (user.userRole != 2 && user.id != userData.id)? true : false}
+                    /> 
                 </TicketMain>
         </Container>
     )

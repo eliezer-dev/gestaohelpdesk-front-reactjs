@@ -3,12 +3,14 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { useEffect, useState } from "react";
 import { api } from "../../services/api";
+import { useAuth } from "../../hooks/auth";
 
 
 export function CategoryEdit({getDataForm, categoryData}) {
     
     const [priorityState, setPriorityState] = useState();
     const [descriptionState, setDescriptionState] = useState();
+    const {user} = useAuth()
 
 
     function handleSave () {
@@ -91,7 +93,12 @@ export function CategoryEdit({getDataForm, categoryData}) {
                         </select> */}
                     </Select>
                 
-                    <Button title={categoryData ? "Atualizar" : "Salvar"} onClick={handleSave}/> 
+                    <Button 
+                        title={categoryData ? "Atualizar" : "Salvar"} 
+                        onClick={handleSave}
+                        disabled={user.userRole != 2? true : false}
+                    
+                    /> 
                 </Form>
         </Container>
     )

@@ -103,15 +103,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
          
     }
 
-    function getUserSelected(userIdSelect) {
-        if (!ticketData && userIdSelect == user.id) return true
-
-        if (ticketData && ticketData?.user.id == userIdSelect) return true
-
-        return false
-    }
-
-
+   
     function handleSheduled(event) {
         
         if (isSheduled) {
@@ -236,6 +228,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
             setStatus(ticketData.status.id)
             setCategoryState(ticketData.category.id)
             setTypeOfService(ticketData.typeOfService)
+            setUserState(ticketData.user.id)
 
             if (ticketData.status.type == 3) {
                 setTicketClosedState(true)
@@ -246,7 +239,10 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                 setScheduledDateTime(ticketData.scheduledDateTime)
             }
             fetchAnnotations();
-        }           
+        }else {
+            setUserState(user.id)
+        } 
+
     },[ticketData])
 
     return (
@@ -391,7 +387,7 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                                         key={user.id} 
                                         id={user.id} 
                                         value={user.name}
-                                        selected={getUserSelected(user.id)}
+                                        selected={user.id == userState}
                                     >
                                     {user.name}
                                     </option>
@@ -498,15 +494,15 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                     </div>
                     {
                         ticketData ?
-                        <Button title={processing=="true" ? "Processando" : "Atualizar"} 
+                        <Button title={processing=="true" ? "Processando" : "Atualizar" } 
                             onClick={salvar}
-                            disabled={(processing=="true") ? true : false}
+                            disabled={(processing=="true") || user.userRole == 3? true : false}
                         />
                         :
                         <Button 
                             title={processing=="true" ? "Processando" : "Salvar"} 
                             onClick={salvar}
-                            disabled={processing=="true"}
+                            disabled={processing=="true" || user.userRole == 3? true : false}
                             />
                     }
                     
@@ -529,12 +525,12 @@ export function TicketEdit({getDataForm, getClientForm, ticketData, processing="
                         <Button 
                             title="Salvar" 
                             onClick={handleSaveAnnotation}
-                            disabled={processing == true || ticketClosedState == true}
+                            disabled={processing == true || ticketClosedState == true || user.userRole == 3}
                             />
                         <Button 
                             title="Cancelar" 
                             onClick={() => {setAnnotationState("")}}
-                            disabled={processing == true || ticketClosedState == true}
+                            disabled={processing == true || ticketClosedState == true || user.userRole == 3}
                         /> 
                     </div>    
                       

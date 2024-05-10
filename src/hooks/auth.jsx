@@ -48,7 +48,7 @@ function AuthProvider({children}) {
             if (avatarFileToForm) {
                 const fileUploadForm = new FormData
                 fileUploadForm.append("avatar", avatarFileToForm)
-                const response = (await api.put(`/users/avatar/${data.user.id}`, fileUploadForm)).data
+                const response = (await api.put(`/users/avatar`, fileUploadForm)).data
                 avatar = `data:image/jpeg;base64,${response}`
             }
 

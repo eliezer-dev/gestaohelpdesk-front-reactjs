@@ -44,7 +44,7 @@ export const NumberAddressLine2 = styled.div`
 
 export const Select = styled.select`   
     outline: none;
-    width: 5rem;
+    width: 100%;
     height: 3rem;
     border-radius: .625rem;
     border: none;

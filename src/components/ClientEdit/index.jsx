@@ -3,6 +3,7 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { api } from "../../services/api";
 import { useEffect, useState} from "react";
+import { useAuth } from "../../hooks/auth";
 
 export function ClientEdit({getDataForm, clientData}) {
     const brazilStatesList = [
@@ -49,7 +50,7 @@ export function ClientEdit({getDataForm, clientData}) {
     const [slaUrgencyState, setSlaUrgencyState] = useState("")
 
     const [stateListState, setStateListState] = useState(brazilStatesList)
-
+    const {user} = useAuth()
 
     async function viaCep(event) {
         const cep = event.replace(/[^0-9]/g,'');
@@ -343,7 +344,11 @@ export function ClientEdit({getDataForm, clientData}) {
                     
 
                     
-                    <Button title={clientData ? "Atualizar" : "Salvar"} onClick={handleSave}/> 
+                    <Button 
+                        title={clientData ? "Atualizar" : "Salvar"} 
+                        onClick={handleSave}
+                        disabled={user.userRole != 2? true : false}
+                    /> 
                 </TicketMain>
         </Container>
     )

@@ -32,7 +32,8 @@ export function NewUser() {
                     state:dataForm.state,
                     city:dataForm.city,
                     email:dataForm.email,
-                    password:dataForm.password
+                    password:dataForm.password,
+                    userRole:dataForm.userRole
                         
                 })
                 alert("Usuário Salvo com sucesso.")
@@ -61,7 +62,8 @@ export function NewUser() {
                     city:dataForm.city,
                     email:dataForm.email,
                     password:dataForm.password,
-                    oldPassword:dataForm.oldPassword
+                    oldPassword:dataForm.oldPassword,
+                    userRole:dataForm.userRole
                 })
                 alert("Usuário atualizado com sucesso.")
                 navigate("/users")
